@@ -1,0 +1,54 @@
+﻿@model FinalWebApp.ViewModels.ItemListViewModel
+
+@{
+    ViewData["Title"] = "Menu";
+}
+
+<div class="d-flex">
+    <!-- Sidebar hiển thị danh mục -->
+    <div class="col-md-3">
+        <h4>Danh mục</h4>
+        <ul class="list-group">
+            @foreach (var category in Model.Categories)
+            {
+                <li class="list-group-item @(Model.SelectedCategoryId == category.Id ? "active" : "")">
+                    <a href="@Url.Action("Index", "Customer", new { categoryId = category.Id })">
+                        @category.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+
+    <!-- Hiển thị danh sách món ăn -->
+    <div class="col-md-9">
+        <h4>Menu Items</h4>
+        <div class="row">
+            @if (!Model.Items.Any())
+            {
+                <p>No items found for the selected category.</p>
+            }
+            else
+            {
+                foreach (var item in Model.Items)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="~/Image/@item.Image" class="card-img-top" alt="Image of @item.Name">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
+                                <a href="@Url.Action("Details", "Customer", new { id = item.Id })" class="btn btn-primary">View Details</a>
+                                <form asp-action="AddToCart" asp-controller="Cart" method="post" class="mt-2">
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+﻿@model List<FinalWebApp.Data.Entities.ApplicationUser>
+
+<div class="user-list">
+    <h2>List of Users</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Phone Number</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Fullname</td>
+                    <td>@user.Email</td>
+                    <td>@user.Gender</td>
+                    <td>@user.DateOfBirth?.ToString("dd/MM/yyyy")</td>
+                    <td>@user.NumberPhone</td>
+                    <td>
+                        @if (user.Roles != null && user.Roles.Any())
+                        {
+                            @foreach (var role in user.Roles)
+                            {
+                                <span >@role</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">No roles assigned</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "UserManager", new { id = user.Id })" class="btn btn-primary btn-sm">Edit</a>
+
+                        <form asp-controller="UserManager" asp-action="Delete" method="post" class="d-inline"
+                              onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+
+                        <a href="@Url.Action("AssignRole", "UserManager", new { id = user.Id })" class="btn btn-success btn-sm">Assign Role</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,18 @@
+﻿@model FinalWebApp.ViewModels.AssignRoleViewModel
+
+<form asp-action="AssignRole" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <div>
+        <label>Select Roles</label>
+        @foreach (var role in Model.Roles)
+        {
+            <div>
+                <!-- Sử dụng name là SelectedRoles[] để lưu các giá trị được chọn -->
+                <input type="checkbox" name="SelectedRoles" value="@role.Name"
+                @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
+                <label>@role.Name</label>
+            </div>
+        }
+    </div>
+    <button type="submit">Assign Roles</button>
+</form>

@@ -1,0 +1,23 @@
+﻿@using FinalWebApp.Data.Entities
+@using FinalWebApp.Enum
+@model List<Table>
+
+<h2>Select a Table</h2>
+
+<form asp-action="CreateOrder" method="post">
+    <div>
+        <label for="tableId">Select Table:</label>
+        <select name="tableId" id="tableId">
+            @foreach (var table in Model)
+            {
+                <option value="@table.Id">@table.Name</option>
+
+            }
+        </select>
+    </div>
+    <div>
+        <label for="diningTime">Dining Time:</label>
+        <input type="datetime-local" id="diningTime" name="diningTime" required />
+    </div>
+    <button type="submit">Place Order</button>
+</form>
