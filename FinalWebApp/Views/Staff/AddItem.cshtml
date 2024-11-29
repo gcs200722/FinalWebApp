@@ -1,0 +1,62 @@
+﻿@model FinalWebApp.ViewModels.ItemListViewModel
+
+@{
+    ViewData["Title"] = "Menu";
+}
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+<div class="d-flex">
+    <!-- Sidebar hiển thị danh mục -->
+    <div class="col-md-3">
+        <h4>Danh mục</h4>
+        <ul class="list-group">
+            @foreach (var category in Model.Categories)
+            {
+                <li class="list-group-item @(Model.SelectedCategoryId == category.Id ? "active" : "")">
+                    <a href="@Url.Action("Index", "Customer", new { categoryId = category.Id })">
+                        @category.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Hiển thị danh sách món ăn -->
+    <div class="col-md-9">
+        <h4>Menu Items</h4>
+        <div class="row">
+            @if (!Model.Items.Any())
+            {
+                <p>No items found for the selected category.</p>
+            }
+            else
+            {
+                foreach (var item in Model.Items)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <!-- Hiển thị ảnh món ăn, sử dụng hình ảnh mặc định nếu không có ảnh -->
+                            <img src="@Url.Content("~/Image/" + (item.Image ?? "default.jpg"))" class="card-img-top" alt="Image of @item.Name">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
+
+                                <!-- Form thêm món ăn vào đơn hàng -->
+                                <form asp-action="AddToOrder" asp-controller="Staff" method="post" class="mt-2">
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                        <input type="hidden" name="orderId" value="@ViewData["OrderId"]" />
+                                    <button type="submit" class="btn btn-success">Add</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <a asp-action="OrderDetails" asp-route-orderId="@ViewData["OrderId"]" class="btn btn-secondary">Back</a>
+    </div>
+</div>

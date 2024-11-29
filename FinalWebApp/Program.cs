@@ -58,7 +58,7 @@ static async Task SeedRolesAsync(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = { "CUSTOMER", "ADMIN", "STAFF" }; // Thêm các vai trò cần thiết
+    string[] roleNames = { "CUSTOMER", "ADMIN", "STAFF" , "MANAGER" }; // Thêm các vai trò cần thiết
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))

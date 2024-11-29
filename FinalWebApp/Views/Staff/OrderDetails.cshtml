@@ -1,0 +1,54 @@
+﻿@model FinalWebApp.Data.Entities.Order
+
+<h2>Order Details</h2>
+<p>
+    <strong>Order ID:</strong> @Model.Id <br />
+    <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Customer:</strong> @Model.Customer?.Fullname <br />
+    <strong>Table:</strong> @Model.Table?.Name <br />
+    <strong>Order Status:</strong> @Model.OrderStatus.ToString() <br />
+    <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C") <br />
+</p>
+
+<h3>Order Items</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Food Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>  <!-- Thêm cột hành động -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Item.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@(item.Quantity * item.Price).ToString("C")</td>
+
+                <td>
+                    <!-- Nút giảm số lượng -->
+                    <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" style="display:inline;">
+                        <input type="hidden" name="quantity" value="@Math.Max(item.Quantity - 1, 1)" />
+                        <button type="submit" class="btn btn-danger btn-sm" @(item.Quantity == 1 ? "disabled" : "")>-</button>
+                    </form>
+
+                    <!-- Nút tăng số lượng -->
+                    <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" style="display:inline;">
+                        <input type="hidden" name="quantity" value="@item.Quantity + 1" />
+                        <button type="submit" class="btn btn-success btn-sm">+</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<a asp-action="AddItem" asp-route-orderId="@Model.Id" class="btn btn-secondary">Add New</a>
+<a asp-action="ListOrder" class="btn btn-secondary">Back to Order List</a>

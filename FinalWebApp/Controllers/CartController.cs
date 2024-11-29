@@ -121,7 +121,7 @@ namespace FinalWebApp.Controllers
                 Id = Guid.NewGuid(),
                 OrderDate = DateTime.Now,
                 TotalAmount = totalAmount,
-                Status = "Pending",
+                OrderStatus = OrderStatusEnum.Pending,
                 TableId = tableId,
                 CustomerId = User.FindFirstValue(ClaimTypes.NameIdentifier), // Lấy đúng CustomerId từ ASP.NET Identity
                 DiningTime = diningTime, // Lưu thời gian dùng bữa

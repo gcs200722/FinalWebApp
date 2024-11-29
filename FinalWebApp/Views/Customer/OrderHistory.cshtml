@@ -27,7 +27,7 @@ else
                 <tr>
                     <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@order.TotalAmount.ToString("C")</td>
-                    <td>@order.Status</td>
+                    <td>@order.OrderStatus</td>
                     <td>
                         <!-- Link to order details -->
                         <a href="@Url.Action("OrderDetails", "Cart", new { orderId = order.Id })">View Details</a>
