@@ -7,7 +7,7 @@
     var buttonString = Model == null || string.IsNullOrEmpty(Model.Id) ? "Create" : "Edit";
 }
 
-<h2 class="page-title">@ViewData["Title"]</h2>
+<h2>@ViewData["Title"]</h2>
 
 <form asp-action="@actionString" method="post">
     <input type="hidden" asp-for="Id" class="form-control input-style" />

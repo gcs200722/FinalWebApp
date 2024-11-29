@@ -60,7 +60,13 @@ namespace FinalWebApp.Controllers
                 {
                     // Gán vai trò cho người dùng (Ví dụ: 'User')
                     await _userManager.AddToRoleAsync(user, "Customer");
-                    return RedirectToAction("ViewUser", "UserManager");
+                    if (User.IsInRole("STAFF"))
+                    {
+                        TempData["SuccessMessage"] = "Operation successful!";
+                        return Redirect(nameof(Create));
+                    }
+                    if (User.IsInRole("ADMIN")) { return RedirectToAction("ViewUser", "UserManager"); }
+                        
                 }
 
                 // Nếu có lỗi trong quá trình đăng ký
@@ -70,7 +76,7 @@ namespace FinalWebApp.Controllers
                 }
             }
 
-            return View(model);
+                return View(model);
         }
 
         // Hành động chỉnh sửa người dùng

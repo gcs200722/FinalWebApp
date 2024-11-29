@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FinalWebApp.Data.Entities.Order>
+
+@{
+    ViewData["Title"] = "Paid or Canceled Orders";
+}
+
+<h1>List of Paid or Canceled Orders</h1>
+
+<!-- Form lọc theo trạng thái đơn hàng -->
+<form method="get" asp-action="OrderCompleted">
+    <div class="form-group">
+        <label for="orderStatus">Filter by Order Status:</label>
+        <select id="orderStatus" name="orderStatus" class="form-control">
+            <option value="paid">Paid</option>
+            <option value="canceled">Canceled</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Customer Name</th>
+            <th>Order Status</th>
+            <th>Table Information</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@order.Customer?.Fullname</td>
+                <td>
+                    @if (order.OrderStatus == FinalWebApp.Enum.OrderStatusEnum.Paid)
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else if (order.OrderStatus == FinalWebApp.Enum.OrderStatusEnum.Canceled)
+                    {
+                        <span class="badge bg-danger">Canceled</span>
+                    }
+                </td>
+                <td>@order.Table?.Name</td>
+                <td>@order.TotalAmount.ToString("C2")</td> <!-- Hiển thị tổng tiền với định dạng tiền tệ -->
+                <td>
+                    <a href="@Url.Action("Details", "Staff", new { orderId = order.Id })" class="btn btn-info">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

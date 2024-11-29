@@ -4,6 +4,7 @@ using FinalWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalWebApp.Migrations
 {
     [DbContext(typeof(FinalWebDbContext))]
-    partial class FinalWebDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127185133_updateOrderTable1")]
+    partial class updateOrderTable1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,6 +171,7 @@ namespace FinalWebApp.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DiningTime")
@@ -400,7 +404,8 @@ namespace FinalWebApp.Migrations
                     b.HasOne("FinalWebApp.Data.Entities.ApplicationUser", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("FinalWebApp.Data.Entities.Table", "Table")
                         .WithMany()

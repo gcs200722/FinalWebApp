@@ -1,0 +1,69 @@
+﻿@using FinalWebApp.Enum
+@using FinalWebApp.ViewModels
+@model IEnumerable<TableViewModel>
+
+<h2>Table Management</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Table Name</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var table in Model)
+        {
+            <tr>
+                <td>@table.Id</td>
+                <td>@table.Name</td>
+                <td>@table.Capacity</td>
+                <td>
+                    @if (table.Status == FinalWebApp.Enum.StatusTableEnum.Empty)
+                    {
+                        <span class="badge bg-success">Empty</span>
+                    }
+                    else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Booked)
+                    {
+                        <span class="badge bg-warning">Booked</span>
+                    }
+                    else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Active)
+                    {
+                        <span class="badge bg-primary">Active</span>
+                    }
+                </td>
+                <td>
+                <td>
+                        @if (table.Status == FinalWebApp.Enum.StatusTableEnum.Empty)
+                        {
+                        <form method="post" asp-controller="Staff" asp-action="CreateOrderForGuest">
+                            <input type="hidden" name="tableId" value="@table.Id" />
+                            <button type="submit" class="btn btn-primary">Create Guest Order</button>
+                        </form>
+                        }
+                        else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Booked)
+                        {
+                        <form method="post" asp-controller="Staff" asp-action="UpdateTableToActive">
+                            <input type="hidden" name="tableId" value="@table.Id" />
+                            <button type="submit" class="btn btn-warning">Change to Active</button>
+                        </form>
+                        }
+                        else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Active)
+                        {
+
+                        <span class="text-muted">Active</span>
+                        }
+                        else
+                        {
+                        <span class="text-muted">No Action</span>
+                        }
+                </td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
