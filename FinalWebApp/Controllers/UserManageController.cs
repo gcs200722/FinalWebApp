@@ -192,6 +192,21 @@ namespace FinalWebApp.Controllers
                 return NotFound();
             }
 
+            // Lấy danh sách các vai trò hiện tại của người dùng
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // Loại bỏ các vai trò cũ
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!removeResult.Succeeded)
+            {
+                foreach (var error in removeResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(model);
+            }
+
+            // Thêm các vai trò mới
             foreach (var role in model.SelectedRoles)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
@@ -213,8 +228,10 @@ namespace FinalWebApp.Controllers
                     }
                 }
             }
-            TempData["Message"] = "Roles assigned successfully!";
+
+            TempData["Message"] = "Roles updated successfully!";
             return RedirectToAction("ViewUser", "UserManager");
         }
+
     }
 }
