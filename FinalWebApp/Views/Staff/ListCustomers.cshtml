@@ -1,0 +1,33 @@
+﻿@model List<FinalWebApp.Data.Entities.ApplicationUser>
+
+<div class="user-list">
+    <h2>List of Users <a asp-action="Create" asp-controller="UserManager">Create New</a></h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Fullname</td>
+                    <td>@user.Email</td>
+                    <td>@user.Gender</td>
+                    <td>@user.DateOfBirth?.ToString("dd/MM/yyyy")</td>
+                    <td>@user.NumberPhone</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "UserManager", new { id = user.Id })" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

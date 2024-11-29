@@ -2,19 +2,24 @@
 using FinalWebApp.Data.Entities;
 using FinalWebApp.Enum;
 using FinalWebApp.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FinalWebApp.Controllers
 {
     public class StaffController : Controller
     {
         private readonly FinalWebDbContext _context;
-
-        public StaffController(FinalWebDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public StaffController(FinalWebDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // Hiển thị danh sách bàn ăn
@@ -53,7 +58,57 @@ namespace FinalWebApp.Controllers
             TempData["Message"] = "Table status updated to Active.";
             return RedirectToAction("TableManagement");
         }
+        public IActionResult Checkout(Guid orderId)
+        {
+            // Lấy thông tin đơn hàng từ database cùng với thông tin của bàn
+            var order = _context.Orders
+                .Include(o => o.Table) // Bao gồm thông tin bàn
+                .FirstOrDefault(o => o.Id == orderId);
 
+            if (order == null)
+            {
+                return NotFound("Order not found");
+            }
+
+            // Lấy thông tin của bàn từ đơn hàng
+            var table = order.Table;
+
+            if (table == null)
+            {
+                return NotFound("Table not found");
+            }
+
+            // Cập nhật trạng thái bàn thành "Trống" (Empty)
+            table.Status = StatusTableEnum.Empty;
+
+            // Cập nhật trạng thái đơn hàng thành "Đã Thanh Toán"
+            order.OrderStatus = OrderStatusEnum.Paid;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            _context.SaveChanges();
+
+            // Chuyển sang trang in hóa đơn
+            return RedirectToAction("Invoice", new { orderId = order.Id });
+        }
+
+
+        public IActionResult Invoice(Guid orderId)
+        {
+            // Lấy thông tin đơn hàng từ database cùng với thông tin bàn và khách hàng
+            var order = _context.Orders
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Item) // Nạp Item liên quan
+                .Include(o => o.Table) // Bao gồm thông tin bàn
+                .Include(o => o.Customer) // Bao gồm thông tin khách hàng
+                .FirstOrDefault(o => o.Id == orderId);
+
+            if (order == null)
+            {
+                return NotFound("Order not found");
+            }
+
+            return View(order);
+        }
 
         [HttpPost]
         public IActionResult CreateOrderForGuest(Guid tableId)
@@ -264,7 +319,7 @@ namespace FinalWebApp.Controllers
                 .Include(o => o.Customer)
                 .AsQueryable();
 
-            // Lọc theo trạng thái đơn
+            // Lọc theo trạng thái đơn hàng (Chỉ lấy các trạng thái Pending, Confirmed, Unpaid)
             if (!string.IsNullOrEmpty(orderStatus))
             {
                 OrderStatusEnum parsedOrderStatus = OrderStatusEnum.Pending;  // Mặc định là Pending
@@ -273,17 +328,20 @@ namespace FinalWebApp.Controllers
                     case "confirmed":
                         parsedOrderStatus = OrderStatusEnum.Confirmed;
                         break;
-                    case "canceled":
-                        parsedOrderStatus = OrderStatusEnum.Canceled;
-                        break;
                     case "unpaid":
                         parsedOrderStatus = OrderStatusEnum.Unpaid;
                         break;
-                    case "paid":
-                        parsedOrderStatus = OrderStatusEnum.Paid;
-                        break;
                 }
+
+                // Lọc chỉ những đơn hàng có trạng thái là Pending, Confirmed, hoặc Unpaid
                 ordersQuery = ordersQuery.Where(o => o.OrderStatus == parsedOrderStatus);
+            }
+            else
+            {
+                // Nếu không có filter orderStatus, chỉ lấy các đơn hàng với trạng thái Pending, Confirmed hoặc Unpaid
+                ordersQuery = ordersQuery.Where(o => o.OrderStatus == OrderStatusEnum.Pending ||
+                                                      o.OrderStatus == OrderStatusEnum.Confirmed ||
+                                                      o.OrderStatus == OrderStatusEnum.Unpaid);
             }
 
             // Lọc theo trạng thái bàn
@@ -305,6 +363,7 @@ namespace FinalWebApp.Controllers
             var orders = ordersQuery.ToList(); // Thực thi truy vấn
             return View(orders);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateOrderStatus(Guid orderId, OrderStatusEnum status)
@@ -334,7 +393,9 @@ namespace FinalWebApp.Controllers
                     case OrderStatusEnum.Paid:
                         order.Table.Status = StatusTableEnum.Empty;
                         break;
-
+                    case OrderStatusEnum.Unpaid:
+                        order.Table.Status = StatusTableEnum.Active;
+                        break;
                     default:
                         // Các trạng thái khác không thay đổi trạng thái bàn
                         break;
@@ -345,6 +406,61 @@ namespace FinalWebApp.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("ListOrder");
+        }
+        public IActionResult OrderCompleted(string orderStatus = "paid")
+        {
+            // Lọc đơn hàng theo trạng thái (mặc định là Paid)
+            var orders = _context.Orders
+                .Where(o => (orderStatus == "paid" && o.OrderStatus == OrderStatusEnum.Paid) ||
+                            (orderStatus == "canceled" && o.OrderStatus == OrderStatusEnum.Canceled))
+                .Include(o => o.Table)  // Bao gồm thông tin bàn
+                .Include(o => o.Customer)  // Bao gồm thông tin khách hàng
+                .Include(o => o.OrderItems)  // Bao gồm các OrderItems
+                .ToList(); // Thực thi truy vấn
+
+            // Tính tổng tiền cho mỗi đơn hàng và thêm vào thuộc tính TotalAmount
+            foreach (var order in orders)
+            {
+                order.TotalAmount = order.OrderItems.Sum(oi => oi.Quantity * oi.Price);
+            }
+
+            // Trả về view với danh sách các đơn hàng và trạng thái đã chọn
+            ViewData["SelectedOrderStatus"] = orderStatus;
+
+            return View(orders);
+        }
+
+        public IActionResult Details(Guid orderId)
+        {
+            // Lấy thông tin chi tiết của đơn hàng theo orderId
+            var order = _context.Orders
+                .Include(o => o.Table)  // Bao gồm thông tin bàn
+                .Include(o => o.Customer)  // Bao gồm thông tin khách hàng
+                .Include(o => o.OrderItems)  // Bao gồm các OrderItems
+                .FirstOrDefault(o => o.Id == orderId); // Lọc theo ID của đơn hàng
+
+            if (order == null)
+            {
+                return NotFound();  // Nếu không tìm thấy đơn hàng
+            }
+
+            // Trả về view với thông tin chi tiết của đơn hàng
+            return View(order);
+        }
+        public async Task<IActionResult> ListCustomers()
+        {
+            var users = _userManager.Users.ToList();
+            var customers = new List<ApplicationUser>();
+
+            foreach (var user in users)
+            {
+                if (await _userManager.IsInRoleAsync(user, "Customer"))
+                {
+                    customers.Add(user);
+                }
+            }
+
+            return View(customers);
         }
 
     }

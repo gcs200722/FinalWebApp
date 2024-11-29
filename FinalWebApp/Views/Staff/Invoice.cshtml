@@ -1,32 +1,38 @@
-﻿@model FinalWebApp.ViewModels.InvoiceViewModel
+﻿@model FinalWebApp.Data.Entities.Order
 
-<h2>Invoice</h2>
-<p><strong>Order ID:</strong> @Model.OrderId</p>
-<p><strong>Order Date:</strong> @Model.OrderDate</p>
-<p><strong>Customer:</strong> @Model.CustomerName</p>
-<p><strong>Table:</strong> @Model.TableName</p>
-<p><strong>Status:</strong> @Model.Status</p>
+<h2>Hóa Đơn</h2>
+<p>
+    <strong>Mã hóa đơn:</strong> @Model.Id <br />
+    <strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Thời gian ăn:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Khách hàng:</strong> @Model.Customer?.Fullname <br />
+    <strong>Bàn:</strong> @Model.Table?.Name <br />
+    <strong>Trạng thái:</strong> Đã thanh toán <br />
+    <strong>Tổng tiền:</strong> @Model.TotalAmount.ToString("C") <br />
+</p>
 
-<table>
+<h3>Chi Tiết Món Ăn</h3>
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th>Item Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
+            <th>Tên món</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng cộng</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
+        @foreach (var item in Model.OrderItems)
         {
             <tr>
-                <td>@item.ItemName</td>
+                <td>@item.Item.Name</td>
                 <td>@item.Quantity</td>
                 <td>@item.Price.ToString("C")</td>
-                <td>@item.Total.ToString("C")</td>
+                <td>@(item.Quantity * item.Price).ToString("C")</td>
             </tr>
         }
     </tbody>
-</table>    
-<p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
-<button onclick="window.print()">Print Invoice</button>
+</table>
+
+<button class="btn btn-secondary" onclick="window.print()">In Hóa Đơn</button>
+<a asp-action="ListOrder" class="btn btn-primary">Quay lại danh sách đơn hàng</a>

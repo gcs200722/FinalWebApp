@@ -1,0 +1,54 @@
+﻿@model FinalWebApp.Data.Entities.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>Order Details</h1>
+
+<div>
+    <h3>Order ID: @Model.Id</h3>
+    <p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+    <p><strong>Customer:</strong> @Model.Customer?.Fullname</p>
+    <p><strong>Table:</strong> @Model.Table?.Name</p>
+    <p>
+        <strong>Order Status:</strong>
+        @if (Model.OrderStatus == FinalWebApp.Enum.OrderStatusEnum.Paid)
+        {
+            <span class="badge bg-success">Paid</span>
+        }
+        else if (Model.OrderStatus == FinalWebApp.Enum.OrderStatusEnum.Canceled)
+        {
+            <span class="badge bg-danger">Canceled</span>
+        }
+        else
+        {
+            <span class="badge bg-warning">@Model.OrderStatus</span>
+        }
+    </p>
+    <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C2")</p>
+</div>
+
+<h3>Order Items</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.ItemName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C2")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("OrderCompleted", "Staff")" class="btn btn-secondary">Back to Orders</a>

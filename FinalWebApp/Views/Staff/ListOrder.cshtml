@@ -10,7 +10,7 @@
         <div class="col-auto">
             <label class="form-label fw-bold">Order Status</label>
             <div>
-                @foreach (var status in Enum.GetValues(typeof(OrderStatusEnum)))
+                @foreach (var status in Enum.GetValues(typeof(OrderStatusEnum)).Cast<OrderStatusEnum>().Where(s => s != OrderStatusEnum.Paid && s != OrderStatusEnum.Canceled))
                 {
                     <div class="form-check form-check-inline">
                         <input type="radio" class="form-check-input" name="orderStatus" value="@status"
@@ -20,11 +20,9 @@
                 }
                 <div class="form-check form-check-inline">
                     <input type="radio" class="form-check-input" name="orderStatus" value="" id="orderStatus-All"
-                           @(string.IsNullOrEmpty(Context.Request.Query["orderStatus"]) ? "checked" : "")>
+                    @(string.IsNullOrEmpty(Context.Request.Query["orderStatus"]) ? "checked" : "")>
                     <label class="form-check-label" for="orderStatus-All">All</label>
                 </div>
-            </div>
-        </div>
 
         <!-- Table Status Filter -->
         <div class="col-auto">

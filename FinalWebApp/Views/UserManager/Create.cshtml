@@ -8,6 +8,7 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+@TempData["SuccessMessage"]
 
 <form asp-action="@actionString" method="post">
     <input type="hidden" asp-for="Id" class="form-control" />

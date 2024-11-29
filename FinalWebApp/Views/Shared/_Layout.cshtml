@@ -14,23 +14,23 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FinalWebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <a href="@Url.Action("Cart", "Cart")" class="btn btn-primary">View Cart</a>
                         @if (SignInManager.IsSignedIn(User))
                         {
+                            var currentUser = await UserManager.GetUserAsync(User);
                             <li class="nav-item">
-                                <span class="navbar-text">Hello, @UserManager.GetUserName(User)</span>
+                                <span class="navbar-text">Hello, @currentUser?.UserName</span>
                             </li>
                             <li class="nav-item">
                                 <form method="post" asp-area="" asp-controller="User" asp-action="Logout" class="form-inline">
@@ -41,16 +41,48 @@
                                 <a class="nav-link" href="/User/Profile">Profile</a>
                             </li>
                             <li class="nav-item">
-                                <img src="@Url.Content("~/Image/" + (User.Identity.IsAuthenticated ? UserManager.GetUserAsync(User).Result.Avatar : "default-avatar.png"))" alt="Avatar" class="rounded-circle" width="30" height="30" />
-
+                                <img src="@Url.Content("~/Image/" + (currentUser?.Avatar ?? "default-avatar.png"))"
+                                     alt="Avatar" class="rounded-circle" width="30" height="30" />
                             </li>
+
+                            @if (User.IsInRole("ADMIN"))
+                            {
+                                
+                            }
+                            else if (User.IsInRole("STAFF"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="ListOrder" asp-controller="Staff">Order Management</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="TableManagement" asp-controller="Staff">Table Management</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="OrderCompleted" asp-controller="Staff">Order Completed</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="ListCustomers" asp-controller="Staff">List Customer</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("CUSTOMER"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Index" asp-controller="Customer">Orders</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Cart" asp-controller="Cart">My Cart</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="OrderHistory" asp-controller="Customer">OrderHistory</a>
+                                </li>
+
+                            }
                         }
                         else
                         {
                             <li class="nav-item">
                                 <a class="nav-link" href="/User/Login">Login</a>
                             </li>
-
                             <li class="nav-item">
                                 <a class="nav-link" href="/User/Register">Register</a>
                             </li>
@@ -65,7 +97,6 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - FinalWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

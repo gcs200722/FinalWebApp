@@ -1,6 +1,6 @@
 ﻿@model FinalWebApp.Data.Entities.Order
 
-<h2>Order Details</h2>
+<h2>Order Details         <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a></h2>
 <p>
     <strong>Order ID:</strong> @Model.Id <br />
     <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
@@ -23,6 +23,8 @@
         </tr>
     </thead>
     <tbody>
+
+
         @foreach (var item in Model.OrderItems)
         {
             <tr>
