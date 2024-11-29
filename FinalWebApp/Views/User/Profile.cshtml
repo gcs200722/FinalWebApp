@@ -4,45 +4,142 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="page-title">@ViewData["Title"]</h2>
 
 <form asp-action="Profile" method="post" enctype="multipart/form-data">
     <input hidden asp-for="UserId" />
-    <div class="form-group">
-        <label asp-for="Avatar">Avatar</label>
-        <input asp-for="Avatar" class="form-control" type="file" />
-        <span asp-validation-for="Avatar" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Fullname"></label>
-        <input asp-for="Fullname" class="form-control" />
-        <span asp-validation-for="Fullname" class="text-danger"></span>
+
+    <div class="form-container shadow-lg">
+        <div class="form-group">
+            <label asp-for="Avatar" class="control-label">Avatar</label>
+            <input asp-for="Avatar" class="form-control input-style" type="file" />
+            <span asp-validation-for="Avatar" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Fullname" class="control-label">Full Name</label>
+            <input asp-for="Fullname" class="form-control input-style" />
+            <span asp-validation-for="Fullname" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Gender" class="control-label">Gender</label>
+            <select asp-for="Gender" class="form-control input-style">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateOfBirth" class="control-label">Date of Birth</label>
+            <input asp-for="DateOfBirth" class="form-control input-style" type="date" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NumberPhone" class="control-label">Phone Number</label>
+            <input asp-for="NumberPhone" class="form-control input-style" />
+            <span asp-validation-for="NumberPhone" class="text-danger"></span>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Gender"></label>
-        <select asp-for="Gender" class="form-control">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
-        <span asp-validation-for="Gender" class="text-danger"></span>
+    <div class="text-center mt-3">
+        <a href="/User/ChangePassword" class="btn btn-link">Change Password</a>
     </div>
-
-    <div class="form-group">
-        <label asp-for="DateOfBirth"></label>
-        <input asp-for="DateOfBirth" class="form-control" type="date" />
-        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="NumberPhone"></label>
-        <input asp-for="NumberPhone" class="form-control" />
-        <span asp-validation-for="NumberPhone" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Update Profile</button>
-
-    <li class="nav-item">
-        <a class="nav-link" href="/User/ChangePassword">ChangePassword</a>
-    </li>
 </form>
+
+<style>
+    /* Body Styling */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa, #e8ebf0); /* Soft gradient */
+        color: #333;
+    }
+
+    .page-title {
+        color: #2c3e50;
+        font-size: 32px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .control-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2c3e50;
+    }
+
+    .input-style {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 16px;
+        width: 100%;
+        transition: box-shadow 0.3s, border-color 0.3s;
+    }
+
+        .input-style:focus {
+            border-color: #f39c12;
+            box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
+        }
+
+    .btn-primary {
+        background-color: #f39c12;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 20px;
+        font-size: 18px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #e67e22;
+        }
+
+    .btn-link {
+        font-size: 16px;
+        color: #f39c12;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .btn-link:hover {
+            color: #e67e22;
+        }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-danger {
+        color: #e74c3c;
+        font-size: 12px;
+    }
+</style>

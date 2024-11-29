@@ -2,22 +2,97 @@
 @using FinalWebApp.Enum
 @model List<Table>
 
-<h2>Select a Table</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-gradient">Select a Table</h2>
 
-<form asp-action="CreateOrder" method="post">
-    <div>
-        <label for="tableId">Select Table:</label>
-        <select name="tableId" id="tableId">
-            @foreach (var table in Model)
-            {
-                <option value="@table.Id">@table.Name</option>
+    <form asp-action="CreateOrder" method="post" class="p-5 rounded shadow-lg bg-glass" style="max-width: 50%; margin: 0 auto;">
+        <div class="mb-4">
+            <label for="tableId" class="form-label">Select Table:</label>
+            <select name="tableId" id="tableId" class="form-select custom-select" required>
+                @foreach (var table in Model)
+                {
+                    <option value="@table.Id">@table.Name</option>
+                }
+            </select>
+        </div>
 
-            }
-        </select>
-    </div>
-    <div>
-        <label for="diningTime">Dining Time:</label>
-        <input type="datetime-local" id="diningTime" name="diningTime" required />
-    </div>
-    <button type="submit">Place Order</button>
-</form>
+        <div class="mb-4">
+            <label for="diningTime" class="form-label">Dining Time:</label>
+            <input type="datetime-local" id="diningTime" name="diningTime" class="form-control custom-input" required />
+        </div>
+
+        <button type="submit" class="btn btn-gradient w-100 shadow-sm">Place Order</button>
+    </form>
+</div>
+
+<style>
+    /* Background styling for a creative touch */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ece9e6, #ffffff);
+        color: #495057;
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+    }
+
+    .bg-glass {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #343a40;
+    }
+
+    .form-select.custom-select,
+    .form-control.custom-input {
+        background: linear-gradient(135deg, #ffffff, #f1f1f1);
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        font-size: 1.1rem;
+        padding: 12px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .form-select.custom-select:focus,
+        .form-control.custom-input:focus {
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+    /* Gradient button with animation */
+    .btn-gradient {
+        font-size: 1.2rem;
+        padding: 12px;
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        border: none;
+        color: #fff;
+        border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(102, 16, 242, 0.4);
+        }
+
+    /* Shadow effect for the form */
+    .shadow-lg {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Smooth hover effect */
+    .form-select:hover,
+    .form-control:hover {
+        transform: scale(1.02);
+    }
+</style>

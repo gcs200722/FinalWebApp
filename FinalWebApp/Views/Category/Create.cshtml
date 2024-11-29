@@ -34,3 +34,84 @@
     </div>
 </div>
 
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif; /* A modern and clean font */
+    color: #333;
+    margin: 0;
+
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #34495e; /* Darker blue-grey for headings */
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+}
+
+
+.col-md-6 {
+    background: #f0f9ff ;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01); /* Stronger shadow for depth */
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.col-md-6:hover {
+transform: translateX(-0.5px); /* Lift effect */
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow on hover */
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.control-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2d98da; /* Vibrant blue for labels */
+}
+
+input[type="text"] {
+    border: 2px solid #dcdfe6;
+    border-radius: 10px;
+    padding: 12px;
+    width: 100%;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fcfcfc;
+}
+
+input[type="text"]:focus {
+    border-color: #9b59b6; /* Purple focus color */
+    box-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
+}
+
+input[type="submit"] {
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient button */
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Reversed gradient on hover */
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.text-danger {
+    color: #e74c3c; /* Bright red for error messages */
+    font-size: 14px;
+}
+
+
+
+</style>

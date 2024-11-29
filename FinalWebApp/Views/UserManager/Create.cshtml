@@ -7,10 +7,10 @@
     var buttonString = Model == null || string.IsNullOrEmpty(Model.Id) ? "Create" : "Edit";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="page-title">@ViewData["Title"]</h2>
 
 <form asp-action="@actionString" method="post">
-    <input type="hidden" asp-for="Id" class="form-control" />
+    <input type="hidden" asp-for="Id" class="form-control input-style" />
 
     @if (ViewData.ModelState.ErrorCount > 0)
     {
@@ -19,74 +19,144 @@
         </div>
     }
 
-    <div class="form-group">
-        <label asp-for="Fullname"></label>
-        <input asp-for="Fullname" class="form-control" value="@Model?.Fullname"/>
-        <span asp-validation-for="Fullname" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" value="@Model?.Email"/>
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    @if (@actionString != "Edit")
-    {
+    <div class="form-container shadow-lg">
         <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" class="form-control" type="password" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <label asp-for="Fullname" class="control-label">Full Name</label>
+            <input asp-for="Fullname" class="form-control input-style" value="@Model?.Fullname" />
+            <span asp-validation-for="Fullname" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="ConfirmPassword"></label>
-            <input asp-for="ConfirmPassword" class="form-control" type="password" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            <label asp-for="Email" class="control-label">Email</label>
+            <input asp-for="Email" class="form-control input-style" value="@Model?.Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
+
+        @if (@actionString != "Edit")
+        {
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password</label>
+                <input asp-for="Password" class="form-control input-style" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
+                <input asp-for="ConfirmPassword" class="form-control input-style" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        }
+
+        <div class="form-group">
+            <label asp-for="Gender" class="control-label">Gender</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="male" name="Gender" value="1" @(Model?.Gender == GenderEnum.Male ? "checked" : "") />
+                <label class="form-check-label" for="male">Male</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="female" name="Gender" value="2" @(Model?.Gender == GenderEnum.Female ? "checked" : "") />
+                <label class="form-check-label" for="female">Female</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="other" name="Gender" value="3" @(Model?.Gender == GenderEnum.Other ? "checked" : "") />
+                <label class="form-check-label" for="other">Other</label>
+            </div>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NumberPhone" class="control-label">Phone Number</label>
+            <input asp-for="NumberPhone" class="form-control input-style" type="tel" value="@Model?.NumberPhone" />
+            <span asp-validation-for="NumberPhone" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateOfBirth" class="control-label">Date of Birth</label>
+            <input asp-for="DateOfBirth" class="form-control input-style" type="date" value="@Model?.DateOfBirth?.ToString("yyyy-MM-dd")" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">@buttonString</button>
+        </div>
+    </div>
+</form>
+
+<style>
+    /* Styling for the form */
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    <div class="form-group">
-        <label asp-for="Gender"></label>
+    .page-title {
+        color: #2c3e50;
+        font-size: 32px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="male" name="Gender" value="1"
-            @(Model?.Gender == GenderEnum.Male ? "checked" : "") />
-            <label class="form-check-label" for="male">
-                Male
-            </label>
-        </div>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="female" name="Gender" value="2"
-            @(Model?.Gender == GenderEnum.Female ? "checked" : "") />
-            <label class="form-check-label" for="female">
-                Female
-            </label>
-        </div>
+    .input-style {
+        border-radius: 8px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="other" name="Gender" value="3"
-            @(Model?.Gender == GenderEnum.Other ? "checked" : "") />
-            <label class="form-check-label" for="other">
-                Other
-            </label>
-        </div>
+        .input-style:focus {
+            border-color: #f39c12;
+            box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
+        }
 
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
+    .form-check {
+        margin-bottom: 10px;
+    }
 
-    <div class="form-group">
-        <label asp-for="NumberPhone"></label>
-        <input asp-for="NumberPhone" class="form-control" type="tel" value="@Model?.NumberPhone" />
-        <span asp-validation-for="NumberPhone" class="text-danger"></span>
-    </div>
+    .form-check-input:checked {
+        background-color: #f39c12;
+        border-color: #f39c12;
+    }
 
-    <div class="form-group">
-        <label asp-for="DateOfBirth"></label>
-        <input asp-for="DateOfBirth" class="form-control" type="date" value="@Model?.DateOfBirth?.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-    </div>
+    .form-check-label {
+        margin-left: 5px;
+        color: #333;
+    }
 
-    <button type="submit" class="btn btn-primary">@buttonString</button>
-</form>
+    .text-danger {
+        font-size: 0.9rem;
+        color: #e74c3c;
+    }
+
+    .btn-primary {
+        background-color: #f39c12;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-primary:hover {
+            background-color: #e67e22;
+        }
+
+    .alert-danger {
+        background-color: #f2dede;
+        border-color: #ebcccc;
+        color: #a94442;
+        border-radius: 5px;
+        padding: 15px;
+    }
+</style>

@@ -4,36 +4,123 @@
     ViewData["Title"] = "Order History";
 }
 
-<h2>Your Order History</h2>
+<div class="container min-vh-50 d-flex align-items-center justify-content-center text-center">
+    <div class="content-box">
+        <h2 class="text-gradient mb-4">@ViewData["Title"]</h2>
 
-@if (Model.Count == 0)
-{
-    <p>You have no orders yet.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Order Date</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
-                <tr>
-                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@order.TotalAmount.ToString("C")</td>
-                    <td>@order.Status</td>
-                    <td>
-                        <!-- Link to order details -->
-                        <a href="@Url.Action("OrderDetails", "Cart", new { orderId = order.Id })">View Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        @if (Model.Count == 0)
+        {
+            <p class="text-muted">You have no orders yet.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Order Date</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr class="table-row-hover">
+                                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@order.Status</td>
+                                <td>
+                                    <!-- Link to order details -->
+                                    <a href="@Url.Action("OrderDetails", "Cart", new { orderId = order.Id })" class="btn btn-info btn-sm rounded-pill shadow-sm">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Full screen centering */
+    .min-vh-50 {
+        min-height: 50vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Content Box */
+    .content-box {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Gradient Text for the title */
+    .text-gradient {
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+    }
+
+    /* Table styling */
+    .table {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hover effect for table rows */
+    .table-row-hover:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    /* Button Styling */
+    .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Info button */
+    .btn-info {
+        background-color: #17a2b8;
+        border: none;
+    }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+    /* Styling for empty cart message */
+    p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #6c757d;
+    }
+
+    /* Styling for the table header */
+    th {
+        background-color: #343a40;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Styling for the table cells */
+    td {
+        font-size: 1.1rem;
+    }
+</style>

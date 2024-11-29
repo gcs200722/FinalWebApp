@@ -1,18 +1,81 @@
 ﻿@model FinalWebApp.ViewModels.AssignRoleViewModel
 
-<form asp-action="AssignRole" method="post">
+<form asp-action="AssignRole" method="post" class="assign-role-form">
     <input type="hidden" asp-for="UserId" />
-    <div>
+
+    <div class="form-group">
         <label>Select Roles</label>
         @foreach (var role in Model.Roles)
         {
-            <div>
-                <!-- Sử dụng name là SelectedRoles[] để lưu các giá trị được chọn -->
-                <input type="checkbox" name="SelectedRoles" value="@role.Name"
-                @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
+            <div class="role-option">
+                <input type="checkbox" name="SelectedRoles" value="@role.Name" 
+                @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") class="checkbox-style" />
                 <label>@role.Name</label>
             </div>
         }
     </div>
-    <button type="submit">Assign Roles</button>
+
+    <button type="submit" class="btn btn-primary">Assign Roles</button>
 </form>
+
+<style>
+    /* Body Styling */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa, #e8ebf0);
+        color: #333;
+        padding: 20px;
+    }
+
+    .assign-role-form {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .role-option {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .checkbox-style {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        accent-color: #3498db;
+    }
+
+    .checkbox-style:checked {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+
+    label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .btn-primary {
+        background-color: #f39c12;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 20px;
+        font-size: 18px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #e67e22;
+        }
+
+</style>
