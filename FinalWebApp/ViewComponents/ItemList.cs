@@ -14,7 +14,7 @@ namespace FinalWebApp.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             //var items = await GetItemsAsync();
-            var items = await _context.Item
+            var items = await _context.Items
                 .Include(c => c.Category)
                 .ToListAsync();
             return View(items);

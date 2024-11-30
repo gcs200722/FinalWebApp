@@ -1,0 +1,83 @@
+﻿@using FinalWebApp.Data.Entities
+@model FinalWebApp.ViewModels.CustomerFeedbackReportViewModel
+
+<h2>Customer Feedback Report</h2>
+
+<form asp-action="ExportFeedbackReportToPdf" asp-controller="Manager" method="post">
+    <button type="submit">Generate PDF</button>
+</form>
+
+<form method="get">
+    <div class="form-row">
+        <div class="col">
+            <label for="StartDate">Start Date</label>
+            <input type="date" class="form-control" id="StartDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="col">
+            <label for="EndDate">End Date</label>
+            <input type="date" class="form-control" id="EndDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            <label for="Month">Month</label>
+            <select class="form-control" id="Month" name="month">
+                <option value="">Select Month</option>
+                @for (int i = 1; i <= 12; i++)
+                {
+                    <!option value="@i" @(i == Model.Month ? "selected" : "")>@i</!option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <label for="Year">Year</label>
+            <select class="form-control" id="Year" name="year">
+                <option value="">Select Year</option>
+                @for (int i = 2020; i <= DateTime.Now.Year; i++)
+                {
+                    <!option value="@i" @(i == Model.Year ? "selected" : "")>@i</!option>
+                }
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+</form>
+
+<hr />
+
+<div>
+    <h4>Overview Information</h4>
+    <p><strong>Total Reviews: </strong>@Model.TotalReviews</p>
+    <p><strong>Average Food Quality Rating: </strong>@Model.AverageFoodQualityRating.ToString("0.0") / 5</p>
+    <p><strong>Average Service Rating: </strong>@Model.AverageServiceRating.ToString("0.0") / 5</p>
+    <p><strong>Average Ambience Rating: </strong>@Model.AverageAmbienceRating.ToString("0.0") / 5</p>
+</div>
+
+<hr />
+
+<h4>Feedback List</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Food Quality</th>
+            <th>Service Quality</th>
+            <th>Ambience</th>
+            <th>Comments</th>
+            <th>Review Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model.CustomerReviews)
+        {
+            <tr>
+                <td>@review.CustomerName</td>
+                <td>@review.FoodQualityRating</td>
+                <td>@review.ServiceRating</td>
+                <td>@review.AmbienceRating</td>
+                <td>@review.Comments</td>
+                <td>@review.ReviewDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

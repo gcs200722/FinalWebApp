@@ -2,17 +2,35 @@
 
 <form asp-action="AssignRole" method="post">
     <input type="hidden" asp-for="UserId" />
+
     <div>
-        <label>Select Roles</label>
+        <label>Select Role</label>
         @foreach (var role in Model.Roles)
         {
-            <div>
-                <!-- Sử dụng name là SelectedRoles[] để lưu các giá trị được chọn -->
-                <input type="checkbox" name="SelectedRoles" value="@role.Name"
-                @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
-                <label>@role.Name</label>
-            </div>
+            // Kiểm tra xem người dùng có phải là "Manage" không
+            if (User.IsInRole("MANAGER"))
+            {
+                // Chỉ hiển thị "Staff" và "Customer" nếu người dùng là "Manage"
+                if (role.Name == "STAFF" || role.Name == "CUSTOMER")
+                {
+                    <div>
+                        <input type="radio" name="SelectedRoles" value="@role.Name"
+                        @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
+                        <label>@role.Name</label>
+                    </div>
+                }
+            }
+            else
+            {
+                // Nếu không phải "Manage", hiển thị tất cả các vai trò
+                <div>
+                    <input type="radio" name="SelectedRoles" value="@role.Name"
+                    @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
+                    <label>@role.Name</label>
+                </div>
+            }
         }
     </div>
-    <button type="submit">Assign Roles</button>
+
+    <button type="submit">Assign Role</button>
 </form>

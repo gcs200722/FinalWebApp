@@ -1,24 +1,24 @@
 ﻿@model FinalWebApp.Data.Entities.Order
 
-<h2>Hóa Đơn</h2>
+<h2>Invoice</h2>
 <p>
-    <strong>Mã hóa đơn:</strong> @Model.Id <br />
-    <strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
-    <strong>Thời gian ăn:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
-    <strong>Khách hàng:</strong> @Model.Customer?.Fullname <br />
-    <strong>Bàn:</strong> @Model.Table?.Name <br />
-    <strong>Trạng thái:</strong> Đã thanh toán <br />
-    <strong>Tổng tiền:</strong> @Model.TotalAmount.ToString("C") <br />
+    <strong>Invoice ID:</strong> @Model.Id <br />
+    <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Customer:</strong> @Model.Customer?.Fullname <br />
+    <strong>Table:</strong> @Model.Table?.Name <br />
+    <strong>Status:</strong> Paid <br />
+    <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C") <br />
 </p>
 
-<h3>Chi Tiết Món Ăn</h3>
+<h3>Order Details</h3>
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Tên món</th>
-            <th>Số lượng</th>
-            <th>Giá</th>
-            <th>Tổng cộng</th>
+            <th>Dish Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
@@ -34,5 +34,6 @@
     </tbody>
 </table>
 
-<button class="btn btn-secondary" onclick="window.print()">In Hóa Đơn</button>
-<a asp-action="ListOrder" class="btn btn-primary">Quay lại danh sách đơn hàng</a>
+<button class="btn btn-secondary" onclick="window.print()">Print Invoice</button>
+<a asp-action="ListOrder" class="btn btn-primary">Back to Orders List</a>
+<a asp-action="Create" asp-controller="Review" class="btn btn-primary">Review</a>

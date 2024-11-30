@@ -1,5 +1,8 @@
-﻿using FinalWebApp.Data;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using FinalWebApp.Commons;
+using FinalWebApp.Data;
 using FinalWebApp.Data.Entities;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +30,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddScoped<ReportGenerator>();
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
 // Configure the HTTP request pipeline.

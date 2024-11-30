@@ -30,7 +30,7 @@
                         {
                             var currentUser = await UserManager.GetUserAsync(User);
                             <li class="nav-item">
-                                <span class="navbar-text">Hello, @currentUser?.UserName</span>
+                                <span class="navbar-text">Hello, @currentUser?.Fullname</span>
                             </li>
                             <li class="nav-item">
                                 <form method="post" asp-area="" asp-controller="User" asp-action="Logout" class="form-inline">
@@ -47,7 +47,9 @@
 
                             @if (User.IsInRole("ADMIN"))
                             {
-                                
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="ViewUser" asp-controller="UserManager">User Manager</a>
+                                </li>
                             }
                             else if (User.IsInRole("STAFF"))
                             {
@@ -76,6 +78,27 @@
                                     <a class="nav-link" asp-action="OrderHistory" asp-controller="Customer">OrderHistory</a>
                                 </li>
 
+                            }
+                            else if (User.IsInRole("MANAGER"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Create" asp-controller="Table">Manage Table</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Create" asp-controller="Category">Manage Category</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Create" asp-controller="Item">Manage Item</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="RevenueReport" asp-controller="Manager">RevenueReport</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="ViewUser" asp-controller="Usermanager">Manage Staff</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="CustomerFeedbackReport" asp-controller="Manager">Manage FeedBack</a>
+                                </li>
                             }
                         }
                         else

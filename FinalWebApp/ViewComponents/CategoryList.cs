@@ -20,7 +20,7 @@ namespace FinalWebApp.ViewComponents
 
         private Task<List<Category>> GetItemsAsync()
         {
-            return _context.Category.ToListAsync();
+            return _context.Categories.ToListAsync();
         }
 
     }

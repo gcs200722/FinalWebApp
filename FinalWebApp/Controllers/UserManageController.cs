@@ -11,15 +11,17 @@ namespace FinalWebApp.Controllers
  
     public class UserManagerController : Controller
     {
+        private readonly FinalWebDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserManagerController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public UserManagerController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, FinalWebDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _context = context;
         }
         // Hành động đăng ký người dùng
         public IActionResult Create()
@@ -30,6 +32,8 @@ namespace FinalWebApp.Controllers
         {
             return View();
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegisterViewModel model)

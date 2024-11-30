@@ -1,0 +1,119 @@
+﻿@model List<FinalWebApp.Data.Dto.RevenueReportDto>
+
+@{
+    ViewData["Title"] = "Revenue Report";
+    var firstReport = Model.FirstOrDefault();
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectedInterval = '@Context.Request.Query["interval"]';  // Lấy giá trị từ query string
+        var selectElement = document.getElementById('interval');
+
+        // Nếu giá trị của selectedInterval tồn tại, chọn thẻ option tương ứng
+        if (selectedInterval) {
+            for (var i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].value === selectedInterval) {
+                    selectElement.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+    });
+</script>
+
+@Html.BeginForm("GenerateRevenueReport", "Manager", FormMethod.Post)
+{
+@foreach (var report in Model)
+{
+    <input type="hidden" name="Period" value="@report.Period" />
+    <input type="hidden" name="TotalRevenue" value="@report.TotalRevenue" />
+    @foreach (var item in report.MenuItems)
+    {
+        <input type="hidden" name="MenuItems[]" value="@item.MenuItem" />
+        <input type="hidden" name="MenuItems[]" value="@item.QuantitySold" />
+        <input type="hidden" name="MenuItems[]" value="@item.Category" />
+    }
+}
+
+<button type="submit">Generate PDF</button>
+}
+
+
+<!-- Form để chọn khoảng thời gian và loại khoảng thời gian -->
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="startDate">Start Date</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" value="@Context.Request.Query["startDate"]" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="endDate">End Date</label>
+            <input type="date" class="form-control" id="endDate" name="endDate" value="@Context.Request.Query["endDate"]" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="interval">Interval</label>
+            <select class="form-control" id="interval" name="interval">
+                <option value="Daily">Daily</option>
+                <option value="Monthly">Monthly</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label>&nbsp;</label>
+            <button type="submit" class="btn btn-primary form-control">Generate Report</button>
+        </div>
+    </div>
+</form>
+
+<hr />
+
+<!-- Bảng hiển thị doanh thu theo các khoảng thời gian -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Period</th>
+            <th>Total Revenue</th>
+            <th>Menu Items</th>
+            <th>Quantity Sold</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Period</td>
+                <td>@item.TotalRevenue.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</td>
+                <td>
+                    @foreach (var menuItem in item.MenuItems)
+                    {
+                        <div>
+                            @menuItem.MenuItem
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var menuItem in item.MenuItems)
+                    {
+                        <div>
+                            @menuItem.QuantitySold
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var menuItem in item.MenuItems)
+                    {
+                        <div>
+                            @menuItem.Category
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -29,7 +29,7 @@ namespace FinalWebApp.Controllers
                 {
                     Name = categoryViewModel.Name,
                 };
-                _context.Category.Add(newcategory);
+                _context.Categories.Add(newcategory);
                 await _context.SaveChangesAsync();
 
                 //ViewBag.Message = "Thêm thành công";
@@ -50,7 +50,7 @@ namespace FinalWebApp.Controllers
         public async Task<ActionResult> Edit(Guid idCategory)
         {
             //var artist = await _context.Artists.FindAsync(idArtist);
-            var category = await _context.Category
+            var category = await _context.Categories
                 .Where(a => a.Id.Equals(idCategory))
                 .SingleOrDefaultAsync();
             var categoryVM = new CategoryViewModel
@@ -68,7 +68,7 @@ namespace FinalWebApp.Controllers
             try
             {
                 //_context.Entry(artistVM).State = EntityState.Modified;
-                var category = await _context.Category.FindAsync(categoryVM.Id);
+                var category = await _context.Categories.FindAsync(categoryVM.Id);
                 if (category == null) { return BadRequest(); }
 
                 category.Name = categoryVM.Name?.Trim();
@@ -95,13 +95,13 @@ namespace FinalWebApp.Controllers
 
             try
             {
-                var category = await _context.Category.FindAsync(categoryVM.Id);
+                var category = await _context.Categories.FindAsync(categoryVM.Id);
                 if (category == null)
                 {
                     return NotFound(); // Trả về 404 nếu không tìm thấy
                 }
 
-                _context.Category.Remove(category); // Xóa category
+                _context.Categories.Remove(category); // Xóa category
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Delete Successful"; // Thông báo thành công
                 return RedirectToAction(nameof(Create), categoryVM); // Quay về danh sách

@@ -91,7 +91,7 @@ namespace FinalWebApp.Controllers
         }
         private async Task<SelectList> GetCategorySelectList()
         {
-            var listCategory = await _context.Category
+            var listCategory = await _context.Categories
                 .Select(a => new
                 {
                     Id = a.Id,
@@ -138,7 +138,7 @@ namespace FinalWebApp.Controllers
                 };
 
                 // Thêm vào cơ sở dữ liệu và lưu
-                _context.Item.Add(newItem);
+                _context.Items.Add(newItem);
                 await _context.SaveChangesAsync();
 
                 // Thêm thông báo thành công
@@ -167,7 +167,7 @@ namespace FinalWebApp.Controllers
 
         public async Task<IActionResult> Edit(Guid idItem, IFormFile file)
         {
-            var item = await _context.Item.FindAsync(idItem);
+            var item = await _context.Items.FindAsync(idItem);
             if (item == null) { return BadRequest(); }
             var itemVM = new ItemViewModel
             {
@@ -190,7 +190,7 @@ namespace FinalWebApp.Controllers
             try
             {
                 //_context.Entry(music).State = EntityState.Modified;
-                var item = await _context.Item.FindAsync(itemViewModel.Id);
+                var item = await _context.Items.FindAsync(itemViewModel.Id);
                 if (item == null)
                 {
                     ModelState.AddModelError("", "Item not found.");
@@ -237,13 +237,13 @@ namespace FinalWebApp.Controllers
 
             try
             {
-                var item = await _context.Item.FindAsync(itemVM.Id);
+                var item = await _context.Items.FindAsync(itemVM.Id);
                 if (item == null)
                 {
                     return NotFound(); // Trả về 404 nếu không tìm thấy
                 }
 
-                _context.Item.Remove(item); // Xóa category
+                _context.Items.Remove(item); // Xóa category
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Xóa thành công"; // Thông báo thành công
                 return RedirectToAction(nameof(Create), itemVM); // Quay về danh sách

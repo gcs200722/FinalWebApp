@@ -158,8 +158,8 @@ namespace FinalWebApp.Controllers
         }
         public async Task<IActionResult> AddItem(Guid orderId)
         {
-            var items = _context.Item.AsQueryable();
-            var categories = await _context.Category.ToListAsync();
+            var items = _context.Items.AsQueryable();
+            var categories = await _context.Categories.ToListAsync();
 
             var viewModel = new ItemListViewModel
             {
@@ -177,7 +177,8 @@ namespace FinalWebApp.Controllers
         public IActionResult AddToOrder(Guid itemId, Guid orderId)
         {
             // Kiểm tra đơn hàng có tồn tại không
-            var order = _context.Orders.Include(o => o.OrderItems).ThenInclude(oi => oi.Item)
+            var order = _context.Orders.Include(o => o.OrderItems)
+                                       .ThenInclude(oi => oi.Item)
                                        .FirstOrDefault(o => o.Id == orderId);
 
             if (order == null)
@@ -186,7 +187,7 @@ namespace FinalWebApp.Controllers
             }
 
             // Lấy món ăn từ cơ sở dữ liệu
-            var item = _context.Item.FirstOrDefault(i => i.Id == itemId);
+            var item = _context.Items.FirstOrDefault(i => i.Id == itemId);
             if (item == null)
             {
                 return NotFound();
@@ -196,14 +197,8 @@ namespace FinalWebApp.Controllers
             var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.ItemId == itemId);
             if (existingOrderItem != null)
             {
-                // Nếu món ăn đã có, bạn có thể cập nhật số lượng thay vì thêm mới
+                // Nếu món ăn đã có, cập nhật số lượng thay vì thêm mới
                 existingOrderItem.Quantity += 1;
-                _context.SaveChanges();
-
-                // Cập nhật lại tổng tiền đơn hàng
-                order.TotalAmount = order.OrderItems.Sum(oi => oi.Quantity * oi.Price);
-
-                // Thêm thông báo cho người dùng
                 TempData["Message"] = $"{item.Name} has been updated in your order.";
             }
             else
@@ -216,28 +211,26 @@ namespace FinalWebApp.Controllers
                     Quantity = 1,  // Số lượng mặc định là 1
                     Price = item.Price,
                     ItemName = item.Name,  // Cập nhật tên món ăn
-                    ItemImage = item.Image // Cập nhật hình ảnh món ăn
+                    ItemImage = item.Image, // Cập nhật hình ảnh món ăn
+                    CategoryId = item.CategoryId // Đảm bảo CategoryId được gán đúng
                 };
 
                 // Thêm món ăn mới vào danh sách OrderItems
                 order.OrderItems.Add(orderItem);
-
-                // Cập nhật lại tổng tiền đơn hàng
-                order.TotalAmount = order.OrderItems.Sum(oi => oi.Quantity * oi.Price);
-
                 _context.OrderItems.Add(orderItem);
-                _context.SaveChanges();
-
-                // Thêm thông báo cho người dùng
                 TempData["Message"] = $"{item.Name} has been added to your order.";
             }
 
-            // Lưu thay đổi vào cơ sở dữ liệu
+            // Cập nhật lại tổng tiền đơn hàng
+            order.TotalAmount = order.OrderItems.Sum(oi => oi.Quantity * oi.Price);
+
+            // Lưu thay đổi vào cơ sở dữ liệu chỉ một lần
             _context.SaveChanges();
 
             // Chuyển hướng đến trang chi tiết đơn hàng
             return RedirectToAction("AddItem", new { orderId = orderId });
         }
+
 
 
         public IActionResult OrderDetails(Guid orderId)

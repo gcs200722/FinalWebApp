@@ -17,13 +17,13 @@ namespace FinalWebApp.Controllers
 
         public async Task<IActionResult> Index(Guid? categoryId)
         {
-            var items = _context.Item.AsQueryable();
+            var items = _context.Items.AsQueryable();
 
             if (categoryId.HasValue)
             {
                 items = items.Where(i => i.CategoryId == categoryId.Value);
             }
-            var categories = await _context.Category.ToListAsync();
+            var categories = await _context.Categories.ToListAsync();
 
             var viewModel = new ItemListViewModel
             {
@@ -35,7 +35,7 @@ namespace FinalWebApp.Controllers
         }
         public async Task<IActionResult> Details(Guid id)
         {
-            var item = await _context.Item.Include(i => i.Category).FirstOrDefaultAsync(i => i.Id == id);
+            var item = await _context.Items.Include(i => i.Category).FirstOrDefaultAsync(i => i.Id == id);
             if (item == null)
             {
                 return NotFound();
