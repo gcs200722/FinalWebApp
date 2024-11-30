@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalWebApp.ViewModels;
 using FinalWebApp.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 namespace FinalWebApp.Controllers
 {
+    [Authorize(Roles ="ADMIN,MANAGER")]
     public class ItemController : Controller
     {
         private readonly IWebHostEnvironment _environment;

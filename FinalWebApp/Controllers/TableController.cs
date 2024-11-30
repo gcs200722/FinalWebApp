@@ -1,11 +1,13 @@
 ﻿using FinalWebApp.Data;
 using FinalWebApp.Data.Entities;
 using FinalWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinalWebApp.Controllers
 {
+    [Authorize(Roles ="ADMIN,MANAGER")]
     public class TableController : Controller
     {
         private readonly FinalWebDbContext _context;

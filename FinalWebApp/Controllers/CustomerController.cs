@@ -1,11 +1,13 @@
 ﻿using FinalWebApp.Data;
 using FinalWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace FinalWebApp.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly FinalWebDbContext _context;

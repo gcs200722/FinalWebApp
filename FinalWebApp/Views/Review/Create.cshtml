@@ -1,99 +1,99 @@
 ﻿@model FinalWebApp.Data.Entities.CustomerReview
 
 @{
-    ViewData["Title"] = "Đánh giá trải nghiệm";
+    ViewData["Title"] = "Experience Review";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <form asp-action="SubmitReview" method="post">
     <div class="form-group">
-        <label for="CustomerName">Họ và tên:</label>
+        <label for="CustomerName">Full Name:</label>
         <input type="text" class="form-control" id="CustomerName" name="CustomerName" required />
     </div>
 
     <div class="form-group">
-        <label>Chất lượng món ăn:</label>
+        <label>Food Quality:</label>
         <div>
             <label>
                 <input type="radio" name="FoodQualityRating" value="1" required />
-                1 - Kém
+                1 - Poor
             </label>
             <label>
                 <input type="radio" name="FoodQualityRating" value="2" />
-                2 - Trung bình
+                2 - Fair
             </label>
             <label>
                 <input type="radio" name="FoodQualityRating" value="3" />
-                3 - Tốt
+                3 - Good
             </label>
             <label>
                 <input type="radio" name="FoodQualityRating" value="4" />
-                4 - Rất tốt
+                4 - Very Good
             </label>
             <label>
                 <input type="radio" name="FoodQualityRating" value="5" />
-                5 - Xuất sắc
+                5 - Excellent
             </label>
         </div>
     </div>
 
     <div class="form-group">
-        <label>Dịch vụ:</label>
+        <label>Service:</label>
         <div>
             <label>
                 <input type="radio" name="ServiceRating" value="1" required />
-                1 - Kém
+                1 - Poor
             </label>
             <label>
                 <input type="radio" name="ServiceRating" value="2" />
-                2 - Trung bình
+                2 - Fair
             </label>
             <label>
                 <input type="radio" name="ServiceRating" value="3" />
-                3 - Tốt
+                3 - Good
             </label>
             <label>
                 <input type="radio" name="ServiceRating" value="4" />
-                4 - Rất tốt
+                4 - Very Good
             </label>
             <label>
                 <input type="radio" name="ServiceRating" value="5" />
-                5 - Xuất sắc
+                5 - Excellent
             </label>
         </div>
     </div>
 
     <div class="form-group">
-        <label>Không gian:</label>
+        <label>Ambience:</label>
         <div>
             <label>
                 <input type="radio" name="AmbienceRating" value="1" required />
-                1 - Kém
+                1 - Poor
             </label>
             <label>
                 <input type="radio" name="AmbienceRating" value="2" />
-                2 - Trung bình
+                2 - Fair
             </label>
             <label>
                 <input type="radio" name="AmbienceRating" value="3" />
-                3 - Tốt
+                3 - Good
             </label>
             <label>
                 <input type="radio" name="AmbienceRating" value="4" />
-                4 - Rất tốt
+                4 - Very Good
             </label>
             <label>
                 <input type="radio" name="AmbienceRating" value="5" />
-                5 - Xuất sắc
+                5 - Excellent
             </label>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="Comments">Ý kiến đóng góp (tuỳ chọn):</label>
+        <label for="Comments">Comments (optional):</label>
         <textarea id="Comments" name="Comments" class="form-control" rows="4"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+    <button type="submit" class="btn btn-primary">Submit Review</button>
 </form>

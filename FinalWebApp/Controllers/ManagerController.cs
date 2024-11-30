@@ -8,9 +8,11 @@ using FinalWebApp.Commons;
 using AutoMapper;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinalWebApp.Controllers
 {
+    [Authorize(Roles ="ADMIN,MANAGER")]
     public class ManagerController : Controller
     {
         private readonly ReportGenerator _reportGenerator;

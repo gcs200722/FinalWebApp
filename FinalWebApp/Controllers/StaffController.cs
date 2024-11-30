@@ -2,6 +2,7 @@
 using FinalWebApp.Data.Entities;
 using FinalWebApp.Enum;
 using FinalWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FinalWebApp.Controllers
 {
+    [Authorize(Roles = "STAFF")]
     public class StaffController : Controller
     {
         private readonly FinalWebDbContext _context;

@@ -1,10 +1,12 @@
 ﻿using FinalWebApp.Data;
 using FinalWebApp.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinalWebApp.Controllers
 {
+    [Authorize(Roles = "STAFF")]
     public class ReviewController : Controller
     {
         private readonly FinalWebDbContext _context;

@@ -3,6 +3,7 @@ using FinalWebApp.Data.Entities;
 using FinalWebApp.Enum;
 using FinalWebApp.Session;
 using FinalWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 
 namespace FinalWebApp.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly FinalWebDbContext _context;

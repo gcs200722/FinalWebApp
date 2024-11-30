@@ -1,39 +1,65 @@
-﻿@model FinalWebApp.Data.Entities.Order
+﻿@using DocumentFormat.OpenXml.Office2010.PowerPoint
+@model FinalWebApp.Data.Entities.Order
 
 <h2>Invoice</h2>
-<p>
-    <strong>Invoice ID:</strong> @Model.Id <br />
-    <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
-    <strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
-    <strong>Customer:</strong> @Model.Customer?.Fullname <br />
-    <strong>Table:</strong> @Model.Table?.Name <br />
-    <strong>Status:</strong> Paid <br />
-    <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C") <br />
-</p>
+<div id="invoiceContent">
+    <p>
+        <strong>Invoice ID:</strong> @Model.Id <br />
+        <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
+        <strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
+        <strong>Customer:</strong> @Model.Customer?.Fullname <br />
+        <strong>Table:</strong> @Model.Table?.Name <br />
+        <strong>Status:</strong> Paid <br />
+        <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C") <br />
+    </p>
 
-<h3>Order Details</h3>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Dish Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
+    <h3>Order Details</h3>
+    <div class="order-details">
         @foreach (var item in Model.OrderItems)
         {
-            <tr>
-                <td>@item.Item.Name</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@(item.Quantity * item.Price).ToString("C")</td>
-            </tr>
+            <p>
+                <strong>Name:</strong> @item.Item.Name <br />
+                <strong>Quantity:</strong> @item.Quantity <br />
+                <strong>Price:</strong> @item.Price.ToString("C") <br />
+                <strong>Total:</strong> @(item.Quantity * item.Price) <br />
+            </p>
         }
-    </tbody>
-</table>
+    </div>
+</div>
 
-<button class="btn btn-secondary" onclick="window.print()">Print Invoice</button>
+<button class="btn btn-secondary" onclick="printInvoice()">Print Invoice</button>
 <a asp-action="ListOrder" class="btn btn-primary">Back to Orders List</a>
 <a asp-action="Create" asp-controller="Review" class="btn btn-primary">Review</a>
+
+<style>
+   Media
+    print {
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        button,
+        a {
+            display: none; /* Ẩn các nút điều hướng và nút in khi in */
+        }
+        .order-details p {
+            margin-bottom: 10px; /* Khoảng cách giữa các mục */
+        }
+    }
+</style>
+
+<script>
+    function printInvoice() {
+        // Lấy nội dung hóa đơn
+        const printContent = document.getElementById('invoiceContent').innerHTML;
+        const originalContent = document.body.innerHTML;
+
+        // Gán nội dung hóa đơn vào body và in
+        document.body.innerHTML = printContent;
+        window.print();
+
+        // Khôi phục nội dung gốc
+        document.body.innerHTML = originalContent;
+        location.reload(); // Làm mới trang sau khi in
+    }
+</script>

@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using FinalWebApp.Data.Entities;
 using FinalWebApp.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinalWebApp.Controllers
 {
- 
+    [Authorize(Roles ="ADMIN,MANAGER,STAFF")]
     public class UserManagerController : Controller
     {
         private readonly FinalWebDbContext _context;
@@ -24,6 +23,7 @@ namespace FinalWebApp.Controllers
             _context = context;
         }
         // Hành động đăng ký người dùng
+        [Authorize(Roles ="MANAGER,ADMIN,STAFF")]
         public IActionResult Create()
         {
             return View();
@@ -67,7 +67,7 @@ namespace FinalWebApp.Controllers
                     if (User.IsInRole("STAFF"))
                     {
                         TempData["SuccessMessage"] = "Operation successful!";
-                        return Redirect(nameof(Create));
+                        return RedirectToAction("ListCustomers","Staff");
                     }
                     if (User.IsInRole("ADMIN")) { return RedirectToAction("ViewUser", "UserManager"); }
                         
