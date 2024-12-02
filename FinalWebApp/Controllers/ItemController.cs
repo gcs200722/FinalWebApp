@@ -107,6 +107,12 @@ namespace FinalWebApp.Controllers
         public async Task<IActionResult> Create(ItemViewModel itemViewModel)
          {
             // Kiểm tra tính hợp lệ của ModelState
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = await GetCategorySelectList();
+                return View(itemViewModel);
+            }
+
             try
             {
                 string uploadedFileName = null;

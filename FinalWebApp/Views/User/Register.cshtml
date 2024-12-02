@@ -5,190 +5,47 @@
     ViewData["Title"] = "Register";
 }
 
-
-
+<h2>@ViewData["Title"]</h2>
 
 <form asp-action="Register" method="post">
     <input type="hidden" asp-for="Id" class="form-control" />
-
-    <div class="form-container shadow-lg">
-        <h2 class="page-title">@ViewData["Title"]</h2>
-        <div class="header-decor text-center">
-            <i class="fas fa-utensils icon-decor"></i>
-        </div>
-        <p class="subheading">Join us for an exquisite dining journey.</p>
-
-        <div class="form-group">
-            <label asp-for="Fullname" class="control-label">Full Name</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input asp-for="Fullname" class="form-control input-style" />
-            </div>
-            <span asp-validation-for="Fullname" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Email" class="control-label">Email</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                <input asp-for="Email" class="form-control input-style" />
-            </div>
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Password" class="control-label">Password</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input asp-for="Password" class="form-control input-style" type="password" />
-            </div>
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input asp-for="ConfirmPassword" class="form-control input-style" type="password" />
-            </div>
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Gender" class="control-label">Gender</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
-                <select asp-for="Gender" class="form-control input-style" asp-items="Html.GetEnumSelectList<GenderEnum>()"></select>
-            </div>
-            <span asp-validation-for="Gender" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="NumberPhone" class="control-label">Phone Number</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                <input asp-for="NumberPhone" class="form-control input-style" type="tel" />
-            </div>
-            <span asp-validation-for="NumberPhone" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="DateOfBirth" class="control-label">Date of Birth</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                <input asp-for="DateOfBirth" class="form-control input-style" type="date" />
-            </div>
-            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-        </div>
-
-        <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">Register</button>
-        </div>
+    <div class="form-group">
+        <label asp-for="Fullname"></label>
+        <input asp-for="Fullname" class="form-control" />
+        <span asp-validation-for="Fullname" class="text-danger"></span>
     </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" class="form-control" type="password" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<GenderEnum>()"></select>
+
+    <div class="form-group">
+        <label asp-for="NumberPhone"></label>
+        <input asp-for="NumberPhone" class="form-control" type="tel" />
+        <span asp-validation-for="NumberPhone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" class="form-control" type="date" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
 </form>
-
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #fffaf0, #f8eee5);
-        color: #2c3e50;
-
-    }
-
-    .page-title {
-        color: #2c3e50;
-        font-size: 32px;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .form-container {
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 40px;
-        background-color: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        max-height:60%;
-    }
-
-    .header-decor {
-        font-size: 48px;
-        color: #d35400;
-        margin-bottom: 10px;
-    }
-
-    .icon-decor {
-        animation: pulse 1.5s infinite;
-    }
-
-    keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.1);
-        }
-    }
-
-    .subheading {
-        font-size: 16px;
-        color: #7f8c8d;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .control-label {
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 8px;
-    }
-
-    .input-group {
-        position: relative;
-        margin-bottom: 20px;
-    }
-
-    .input-group-text {
-        background: #f5f5f5;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 12px 0 0 12px;
-        color: #d35400;
-    }
-
-    .input-style {
-        border: 1px solid #ddd;
-        border-radius: 0 12px 12px 0;
-        padding: 12px;
-        font-size: 16px;
-        width: 100%;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .input-style:focus {
-        border-color: #d35400;
-        box-shadow: 0 4px 12px rgba(211, 84, 0, 0.2);
-    }
-
-    .btn-primary {
-        background-color: #d35400;
-        border: none;
-        border-radius: 12px;
-        padding: 14px;
-        font-size: 18px;
-        width: 100%;
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-    .btn-primary:hover {
-        background-color: #e67e22;
-        transform: scale(1.05);
-    }
-
-    .text-danger {
-        font-size: 12px;
-        color: #e74c3c;
-    }
-</style>

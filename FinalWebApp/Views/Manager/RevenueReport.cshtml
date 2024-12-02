@@ -5,11 +5,45 @@
     var firstReport = Model.FirstOrDefault();
 }
 
-<h2 class="page-title"><i class="fas fa-chart-line"></i> @ViewData["Title"]</h2>
-<hr />
+<h2>@ViewData["Title"]</h2>
 
-<!-- Form chọn khoảng thời gian -->
-<form method="get" class="filter-form">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectedInterval = '@Context.Request.Query["interval"]';  // Lấy giá trị từ query string
+        var selectElement = document.getElementById('interval');
+
+        // Nếu giá trị của selectedInterval tồn tại, chọn thẻ option tương ứng
+        if (selectedInterval) {
+            for (var i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].value === selectedInterval) {
+                    selectElement.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+    });
+</script>
+
+@Html.BeginForm("GenerateRevenueReport", "Manager", FormMethod.Post)
+{
+@foreach (var report in Model)
+{
+    <input type="hidden" name="Period" value="@report.Period" />
+    <input type="hidden" name="TotalRevenue" value="@report.TotalRevenue" />
+    @foreach (var item in report.MenuItems)
+    {
+        <input type="hidden" name="MenuItems[]" value="@item.MenuItem" />
+        <input type="hidden" name="MenuItems[]" value="@item.QuantitySold" />
+        <input type="hidden" name="MenuItems[]" value="@item.Category" />
+    }
+}
+
+<button type="submit">Generate PDF</button>
+}
+
+
+<!-- Form để chọn khoảng thời gian và loại khoảng thời gian -->
+<form method="get">
     <div class="row">
         <div class="col-md-3">
             <label for="startDate">Start Date</label>
@@ -29,161 +63,57 @@
             </select>
         </div>
 
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-generate w-100">
-                <i class="fas fa-sync-alt"></i> Generate Report
-            </button>
+        <div class="col-md-3">
+            <label>&nbsp;</label>
+            <button type="submit" class="btn btn-primary form-control">Generate Report</button>
         </div>
     </div>
 </form>
 
 <hr />
 
-<!-- Bảng hiển thị doanh thu -->
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <thead class="table-header">
+<!-- Bảng hiển thị doanh thu theo các khoảng thời gian -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Period</th>
+            <th>Total Revenue</th>
+            <th>Menu Items</th>
+            <th>Quantity Sold</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Period</th>
-                <th>Total Revenue</th>
-                <th>Menu Items</th>
-                <th>Quantity Sold</th>
-                <th>Category</th>
+                <td>@item.Period</td>
+                <td>@item.TotalRevenue.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</td>
+                <td>
+                    @foreach (var menuItem in item.MenuItems)
+                    {
+                        <div>
+                            @menuItem.MenuItem
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var menuItem in item.MenuItems)
+                    {
+                        <div>
+                            @menuItem.QuantitySold
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var menuItem in item.MenuItems)
+                    {
+                        <div>
+                            @menuItem.Category
+                        </div>
+                    }
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Period</td>
-                    <td>@item.TotalRevenue.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</td>
-                    <td>
-                        @foreach (var menuItem in item.MenuItems)
-                        {
-                            <div class="menu-item">@menuItem.MenuItem</div><br />
-                        }
-                    </td>
-                    <td>
-                        @foreach (var menuItem in item.MenuItems)
-                        {
-                            <div class="menu-item">@menuItem.QuantitySold</div>
-
-                            <br />
-                        }
-                    </td>
-                    <td>
-                        @foreach (var menuItem in item.MenuItems)
-                        {
-                            <div class="menu-item">@menuItem.Category</div>
-
-                            <br />
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-<!-- Form ẩn để tạo PDF -->
-@Html.BeginForm("GenerateRevenueReport", "Manager", FormMethod.Post, new { id = "pdfForm" })
-{
-@foreach (var report in Model)
-{
-    <input type="hidden" name="Period" value="@report.Period" />
-    <input type="hidden" name="TotalRevenue" value="@report.TotalRevenue" />
-    @foreach (var item in report.MenuItems)
-    {
-        <input type="hidden" name="MenuItems[]" value="@item.MenuItem" /> 
-        <input type="hidden" name="MenuItems[]" value="@item.QuantitySold" />
-
-        <input type="hidden" name="MenuItems[]" value="@item.Category" />
-    }
-}
-<button type="submit" class="btn btn-export">
-    <i class="fas fa-file-pdf"></i> Export PDF
-</button>
-}
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: #f3f4f6;
-        color: #333;
-    }
-
-    .page-title {
-        text-align: center;
-        font-size: 28px;
-        color: #4b6584;
-    }
-
-    .filter-form {
-        background: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-generate {
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 8px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .btn-generate:hover {
-        background: #0056b3;
-        transform: translateY(-3px);
-    }
-
-    .table {
-        margin-top: 20px;
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .table-header {
-        background-color: #4b6584;
-        color: white;
-    }
-
-    .table tbody tr:hover {
-        background: #f7f9fb;
-        cursor: pointer;
-        transform: scale(1.02);
-        transition: transform 0.2s;
-    }
-
-    .menu-item {
-        background: #eef2f3;
-        padding: 5px;
-        border-radius: 4px;
-        margin-bottom: 3px;
-        display: inline-block;
-        font-size: 14px;
-    }
-
-    .btn-export {
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: bold;
-        display: inline-block;
-        margin-top: 15px;
-    }
-
-    .btn-export:hover {
-        background-color: #c0392b;
-        transform: scale(1.05);
-    }
-
-    .table-responsive {
-        margin-top: 20px;
-    }
-</style>
+        }
+    </tbody>
+</table>

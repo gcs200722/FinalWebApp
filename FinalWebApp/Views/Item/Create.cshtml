@@ -6,79 +6,87 @@
     string buttonName = actionName;
 }
 
-<h1 class="page-title">@ViewData["Title"]</h1>
+<h1>@ViewData["Title"]</h1>
 <hr />
 
-<div class="container-fluid">
+<form asp-action="@actionName" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="row">
-        <!-- Form Section -->
         <div class="col-md-4">
-            <div class="form-section">
-                <form asp-action="@actionName" method="post" enctype="multipart/form-data">
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                    <input type="hidden" asp-for="Id" class="form-control" />
-
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label"></label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Description" class="control-label"></label>
-                        <textarea asp-for="Description" rows="3" class="form-control"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Price" class="control-label"></label>
-                        <input asp-for="Price" type="number" step="0.01" class="form-control" />
-                        <span asp-validation-for="Price" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="CategoryId" class="control-label">Category</label>
-                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control custom-select"></select>
-                        <span asp-validation-for="CategoryId" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Image" class="control-label">Choose Image</label>
-                        <div class="custom-file">
-                            <input asp-for="Image" type="file" class="custom-file-input" id="inputGroupFile02" accept="image/*" />
-                            <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-                        </div>
-                        <img id="imagePreview" src="" alt="Image preview" style="display:none; max-width: 100%; margin-top: 10px;" />
-                        <span asp-validation-for="Image" class="text-danger"></span>
-                    </div>
-
-                    <div class="text-center mt-3">
-                        <input type="submit" value="@buttonName" class="btn btn-create" />
-                    </div>
-                </form>
+            <input type="hidden" asp-for="Id" class="form-control" />
+            
+            <!-- Item Name -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
             </div>
-        </div>
 
-        <!-- Table Section -->
-        <div class="col-md-8">
-            <div class="table-section">
-                @await Component.InvokeAsync("ItemList")
+            <!-- Item Description -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Item Price -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Category Selection -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <label asp-for="CategoryId" class="control-label">Category</label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control custom-select"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <label asp-for="Image" class="control-label">Choose Image</label>
+                    <div class="custom-file">
+                        <input asp-for="Image" type="file" class="custom-file-input" id="inputGroupFile02" accept="image/*" />
+                        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                    </div>
+                    <img id="imagePreview" src="" alt="Image preview" style="display:none; max-width: 200px; margin-top: 10px;" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-3">
+                <input type="submit" value="@buttonName" class="btn btn-primary" />
             </div>
         </div>
     </div>
+</form>
+
+<!-- Display List of Items -->
+<div class="col-md-12 mt-4">
+    @await Component.InvokeAsync("ItemList")
 </div>
 
 <script>
-    // Handle file input change event for image preview
+    // Handle the file input change event for image upload and preview
     document.querySelector('.custom-file-input').addEventListener('change', function (event) {
         var input = event.target;
         var label = input.nextElementSibling;
         var fileName = input.files.length > 0 ? input.files[0].name : 'Choose file';
         label.innerText = fileName;
 
-        // Clear previous image preview
+        // Clear the previous image preview
         var preview = document.getElementById('imagePreview');
         preview.src = ''; // Clear previous preview
 
@@ -93,107 +101,3 @@
         }
     });
 </script>
-<style>
-    /* General Styles */
-    .page-title {
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-    h1{
-        font-weight:bold;
-    }
-
-    /* Form Section Styles */
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .form-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-    .form-group label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .custom-file-label {
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    /* Table Section Styles */
-    .table-section {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .table-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-    .table {
-        margin-top: 10px;
-        border-collapse: collapse;
-        width: 100%;
-    }
-    .table th {
-            background-color: #f39c12;
-    }
-
-        .table th, .table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-
-    /* Button Styles */
-    .btn-create {
-        background: #f39c12;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-        .btn-create:hover {
-            background: #e67e22;
-            transform: scale(1.05);
-        }
-
-    .btn-update {
-        background: #3498db;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        transition: background 0.3s ease;
-    }
-
-        .btn-update:hover {
-            background: #2980b9;
-        }
-
-    .btn-delete {
-        background: #e74c3c;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        transition: background 0.3s ease;
-    }
-
-        .btn-delete:hover {
-            background: #c0392b;
-        }
-</style>
