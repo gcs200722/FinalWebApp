@@ -1,21 +1,149 @@
 ﻿@model FinalWebApp.ViewModels.LoginViewModel
 
 <form asp-action="Login" method="post">
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+    <div class="form-container shadow-lg">
+        <div class="header-decor text-center">
+            <i class="fas fa-utensils icon-decor"></i>
+        </div>
+        <h2>Welcome Back!</h2>
+        <p class="subheading">Enjoy a luxurious dining experience.</p>
+
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input asp-for="Email" class="form-control input-style" />
+            </div>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="control-label">Password</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input asp-for="Password" class="form-control input-style" type="password" />
+            </div>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group form-check">
+            <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+            <label class="form-check-label" for="RememberMe">
+                Remember me
+            </label>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group form-check">
-        <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
-        <label class="form-check-label" for="RememberMe">
-            Remember me
-        </label>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #fffaf0, #f8eee5);
+        color: #2c3e50;
+        padding: 20px;
+    }
+
+    .form-container {
+        max-width: 450px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+
+    .header-decor {
+        font-size: 48px;
+        color: #d35400;
+        margin-bottom: 20px;
+    }
+
+    .icon-decor {
+        animation: pulse 1.5s infinite;
+    }
+
+    keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    h2 {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .subheading {
+        font-size: 16px;
+        color: #7f8c8d;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .input-group-text {
+        background: #f5f5f5;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 12px 0 0 12px;
+        color: #d35400;
+    }
+
+    .input-style {
+        border: 1px solid #ddd;
+        border-radius: 0 12px 12px 0;
+        padding: 12px;
+        font-size: 16px;
+        width: 100%;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .input-style:focus {
+        border-color: #d35400;
+        box-shadow: 0 4px 12px rgba(211, 84, 0, 0.2);
+    }
+
+    .btn-primary {
+        background-color: #d35400;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 18px;
+        width: 100%;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #e67e22;
+        transform: scale(1.05);
+    }
+
+    .text-danger {
+        font-size: 12px;
+        color: #e74c3c;
+    }
+
+    .form-check-label {
+        color: #2c3e50;
+    }
+</style>

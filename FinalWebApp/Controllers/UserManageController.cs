@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FinalWebApp.Controllers
 {
-    [Authorize(Roles ="ADMIN,MANAGER,STAFF")]
+    [Authorize(Roles ="ADMIN,MANAGER,STAFF")]    
     public class UserManagerController : Controller
     {
         private readonly FinalWebDbContext _context;
@@ -23,7 +23,6 @@ namespace FinalWebApp.Controllers
             _context = context;
         }
         // Hành động đăng ký người dùng
-        [Authorize(Roles ="MANAGER,ADMIN,STAFF")]
         public IActionResult Create()
         {
             return View();

@@ -11,123 +11,206 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FinalWebApp.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-gradient-primary shadow-lg mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FinalWebApp</a>
+                <!-- Logo -->
+                <a class="navbar-brand text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-utensils me-2"></i>FinalWebApp
+                </a>
+
+                <!-- Toggler button for responsive design -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <!-- Navbar content -->
                 <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Left-side navigation items -->
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (User.IsInRole("ADMIN"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="ViewUser" asp-controller="UserManager">User Manager</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("STAFF"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="ListOrder" asp-controller="Staff">Order Management</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="TableManagement" asp-controller="Staff">Table Management</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="OrderCompleted" asp-controller="Staff">Order Completed</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="ListCustomers" asp-controller="Staff">List Customer</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("CUSTOMER"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="Index" asp-controller="Customer">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="Cart" asp-controller="Cart">My Cart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="OrderHistory" asp-controller="Customer">Order History</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("MANAGER"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="Create" asp-controller="Table">Manage Table</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="Create" asp-controller="Category">Manage Category</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="Create" asp-controller="Item">Manage Item</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="RevenueReport" asp-controller="Manager">Revenue Report</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="ViewUser" asp-controller="UserManager">Manage Staff</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="CustomerFeedbackReport" asp-controller="Manager">Manage Feedback</a>
+                            </li>
+                        }
+                       
+                        <!-- Additional public or shared links can go here -->
+                    </ul>
+
+                    <!-- Right-side user-specific items -->
+                    <ul class="navbar-nav ms-auto align-items-center">
                         @if (SignInManager.IsSignedIn(User))
                         {
                             var currentUser = await UserManager.GetUserAsync(User);
                             <li class="nav-item">
-                                <span class="navbar-text">Hello, @currentUser?.Fullname</span>
+                                <span class="navbar-text text-white me-3">Hello, @currentUser?.Fullname</span>
                             </li>
                             <li class="nav-item">
                                 <form method="post" asp-area="" asp-controller="User" asp-action="Logout" class="form-inline">
-                                    <button type="submit" class="btn btn-danger">Logout</button>
+                                    <button type="submit" class="btn btn-outline-light me-3">Logout</button>
                                 </form>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/User/Profile">Profile</a>
+                                <a class="nav-link text-white" href="/User/Profile">
+                                    <img src="@Url.Content("~/Image/" + (currentUser?.Avatar ?? "default-avatar.png"))"
+                                         alt="Avatar" class="rounded-circle border border-light" width="30" height="30" />
+                                </a>
                             </li>
-                            <li class="nav-item">
-                                <img src="@Url.Content("~/Image/" + (currentUser?.Avatar ?? "default-avatar.png"))"
-                                     alt="Avatar" class="rounded-circle" width="30" height="30" />
-                            </li>
-
-                            @if (User.IsInRole("ADMIN"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="ViewUser" asp-controller="UserManager">User Manager</a>
-                                </li>
-                            }
-                            else if (User.IsInRole("STAFF"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="ListOrder" asp-controller="Staff">Order Management</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="TableManagement" asp-controller="Staff">Table Management</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="OrderCompleted" asp-controller="Staff">Order Completed</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="ListCustomers" asp-controller="Staff">List Customer</a>
-                                </li>
-                            }
-                            else if (User.IsInRole("CUSTOMER"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="Index" asp-controller="Customer">Orders</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="Cart" asp-controller="Cart">My Cart</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="OrderHistory" asp-controller="Customer">OrderHistory</a>
-                                </li>
-
-                            }
-                            else if (User.IsInRole("MANAGER"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="Create" asp-controller="Table">Manage Table</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="Create" asp-controller="Category">Manage Category</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="Create" asp-controller="Item">Manage Item</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="RevenueReport" asp-controller="Manager">RevenueReport</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="ViewUser" asp-controller="Usermanager">Manage Staff</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="CustomerFeedbackReport" asp-controller="Manager">Manage FeedBack</a>
-                                </li>
-                            }
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" href="/User/Login">Login</a>
+                                <a class="nav-link text-white" href="/User/Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/User/Register">Register</a>
+                                <a class="nav-link text-white" href="/User/Register">Register</a>
                             </li>
                         }
+                            <!-- Role-based navigation -->
+                         
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FinalWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+  
+
+    /* Header và Footer opacity */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #1d3557, #457b9d); /* Gradient xanh đậm */
+        color: white;
+        opacity: 0.95; /* Giảm độ opacity */
+    }
+
+    /* Navbar Brand */
+    .navbar-brand {
+        font-size: 1.6rem;
+        font-family: 'Lora', serif; /* Font sang trọng */
+    }
+
+    /* Navigation links */
+    .nav-link {
+        font-size: 1.1rem;
+        font-family: 'Nunito', sans-serif; /* Font hiện đại, dễ đọc */
+        transition: color 0.3s ease;
+    }
+
+        .nav-link:hover {
+            color: #a8dadc; /* Màu xanh nhạt khi hover */
+        }
+
+    /* Button outline-light */
+    .btn-outline-light {
+        border-color: white;
+        color: white;
+        font-family: 'Nunito', sans-serif;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #e63946; /* Đỏ nhạt khi hover */
+            color: white;
+        }
+
+    /* Avatar rounded-circle */
+    .rounded-circle {
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+    }
+
+    /* Body font */
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .navbar-text {
+        font-family: 'Lora', serif;
+    }
+
+
+    /* Navbar responsive */
+    .navbar-toggler {
+        border: none;
+        background-color: transparent;
+    }
+
+   
+</style>
+
+
+<!-- Thêm link font từ Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+
+
+
+

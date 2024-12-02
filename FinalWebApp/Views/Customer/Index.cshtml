@@ -4,51 +4,239 @@
     ViewData["Title"] = "Menu";
 }
 
-<div class="d-flex">
-    <!-- Sidebar hiển thị danh mục -->
-    <div class="col-md-3">
-        <h4>Danh mục</h4>
-        <ul class="list-group">
-            @foreach (var category in Model.Categories)
-            {
-                <li class="list-group-item @(Model.SelectedCategoryId == category.Id ? "active" : "")">
-                    <a href="@Url.Action("Index", "Customer", new { categoryId = category.Id })">
-                        @category.Name
-                    </a>
-                </li>
-            }
-        </ul>
-    </div>
+<!-- Thêm link tới Google Fonts cho font chữ mới -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-
-    <!-- Hiển thị danh sách món ăn -->
-    <div class="col-md-9">
-        <h4>Menu Items</h4>
-        <div class="row">
-            @if (!Model.Items.Any())
-            {
-                <p>No items found for the selected category.</p>
-            }
-            else
-            {
-                foreach (var item in Model.Items)
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar hiển thị danh mục với màu nền sáng và hiệu ứng hover -->
+        <div class="col-md-3 p-4 rounded shadow-lg" style="background: #1e2a47; border-radius: 20px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
+            <h4 class="text-center mb-4" style="font-family: 'Poppins', sans-serif; color: white;">Danh mục</h4>
+            <ul class="list-group">
+                @foreach (var category in Model.Categories)
                 {
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <img src="~/Image/@item.Image" class="card-img-top" alt="Image of @item.Name">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.Name</h5>
-                                <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
-                                <a href="@Url.Action("Details", "Customer", new { id = item.Id })" class="btn btn-primary">View Details</a>
-                                <form asp-action="AddToCart" asp-controller="Cart" method="post" class="mt-2">
-                                    <input type="hidden" name="itemId" value="@item.Id" />
-                                    <button type="submit" class="btn btn-success">Add to Cart</button>
-                                </form>
+                    <li class="list-group-item @(Model.SelectedCategoryId == category.Id ? "active" : "")">
+                        <a href="@Url.Action("Index", "Customer", new { categoryId = category.Id })" class="text-decoration-none text-light">
+                            <i class="fa fa-utensils" aria-hidden="true" style="font-size: 20px; margin-right: 10px;"></i>@category.Name
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Hiển thị danh sách món ăn -->
+        <div class="col-md-9 p-4">
+            <h4 class="text-center mb-4" style="font-family: 'Poppins', sans-serif; color: #34495e;">Menu Items</h4>
+            <div class="row">
+                @if (!Model.Items.Any())
+                {
+                    <p class="text-center w-100" style="color: #95a5a6; font-family: 'Poppins', sans-serif;">No items found for the selected category.</p>
+                }
+                else
+                {
+                    foreach (var item in Model.Items)
+                    {
+                        <div class="col-md-4 mb-4 d-flex justify-content-center">
+                            <div class="card custom-card shadow-lg rounded hover-card" style="transition: transform 0.4s ease, box-shadow 0.4s ease;">
+                                <div class="card-img-container">
+                                    <img src="~/Image/@item.Image" class="card-img-top" alt="Image of @item.Name">
+                                    <div class="overlay">
+                                        <p class="overlay-text">Click to View</p>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Name</h5>
+                                    <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
+                                    <div class="button-group">
+                                        <a href="@Url.Action("Details", "Customer", new { id = item.Id })" class="btn btn-primary">View</a>
+                                        <form asp-action="AddToCart" asp-controller="Cart" method="post" class="mt-2">
+                                            <input type="hidden" name="itemId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-success">Add</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
-            }
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Toàn bộ trang sử dụng font chữ Poppins */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f7f7f7;
+        color: #34495e;
+    }
+
+    /* Sidebar */
+    .list-group-item {
+        border: none;
+        background-color: #2c3e50;
+        padding: 15px 25px;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .list-group-item:hover {
+            background-color: #34495e;
+            cursor: pointer;
+            transform: scale(1.05);
+        }
+
+    .active {
+        background-color: #16a085 !important;
+        color: white !important;
+    }
+
+    .list-group-item i {
+        transition: transform 0.3s ease;
+    }
+
+    .list-group-item:hover i {
+        transform: rotate(10deg);
+    }
+
+    /* Card Styles */
+    .custom-card {
+        position: relative;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+        .custom-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Card Image */
+    .card-img-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .card-img-top {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: 15px;
+    }
+
+    /* Overlay */
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s ease;
+        border-radius: 15px;
+    }
+
+    .overlay-text {
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .card-img-container:hover .overlay {
+        opacity: 1;
+    }
+
+    /* Card Body */
+    .card-body {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #7f8c8d;
+    }
+
+    /* Button Styles */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn {
+        transition: all 0.3s ease;
+        font-weight: 600;
+        text-transform: uppercase;
+        padding: 8px 18px;
+        font-size: 14px;
+        border-radius: 8px;
+        letter-spacing: 1px;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+    .btn-success {
+        background-color: #2ecc71;
+        border: none;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+    /* Layout for cards */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .col-md-4 {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    /* Container Margin */
+    .container-fluid {
+        margin-top: 30px;
+    }
+
+    .text-center {
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
