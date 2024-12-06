@@ -73,7 +73,6 @@
                                 <th>Table</th>
                                 <th>Table Status</th>
                                 <th>Customer</th>
-                                <th>Update</th>
                                 <th>View Item</th>
                             </tr>
                         </thead>
@@ -114,49 +113,9 @@
                                         </td>
                                         <td>@order.Customer?.Fullname</td>
                                         <td>
-                                            @if (order.OrderStatus != OrderStatusEnum.Paid && order.OrderStatus != OrderStatusEnum.Canceled)
-                                            {
-                                                <form method="post" asp-action="UpdateOrderStatus" class="d-inline">
-                                                    <input type="hidden" name="orderId" value="@order.Id" />
-                                                    <div class="btn-group" role="group">
-                                                        @if (order.OrderStatus == OrderStatusEnum.Pending)
-                                                        {
-                                                            <input type="radio" class="btn-check" name="status" value="Confirmed"
-                                                                   id="confirmed-@order.Id">
-                                                            <label class="btn btn-outline-primary btn-sm" for="confirmed-@order.Id">Confirm</label>
-
-                                                            <input type="radio" class="btn-check" name="status" value="Canceled"
-                                                                   id="canceled-@order.Id">
-                                                            <label class="btn btn-outline-danger btn-sm" for="canceled-@order.Id">Cancel</label>
-                                                        }
-                                                        else if (order.OrderStatus == OrderStatusEnum.Confirmed)
-                                                        {
-                                                            <input type="radio" class="btn-check" name="status" value="Unpaid"
-                                                                   id="unpaid-@order.Id">
-                                                            <label class="btn btn-outline-success btn-sm" for="unpaid-@order.Id">Unpaid</label>
-
-                                                            <input type="radio" class="btn-check" name="status" value="Paid"
-                                                                   id="paid-@order.Id">
-                                                            <label class="btn btn-outline-warning btn-sm" for="paid-@order.Id">Paid</label>
-                                                        }
-                                                        else if (order.OrderStatus == OrderStatusEnum.Unpaid)
-                                                        {
-                                                            <input type="radio" class="btn-check" name="status" value="Paid"
-                                                                   id="paid-@order.Id">
-                                                            <label class="btn btn-outline-warning btn-sm" for="paid-@order.Id">Paid</label>
-                                                        }
-                                                    </div>
-                                                    <button type="submit" class="btn btn-sm btn-primary mt-2">Update</button>
-                                                </form>
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (order.Table?.Status == StatusTableEnum.Active)
-                                            {
                                                 <a asp-action="OrderDetails" asp-route-orderId="@order.Id" class="btn btn-info btn-sm">
-                                                    View Items
+                                                    View Order
                                                 </a>
-                                            }
                                         </td>
                                     </tr>
                                 }

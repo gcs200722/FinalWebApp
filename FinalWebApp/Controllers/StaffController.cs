@@ -158,50 +158,61 @@ namespace FinalWebApp.Controllers
             }
             return RedirectToAction("TableManagement");
         }
-        public async Task<IActionResult> AddItem(Guid orderId)
+        // GET: Add Item to Order
+        public async Task<IActionResult> AddItem(Guid orderId, Guid? categoryId)
         {
-            var items = _context.Items.AsQueryable();
+            // Lấy danh sách món ăn và danh mục
+            var items = _context.Items.Include(i => i.Category).AsQueryable();
             var categories = await _context.Categories.ToListAsync();
 
+            // Nếu có categoryId, lọc món ăn theo categoryId
+            if (categoryId.HasValue)
+            {
+                items = items.Where(i => i.CategoryId == categoryId.Value);
+            }
+
+            // Tạo view model và truyền dữ liệu
             var viewModel = new ItemListViewModel
             {
-                Items = await items.Include(i => i.Category).ToListAsync(),
+                Items = await items.ToListAsync(),
                 Categories = categories,
-                SelectedCategoryId = null
+                SelectedCategoryId = categoryId // Lưu giá trị categoryId vào ViewModel để biết danh mục nào được chọn
             };
 
-            // Truyền orderId vào ViewData hoặc ViewBag nếu cần sử dụng trên view
+            // Truyền orderId vào ViewData để sử dụng trên View
             ViewData["OrderId"] = orderId;
 
             return View(viewModel);
         }
+
+
+        // POST: Add item to order
         [HttpPost]
-        public IActionResult AddToOrder(Guid itemId, Guid orderId)
+        public async Task<IActionResult> AddToOrder(Guid itemId, Guid orderId)
         {
-            // Kiểm tra đơn hàng có tồn tại không
-            var order = _context.Orders.Include(o => o.OrderItems)
-                                       .ThenInclude(oi => oi.Item)
-                                       .FirstOrDefault(o => o.Id == orderId);
+            // Lấy đơn hàng theo orderId
+            var order = await _context.Orders.Include(o => o.OrderItems)
+                                             .ThenInclude(oi => oi.Item)
+                                             .FirstOrDefaultAsync(o => o.Id == orderId);
 
             if (order == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Order not found." });
             }
 
             // Lấy món ăn từ cơ sở dữ liệu
-            var item = _context.Items.FirstOrDefault(i => i.Id == itemId);
+            var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId);
             if (item == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Item not found." });
             }
 
             // Kiểm tra nếu món ăn đã có trong đơn hàng
             var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.ItemId == itemId);
             if (existingOrderItem != null)
             {
-                // Nếu món ăn đã có, cập nhật số lượng thay vì thêm mới
+                // Nếu món ăn đã có, cập nhật số lượng
                 existingOrderItem.Quantity += 1;
-                TempData["Message"] = $"{item.Name} has been updated in your order.";
             }
             else
             {
@@ -220,18 +231,15 @@ namespace FinalWebApp.Controllers
                 // Thêm món ăn mới vào danh sách OrderItems
                 order.OrderItems.Add(orderItem);
                 _context.OrderItems.Add(orderItem);
-                TempData["Message"] = $"{item.Name} has been added to your order.";
             }
 
-            // Cập nhật lại tổng tiền đơn hàng
-            order.TotalAmount = order.OrderItems.Sum(oi => oi.Quantity * oi.Price);
+            // Lưu thay đổi vào cơ sở dữ liệu
+            await _context.SaveChangesAsync();
 
-            // Lưu thay đổi vào cơ sở dữ liệu chỉ một lần
-            _context.SaveChanges();
-
-            // Chuyển hướng đến trang chi tiết đơn hàng
-            return RedirectToAction("AddItem", new { orderId = orderId });
+            // Trả về kết quả thành công
+            return Json(new { success = true, message = $"{item.Name} has been added/updated in your order." });
         }
+
 
 
 
@@ -251,7 +259,6 @@ namespace FinalWebApp.Controllers
 
             return View(order); // Trả về view chi tiết đơn hàng
         }
-
         [HttpPost]
         public IActionResult UpdateQuantity(Guid orderId, Guid orderItemId, int quantity)
         {
@@ -364,14 +371,12 @@ namespace FinalWebApp.Controllers
         public async Task<IActionResult> UpdateOrderStatus(Guid orderId, OrderStatusEnum status)
         {
             // Lấy đơn hàng theo ID
-            var order = await _context.Orders
-                                      .Include(o => o.Table)
-                                      .FirstOrDefaultAsync(o => o.Id == orderId);
-
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
             if (order == null)
             {
-                return NotFound("Order not found.");
+                return NotFound();
             }
+
 
             // Cập nhật trạng thái đơn hàng
             order.OrderStatus = status;
@@ -400,7 +405,7 @@ namespace FinalWebApp.Controllers
             // Lưu thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ListOrder");
+            return Json(new { success = true, message = "Order status updated successfully!" });
         }
         public IActionResult OrderCompleted(string orderStatus = "paid")
         {

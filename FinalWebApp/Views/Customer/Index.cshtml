@@ -10,9 +10,14 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar hiển thị danh mục với màu nền sáng và hiệu ứng hover -->
-        <div class="col-md-3 p-4 rounded shadow-lg" style="background: #1e2a47; border-radius: 20px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
+        <div class="col-md-3 p-4  shadow-lg sidebar" style="background: #1e2a47; border-radius: 20px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
             <h4 class="text-center mb-4" style="font-family: 'Poppins', sans-serif; color: white;">Category</h4>
             <ul class="list-group">
+                <li class="list-group-item @(Model.SelectedCategoryId == null ? "active" : "")">
+                    <a href="@Url.Action("Index", "Customer", new { categoryId = (Guid?)null })" class="text-decoration-none text-light">
+                        <i class="fa fa-list" aria-hidden="true" style="font-size: 20px; margin-right: 10px;"></i>All
+                    </a>
+                </li>
                 @foreach (var category in Model.Categories)
                 {
                     <li class="list-group-item @(Model.SelectedCategoryId == category.Id ? "active" : "")">
@@ -26,7 +31,7 @@
 
         <!-- Hiển thị danh sách món ăn -->
         <div class="col-md-9 p-4">
-            <h4 class="text-center mb-4" style="font-family: 'Poppins', sans-serif; color: #34495e;">Menu Items</h4>
+            <h1 class="text-center mb-4" style="font-family: 'Poppins', sans-serif; color: #34495e;">Menu Items</h1>
             <div class="row">
                 @if (!Model.Items.Any())
                 {
@@ -49,11 +54,10 @@
                                     <p class="card-text"><strong>Price:</strong> @item.Price.ToString("C")</p>
                                     <div class="button-group">
                                         <a href="@Url.Action("Details", "Customer", new { id = item.Id })" class="btn btn-primary">View</a>
-                                        <form asp-action="AddToCart" asp-controller="Cart" method="post" class="mt-2">
-                                            <input type="hidden" name="itemId" value="@item.Id" />
-                                            <button type="submit" class="btn btn-success">Add</button>
-                                        </form>
+                                        <button class="btn btn-secondary btn-add-to-cart" data-id="@item.Id">Add</button>
                                     </div>
+                                    <div class="cart-message" id="cart-message-@item.Id" style="display: none; color: green; margin-top: 5px;"></div>
+
                                 </div>
                             </div>
                         </div>
@@ -63,6 +67,40 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Sự kiện click nút Add
+        $(".btn-add-to-cart").on("click", function () {
+            var button = $(this);
+            var itemId = button.data("id"); // Lấy ID sản phẩm từ data-id
+
+            $.ajax({
+                url: "/Cart/AddToCartAjax", // Đường dẫn đến API thêm sản phẩm
+                type: "POST",
+                data: { itemId: itemId },
+                success: function (response) {
+                    // Hiển thị thông báo cho sản phẩm tương ứng
+                    var messageDiv = $("#cart-message-" + itemId);
+
+                    if (response.success) {
+                        messageDiv.text(response.message).css("color", "green").fadeIn().delay(3000).fadeOut();
+
+                        // Cập nhật số lượng sản phẩm trong giỏ hàng
+                        var cartCount = $("#cart-count");
+                        cartCount.text(response.itemCount);  // Cập nhật số lượng mới
+                    } else {
+                        messageDiv.text(response.message).css("color", "red").fadeIn().delay(3000).fadeOut();
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra, vui lòng thử lại.");
+                }
+            });
+        });
+    });
+</script>
+
 
 <style>
     /* Toàn bộ trang sử dụng font chữ Poppins */
@@ -71,6 +109,16 @@
         background-color: #f7f7f7;
         color: #34495e;
     }
+
+    .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 100; /* Đảm bảo sidebar luôn ở trên cùng */
+        height: 100vh; /* Đảm bảo sidebar chiếm toàn bộ chiều cao của màn hình */
+        overflow-y: auto; /* Cho phép cuộn khi có nhiều mục trong sidebar */
+    }
+
+
 
     /* Sidebar */
     .list-group-item {
@@ -179,7 +227,6 @@
         font-size: 1rem;
         color: #7f8c8d;
     }
-
     /* Button Styles */
     .button-group {
         display: flex;

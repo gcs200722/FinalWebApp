@@ -44,15 +44,15 @@ namespace FinalWebApp.Controllers
             };
 
             return View(viewModel);
-
         }
+
         [HttpPost]
         public IActionResult RemoveFromCart(Guid id)
         {
             // Lấy giỏ hàng từ session
             var cart = HttpContext.Session.Get<List<Guid>>("Cart") ?? new List<Guid>();
 
-            // Xóa sản phẩm đầu tiên khớp với ID
+            // Xóa sản phẩm khỏi giỏ hàng
             cart.Remove(id);
 
             // Lưu lại giỏ hàng vào session
@@ -61,26 +61,87 @@ namespace FinalWebApp.Controllers
             TempData["SuccessMessage"] = "Item removed from cart.";
             return RedirectToAction("Cart");
         }
+
         [HttpPost]
-        public IActionResult AddToCart(Guid itemId)
+        public IActionResult AddToCartAjax(Guid itemId)
         {
             var item = _context.Items.FirstOrDefault(i => i.Id == itemId);
             if (item == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "item not found" });
             }
-            // Lấy danh sách giỏ hàng từ session (hoặc tạo mới nếu chưa có)
+
             var cart = HttpContext.Session.Get<List<Guid>>("Cart") ?? new List<Guid>();
 
-            // Thêm sản phẩm vào giỏ hàng
-            cart.Add(itemId);
+            if (!cart.Contains(itemId))
+            {
+                cart.Add(itemId);  // Thêm sản phẩm vào giỏ
+                HttpContext.Session.Set("Cart", cart);
+            }
+            else
+            {
+                cart.Add(itemId);  // Thêm sản phẩm vào giỏ
+                HttpContext.Session.Set("Cart", cart);
+            }
+            int itemCount = cart.Count;  // Đếm số lượng Tổng món trong giỏ
+            return Json(new { success = true, message = "Add to cart successfully!", itemCount });
+        }
+        [HttpPost]
+        public IActionResult UpdateQuantity(Guid itemId, string action)
+        {
+            // Lấy giỏ hàng từ session
+            var cartItemIds = HttpContext.Session.Get<List<Guid>>("Cart") ?? new List<Guid>();
+
+            // Kiểm tra xem sản phẩm có trong giỏ hàng không
+            if (!cartItemIds.Contains(itemId))
+            {
+                return Json(new { success = false, message = "Item not found in cart." });
+            }
+
+            // Cập nhật số lượng dựa trên hành động
+            if (action == "increase")
+            {
+                // Thêm 1 sản phẩm vào giỏ hàng (tăng số lượng)
+                cartItemIds.Add(itemId);
+            }
+            else if (action == "decrease")
+            {
+                // Xóa 1 sản phẩm khỏi giỏ hàng (giảm số lượng)
+                // Chỉ xóa nếu số lượng lớn hơn 1
+                if (cartItemIds.Count(id => id == itemId) > 1)
+                {
+                    cartItemIds.Remove(itemId);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Quantity cannot be less than 1." });
+                }
+            }
 
             // Lưu lại giỏ hàng vào session
-            HttpContext.Session.Set("Cart", cart);
+            HttpContext.Session.Set("Cart", cartItemIds);
 
-            TempData["SuccessMessage"] = "Item added to cart!";
-            return RedirectToAction("Index", "Customer");
+            // Tính tổng số lượng và tổng tiền giỏ hàng sau khi cập nhật
+            var cartItems = _context.Items
+                .Where(i => cartItemIds.Contains(i.Id))
+                .Select(i => new
+                {
+                    i.Id,
+                    Quantity = cartItemIds.Count(id => id == i.Id),
+                    Total = i.Price * cartItemIds.Count(id => id == i.Id)
+                })
+                .ToList();
+
+            var cartTotal = cartItems.Sum(i => i.Total);
+
+            return Json(new
+            {
+                success = true,
+                cartTotal = cartTotal.ToString("C"), // Đưa tổng tiền về định dạng tiền tệ
+                updatedQuantity = cartItemIds.Count(id => id == itemId)
+            });
         }
+
         [HttpPost]
         public IActionResult CreateOrder(Guid tableId, DateTime diningTime)
         {
@@ -208,6 +269,7 @@ namespace FinalWebApp.Controllers
                 CustomerName = customer?.UserName ?? "Guest", // Lấy tên khách hàng từ User
                 OrderDate = order.OrderDate,
                 OrderTime = order.OrderDate,
+                DiningTime = order.DiningTime,
                 TableNumber = order.Table?.Name ?? "Not Assigned"
             };
             return View(viewModel);

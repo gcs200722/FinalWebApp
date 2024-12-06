@@ -1,7 +1,15 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using FinalWebApp.Session
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
 @using FinalWebApp.Data.Entities
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var cart = Context.Session.Get<List<Guid>>("Cart") ?? new List<Guid>(); // Lấy giỏ hàng từ Session
+    int itemCount = cart.Count();  // Số lượng món ăn khác nhau trong giỏ hàng
+    // Truyền số lượng món ăn vào ViewData
+    ViewData["CartItemCount"] = itemCount;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +20,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FinalWebApp.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -60,14 +68,22 @@
                         else if (User.IsInRole("CUSTOMER"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-action="Index" asp-controller="Customer">Orders</a>
+                                <a class="nav-link text-white" asp-action="Index" asp-controller="Customer">Menu</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-action="Cart" asp-controller="Cart">My Cart</a>
-                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-action="OrderHistory" asp-controller="Customer">Order History</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-action="Cart" asp-controller="Cart">
+                                    <i class="fa fa-shopping-cart" style="font-size: 24px;">
+                                        <span class="badge badge-pill badge-light" id="cart-count">
+                                            @ViewData["CartItemCount"] <!-- Hiển thị số lượng món ăn ban đầu -->
+                                        </span>
+                                    </i>
+                                </a>
+                            </li>
+
                         }
                         else if (User.IsInRole("MANAGER"))
                         {
@@ -137,12 +153,14 @@
             @RenderBody()
         </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
 <style>
   
 
@@ -209,7 +227,6 @@
 
 
 <!-- Thêm link font từ Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
 
 
 

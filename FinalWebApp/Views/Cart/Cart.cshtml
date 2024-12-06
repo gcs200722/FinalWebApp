@@ -32,8 +32,14 @@ else
                     </td>
                     <td>@item.Name</td>
                     <td>@item.Price.ToString("C")</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        <div class="quantity-control" style="display: flex; align-items: center;">
+                            <button class="btn btn-sm btn-outline-secondary btn-decrease" data-id="@item.Id">-</button>
+                            <span id="quantity-@item.Id" style="margin: 0 10px;">@item.Quantity</span>
+                            <button class="btn btn-sm btn-outline-secondary btn-increase" data-id="@item.Id">+</button>
+                        </div>
+                    </td>
+                    <td id="total-@item.Id">@item.Total.ToString("C")</td>
                     <td>
                         <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
                             <input type="hidden" name="id" value="@item.Id" />
@@ -45,12 +51,45 @@ else
         </tbody>
     </table>
 
-    <h4>Grand Total: @Model.GrandTotal.ToString("C")</h4>
-    <form method="get" action="@Url.Action("SelectTable", "Cart")">
-        <button type="submit">Choose a Table</button>
-    </form>
+    <h4 class="cart-total">Grand Total: @Model.GrandTotal.ToString("C")</h4>
     <form method="post" action="@Url.Action("CreateOrder", "Cart")">
         <button type="submit">Create Order</button>
     </form>
     <a href="@Url.Action("Index", "Customer")" class="btn btn-secondary">Continue Shopping</a>
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".btn-increase").click(function () {
+            var itemId = $(this).data("id");
+            updateCartQuantity(itemId, "increase");
+        });
+
+        $(".btn-decrease").click(function () {
+            var itemId = $(this).data("id");
+            updateCartQuantity(itemId, "decrease");
+        });
+
+        function updateCartQuantity(itemId, action) {
+            $.ajax({
+                url: '/Cart/UpdateQuantity',
+                type: 'POST',
+                data: { itemId: itemId, action: action },
+                success: function (response) {
+                    if (response.success) {
+                        // Cập nhật lại số lượng sản phẩm
+                        $("#quantity-" + itemId).text(response.updatedQuantity);
+                        // Cập nhật lại tổng giỏ hàng
+                        $(".cart-total").text(response.cartTotal);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error occurred while updating the quantity.");
+                }
+            });
+        }
+    });
+
+</script>

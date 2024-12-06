@@ -1,6 +1,38 @@
-﻿@model FinalWebApp.Data.Entities.Order
+﻿@using FinalWebApp.Enum
+@model FinalWebApp.Data.Entities.Order
 
-<h2>Order Details         <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a></h2>
+<h2>Order Details
+        @if (Model.OrderStatus == OrderStatusEnum.Pending || Model.OrderStatus == OrderStatusEnum.Confirmed)
+        {
+        <form id="orderStatusForm" method="post" asp-action="UpdateOrderStatus" class="d-inline">
+            <input type="hidden" name="orderId" value="@Model.Id" />
+            <div class="btn-group" role="group">
+                @if (Model.OrderStatus == OrderStatusEnum.Pending)
+                {
+                    <input type="radio" class="btn-check" name="status" value="Confirmed"
+                           id="confirmed-@Model.Id">
+                    <label class="btn btn-outline-primary btn-sm" for="confirmed-@Model.Id">Confirm</label>
+
+                    <input type="radio" class="btn-check" name="status" value="Canceled"
+                           id="canceled-@Model.Id">
+                    <label class="btn btn-outline-danger btn-sm" for="canceled-@Model.Id">Cancel</label>
+                }
+                else if (Model.OrderStatus == OrderStatusEnum.Confirmed)
+                {
+                    <input type="radio" class="btn-check" name="status" value="Unpaid"
+                           id="unpaid-@Model.Id">
+                    <label class="btn btn-outline-success btn-sm" for="unpaid-@Model.Id">Unpaid</label>
+                }
+            </div>
+        </form>
+
+        }
+
+    @if (Model.OrderStatus == OrderStatusEnum.Unpaid)
+    {
+        <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a>
+    }
+   </h2>
 <p>
     <strong>Order ID:</strong> @Model.Id <br />
     <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
@@ -51,6 +83,36 @@
     </tbody>
 
 </table>
+@if (Model.OrderStatus == OrderStatusEnum.Unpaid)
+{
+    <a asp-action="AddItem" asp-route-orderId="@Model.Id" class="btn btn-secondary">Add New</a>
+}
 
-<a asp-action="AddItem" asp-route-orderId="@Model.Id" class="btn btn-secondary">Add New</a>
 <a asp-action="ListOrder" class="btn btn-secondary">Back to Order List</a>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khi người dùng thay đổi trạng thái
+        $("input[name='status']").on("change", function () {
+            var status = $("input[name='status']:checked").val(); // Lấy giá trị của status được chọn
+            var orderId = $("input[name='orderId']").val(); // Lấy orderId
+
+            // Gửi AJAX request để cập nhật trạng thái
+            $.ajax({
+                url: '@Url.Action("UpdateOrderStatus", "Staff")', // Đường dẫn đến action
+                type: "POST",
+                data: {
+                    orderId: orderId,
+                    status: status
+                },
+                success: function (response) {
+                    // Có thể thêm thông báo thành công
+                    alert("Order status updated successfully!");
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra, vui lòng thử lại.");
+                }
+            });
+        });
+    });
+</script>
