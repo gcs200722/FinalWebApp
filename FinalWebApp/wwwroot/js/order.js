@@ -14,7 +14,6 @@ FinalWebApp.OrderNotifications = {
 
         this.connection.start().catch((err) => console.error("Error starting SignalR: ", err));
     },
-
     addNotification: function (message, type) {
         let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
 
