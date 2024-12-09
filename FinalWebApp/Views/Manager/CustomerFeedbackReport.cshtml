@@ -1,83 +1,200 @@
 ﻿@using FinalWebApp.Data.Entities
 @model FinalWebApp.ViewModels.CustomerFeedbackReportViewModel
 
-<h2>Customer Feedback Report</h2>
+<div class="tin-container">
+    <div class="header-section d-flex justify-content-between align-items-center">
+        <h2 class="tin-title">Customer Feedback Report</h2>
+        <form asp-action="ExportFeedbackReportToPdf" asp-controller="Manager" method="post">
+            <button type="submit" class="tin-button">
+                <i class="fas fa-file-pdf"></i> Generate PDF
+            </button>
+        </form>
+    </div>
 
-<form asp-action="ExportFeedbackReportToPdf" asp-controller="Manager" method="post">
-    <button type="submit">Generate PDF</button>
-</form>
+    <!-- Filter Section -->
+    <div class="filter-section mb-4">
+        <h4 class="tin-section-title">Filter Options</h4>
+        <form method="get" class="tin-form">
+            <table class="filter-table">
+                <tr>
+                    <td>
+                        <label for="StartDate" class="tin-label">Start Date</label>
+                        <input type="date" class="form-control tin-input" id="StartDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")">
+                    </td>
+                    <td>
+                        <label for="EndDate" class="tin-label">End Date</label>
+                        <input type="date" class="form-control tin-input" id="EndDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="Month" class="tin-label">Month</label>
+                        <select class="form-control tin-input" id="Month" name="month">
+                            <option value="">Select Month</option>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <!option value="@i" @(i == Model.Month ? "selected" : "")>@i</!option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <label for="Year" class="tin-label">Year</label>
+                        <select class="form-control tin-input" id="Year" name="year">
+                            <option value="">Select Year</option>
+                            @for (int i = 2020; i <= DateTime.Now.Year; i++)
+                            {
+                                <!option value="@i" @(i == Model.Year ? "selected" : "")>@i</!option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="tin-button mt-3">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+        </form>
+    </div>
 
-<form method="get">
-    <div class="form-row">
-        <div class="col">
-            <label for="StartDate">Start Date</label>
-            <input type="date" class="form-control" id="StartDate" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")">
-        </div>
-        <div class="col">
-            <label for="EndDate">End Date</label>
-            <input type="date" class="form-control" id="EndDate" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")">
+    <hr class="tin-divider" />
+
+    <!-- Overview Section -->
+    <div class="tin-overview mb-4">
+        <h4 class="tin-section-title">Overview Information</h4>
+        <div class="overview-content">
+            <p><strong>Total Reviews: </strong>@Model.TotalReviews</p>
+            <p><strong>Food Quality: </strong>@Model.AverageFoodQualityRating.ToString("0.0") / 5</p>
+            <p><strong>Service: </strong>@Model.AverageServiceRating.ToString("0.0") / 5</p>
+            <p><strong>Ambience: </strong>@Model.AverageAmbienceRating.ToString("0.0") / 5</p>
         </div>
     </div>
-    <div class="form-row">
-        <div class="col">
-            <label for="Month">Month</label>
-            <select class="form-control" id="Month" name="month">
-                <option value="">Select Month</option>
-                @for (int i = 1; i <= 12; i++)
-                {
-                    <!option value="@i" @(i == Model.Month ? "selected" : "")>@i</!option>
-                }
-            </select>
-        </div>
-        <div class="col">
-            <label for="Year">Year</label>
-            <select class="form-control" id="Year" name="year">
-                <option value="">Select Year</option>
-                @for (int i = 2020; i <= DateTime.Now.Year; i++)
-                {
-                    <!option value="@i" @(i == Model.Year ? "selected" : "")>@i</!option>
-                }
-            </select>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Filter</button>
-</form>
 
-<hr />
+    <hr class="tin-divider" />
 
-<div>
-    <h4>Overview Information</h4>
-    <p><strong>Total Reviews: </strong>@Model.TotalReviews</p>
-    <p><strong>Average Food Quality Rating: </strong>@Model.AverageFoodQualityRating.ToString("0.0") / 5</p>
-    <p><strong>Average Service Rating: </strong>@Model.AverageServiceRating.ToString("0.0") / 5</p>
-    <p><strong>Average Ambience Rating: </strong>@Model.AverageAmbienceRating.ToString("0.0") / 5</p>
+    <!-- Feedback List Section -->
+    <h4 class="tin-section-title mb-3">Feedback List</h4>
+    <table class="table table-bordered tin-table">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Food Quality</th>
+                <th>Service Quality</th>
+                <th>Ambience</th>
+                <th>Comments</th>
+                <th>Review Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model.CustomerReviews)
+            {
+                <tr>
+                    <td>@review.CustomerName</td>
+                    <td>@review.FoodQualityRating</td>
+                    <td>@review.ServiceRating</td>
+                    <td>@review.AmbienceRating</td>
+                    <td>@review.Comments</td>
+                    <td>@review.ReviewDate.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
-<hr />
+<style>
+    .tin-container {
+        background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+        border-radius: 15px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.8);
+        padding: 25px;
+        margin: 20px;
+    }
 
-<h4>Feedback List</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Food Quality</th>
-            <th>Service Quality</th>
-            <th>Ambience</th>
-            <th>Comments</th>
-            <th>Review Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var review in Model.CustomerReviews)
-        {
-            <tr>
-                <td>@review.CustomerName</td>
-                <td>@review.FoodQualityRating</td>
-                <td>@review.ServiceRating</td>
-                <td>@review.AmbienceRating</td>
-                <td>@review.Comments</td>
-                <td>@review.ReviewDate.ToString("dd/MM/yyyy")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    .header-section {
+        margin-bottom: 20px;
+    }
+
+    .tin-title {
+        font-size: 26px;
+        font-weight: bold;
+        color: #444;
+    }
+
+    .tin-button {
+        background: linear-gradient(145deg, #ffa726, #fb8c00);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 15px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tin-button:hover {
+        background: linear-gradient(145deg, #fb8c00, #ef6c00);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .filter-section {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
+        padding: 15px;
+    }
+
+    .filter-table {
+        width: 100%;
+        border-spacing: 15px;
+    }
+
+    .tin-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .tin-input {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 8px 12px;
+        box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+    .tin-input:focus {
+        outline: none;
+        border-color: #fb8c00;
+        box-shadow: inset 0px 0px 5px rgba(251, 140, 0, 0.3);
+    }
+
+    .overview-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .tin-table {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tin-table tbody tr:hover {
+        background: #f7f7f7;
+    }
+
+    .tin-divider {
+        border: 1px solid #e0e0e0;
+    }
+
+    .tin-section-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #444;
+    }
+</style>
+
