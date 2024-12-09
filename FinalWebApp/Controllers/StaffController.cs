@@ -6,10 +6,8 @@ using FinalWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FinalWebApp.Controllers
 {
@@ -372,7 +370,10 @@ namespace FinalWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateOrderStatus(Guid orderId, OrderStatusEnum status)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
+            var order = await _context.Orders
+    .Include(o => o.Table) // Tải dữ liệu liên quan đến Table
+    .FirstOrDefaultAsync(o => o.Id == orderId);
+
             if (order == null)
             {
                 return NotFound();
@@ -382,36 +383,46 @@ namespace FinalWebApp.Controllers
             order.OrderStatus = status;
 
             // Logic cập nhật trạng thái bàn
-            if (order.Table != null)
-            {
-                switch (status)
+                if (order.Table != null)
                 {
-                    case OrderStatusEnum.Canceled:
-                        order.Table.Status = StatusTableEnum.Empty;
-                        break;
+                    switch (status)
+                    {
+                        case OrderStatusEnum.Canceled:
+                            order.Table.Status = StatusTableEnum.Empty;
+                            break;
 
-                    case OrderStatusEnum.Paid:
-                        order.Table.Status = StatusTableEnum.Empty;
-                        break;
+                        case OrderStatusEnum.Paid:
+                            order.Table.Status = StatusTableEnum.Empty;
+                            break;
 
-                    case OrderStatusEnum.Unpaid:
-                        order.Table.Status = StatusTableEnum.Active;
-                        break;
+                        case OrderStatusEnum.Unpaid:
+                            order.Table.Status = StatusTableEnum.Active;
+                            break;
 
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
                 }
-            }
 
             // Lưu thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
 
             // Lấy customerId từ đơn hàng
-            var customerId = order.CustomerId; // Giả sử bạn có customerId trong order
+            var customerId = order.CustomerId; // Giả sử bạn có customerId trong order  
+            if (customerId != null)
+            {
+                // Tạo thông báo dựa trên trạng thái
+                string message = status switch
+                {
+                    OrderStatusEnum.Confirmed => "Your order has been confirmed.",
+                    OrderStatusEnum.Canceled => "Your order has been canceled.",
+                    _ => $"Your order status has been updated to {status}."
+                };
 
-            // Gửi thông báo đến nhóm của khách hàng sở hữu đơn hàng
-            await _orderHubContext.Clients.Group($"customer-{customerId}")
-                .SendAsync("SendOrderStatusNotification", orderId.ToString(), status.ToString());
+                // Gửi thông báo đến đúng nhóm khách hàng sở hữu đơn hàng
+                await _orderHubContext.Clients.Group($"customer-{customerId}")
+                    .SendAsync("SendOrderStatusNotification", message,order.Id);
+            }
 
             return Json(new { success = true, message = "Order status updated successfully!" });
         }

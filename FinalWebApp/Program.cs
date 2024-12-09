@@ -63,6 +63,7 @@ app.Run();
 static async Task SeedRolesAsync(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
     string[] roleNames = { "CUSTOMER", "ADMIN", "STAFF" , "MANAGER" }; // Thêm các vai trò cần thiết
     foreach (var roleName in roleNames)
@@ -71,5 +72,39 @@ static async Task SeedRolesAsync(IServiceProvider serviceProvider)
         {
             await roleManager.CreateAsync(new IdentityRole(roleName));
         }
+    }
+    string adminEmail = "Admin@test123";
+    string adminPassword = "Admin123";
+
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        adminUser = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true, // Xác nhận email mặc định
+            Fullname = "Administrator",
+            NumberPhone="12345678"
+        };
+
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "ADMIN");
+            Console.WriteLine("Admin account created successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Failed to create Admin account:");
+            foreach (var error in result.Errors)
+            {
+                Console.WriteLine($"- {error.Description}");
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine("Admin account already exists.");
     }
 }
