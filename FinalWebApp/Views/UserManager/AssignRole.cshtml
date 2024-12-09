@@ -1,9 +1,9 @@
 ﻿@model FinalWebApp.ViewModels.AssignRoleViewModel
 
-<form asp-action="AssignRole" method="post">
+<form asp-action="AssignRole" method="post" class="assign-role-form">
     <input type="hidden" asp-for="UserId" />
 
-    <div>
+    <div class="form-group">
         <label>Select Role</label>
         @foreach (var role in Model.Roles)
         {
@@ -13,7 +13,7 @@
                 // Chỉ hiển thị "Staff" và "Customer" nếu người dùng là "Manage"
                 if (role.Name == "STAFF" || role.Name == "CUSTOMER")
                 {
-                    <div>
+                    <div class="role-option">
                         <input type="radio" name="SelectedRoles" value="@role.Name"
                         @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
                         <label>@role.Name</label>
@@ -23,7 +23,7 @@
             else
             {
                 // Nếu không phải "Manage", hiển thị tất cả các vai trò
-                <div>
+                <div class="role-option">
                     <input type="radio" name="SelectedRoles" value="@role.Name"
                     @(Model.SelectedRoles.Contains(role.Name) ? "checked" : "") />
                     <label>@role.Name</label>
@@ -32,5 +32,76 @@
         }
     </div>
 
-    <button type="submit">Assign Role</button>
+    <button type="submit" class="submit-btn">Assign Role</button>
 </form>
+<style>
+    /* Style for the form container */
+    .assign-role-form {
+        background-color: #f4f6f9;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 50%;
+        margin: 50px auto;
+        transition: all 0.3s ease;
+    }
+
+        /* Label and input styles */
+        .assign-role-form label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .role-option {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+        .role-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .role-option label {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        /* Hover effect for radio buttons */
+        .role-option:hover {
+            background-color: #ecf0f1;
+            transform: scale(1.03);
+        }
+
+    /* Submit button styling */
+    .submit-btn {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+</style>

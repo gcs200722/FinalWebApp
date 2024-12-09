@@ -233,10 +233,11 @@ namespace FinalWebApp.Controllers
 
             public IActionResult SelectTable()
         {
-            // Lấy danh sách bàn có sẵn
-            var availableTables = _context.Tables.Where(t => t.Status == Enum.StatusTableEnum.Empty).ToList();
-            return View(availableTables);
+            // Lấy danh sách tất cả các bàn
+            var allTables = _context.Tables.ToList();
+            return View(allTables);
         }
+
         public IActionResult OrderDetails(Guid orderId)
         {
             // Lấy thông tin đơn hàng

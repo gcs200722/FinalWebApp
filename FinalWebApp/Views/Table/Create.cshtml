@@ -7,43 +7,176 @@
     var buttonString = isCreate ? "Create" : "Edit";
 }
 
-<h1>@actionString</h1>
+<!DOCTYPE html>
+<html lang="vi">
 
-<hr />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>Create New Table</h2>
-        <form asp-action="@actionString" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" class="form-control" />
-            <div>@TempData["Message"]</div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<body>
+    <div class="container">
+        <h1>@actionString Table</h1>
+        <hr />
+        <div class="row">
+            <!-- Cột cho form tạo bàn chiếm 3/10 -->
+            <div class="col-create neumorphism col-3">
+                <h2>@actionString Table</h2>
+                <form asp-action="@actionString" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div>@TempData["Message"]</div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label">Table Name</label>
+                        <input asp-for="Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Capacity" class="control-label">Capacity</label>
+                        <input asp-for="Capacity" type="number" />
+                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status">Status</label>
+                        <select asp-for="Status">
+                            <option value="1">Empty</option>
+                            <option value="2">Booked</option>
+                            <option value="3">Active</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="@buttonString" class="btn btn-gradient" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-                <div class="form-group">
-                    <label asp-for="Status"></label>
-                    <select asp-for="Status" class="form-control">
-                        <option value="1">Empty</option>
-                        <option value="2">Booked</option>
-                        <option value="3">Active</option>
-                    </select>
-                    <span asp-validation-for="Status" class="text-danger"></span>
-                </div>
-            <div class="form-group">
-                <input type="submit" value="@buttonString" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-    <div class="col-md-6">
-        <h2>List Table</h2>
-        @await Component.InvokeAsync("TableList")
-    </div>
-</div>
 
+            <!-- Cột cho danh sách bàn chiếm 7/10 -->
+            <div class="col-list neumorphism col-7">
+                <h2>List of Tables</h2>
+                @await Component.InvokeAsync("TableList")
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Style áp dụng Tin -->
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #e3fdfd, #ffe6fa);
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #444;
+        font-weight:bold;
+    }
+    h2 {
+        text-align: center;
+        font-weight:bold
+    }
+
+    .row {
+        display: flex;
+        gap: 20px;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    /* Điều chỉnh cột tạo bàn chiếm 3/10 */
+    .col-create {
+        flex: 3;  /* Chiếm 3/10 */
+    }
+
+    /* Điều chỉnh cột danh sách bàn chiếm 7/10 */
+    .col-list {
+        flex: 7;  /* Chiếm 7/10 */
+    }
+
+    .neumorphism {
+        background: #f9f9f9;
+        border-radius: 20px;
+        box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.7);
+        padding: 20px;
+        width: 100%;
+        align-content:center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 15px;
+        box-shadow: inset 4px 4px 6px rgba(0, 0, 0, 0.1), inset -4px -4px 6px rgba(255, 255, 255, 0.6);
+        background: #f2f2f2;
+        font-size: 1rem;
+        color: #555;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+        box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1), inset -2px -2px 4px rgba(255, 255, 255, 0.6), 0 0 8px #8fbc8f;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        
+    }
+
+    .btn-gradient {
+        background: linear-gradient(135deg, #8fd3f4, #84fab0);
+        color: white;
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.7);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.2), -6px -6px 10px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .row {
+            flex-direction: column;
+        }
+
+        .neumorphism {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+</html>

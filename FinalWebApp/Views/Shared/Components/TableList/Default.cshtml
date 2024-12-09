@@ -1,40 +1,155 @@
 ﻿@model List<FinalWebApp.Data.Entities.Table>
-<div class="row">
-    <table>
-        <tr>
-            <th>Position</th>
-            <th>Name</th>
-            <th>Capacity</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-        @if (Model != null)
-        {
-            var position = 1;
-            foreach (var item in Model)
-            {
+<div class="tin-container">
+    <!-- Container chứa bảng với hiệu ứng Tin -->
+    <div class="table-container">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@(position++)</td>
-                    <td>@item.Name</td>
-                    <td>@item.Capacity</td>
-                    <td>@item.Status</td>
-                    <td>
-                        <a href="~/Table/Edit?idTable=@item.Id">Update</a>
-
-                        @using (Html.BeginForm("Delete", "Table", FormMethod.Post))
-                        {
-                            @Html.Hidden("id", item.Id)
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                        }
-                    </td>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="3">Empty data</td>
-            </tr>
-        }
-    </table>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    var position = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(position++)</td>
+                            <td>@item.Name</td>
+                            <td>@item.Capacity</td>
+                            <td class="status">@item.Status</td>
+                            <td>
+                                <!-- Nút Update -->
+                                <a href="~/Table/Edit?idTable=@item.Id" class="btn btn-update">
+                                    <i class="fa fa-pencil"></i> 
+                                </a>
+
+                                <!-- Nút Delete -->
+                                @using (Html.BeginForm("Delete", "Table", FormMethod.Post))
+                                {
+                                    @Html.Hidden("id", item.Id)
+                                    <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this item?');">
+                                        <i class="fa fa-trash"></i> 
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No data available</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<!-- CSS phong cách Tin -->
+<style>
+    /* Container tổng quát */
+    .tin-container {
+        background: linear-gradient(145deg, #f9f9f9, #ffffff);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: inset 2px 2px 5px #e0e0e0, inset -2px -2px 5px #ffffff;
+        margin: 20px auto;
+        max-width: 80%;
+    }
+
+    /* Bảng */
+    .table-container {
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: 12px;
+        box-shadow: inset 1px 1px 4px #e0e0e0, inset -1px -1px 4px #ffffff;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table th {
+            color: #333;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .table td {
+            padding: auto;
+            font-size: 13px;
+            color: #555;
+            background: linear-gradient(145deg, #ffffff, #fafafa);
+            box-shadow: inset 1px 1px 2px #d1d1d1, inset -1px -1px 2px #ffffff;
+            text-align: center;
+            max-height: 70px;
+
+        }
+
+        .table tr:hover td {
+            background: linear-gradient(145deg, #f5f5f5, #ffffff);
+            box-shadow: inset 2px 2px 3px #e0e0e0, inset -2px -2px 3px #ffffff;
+ 
+        }
+
+    /* Status column styling */
+    .status {
+        font-weight: 600;
+        color: #4CAF50;
+    }
+
+    /* Button styling */
+    .btn {
+        font-size: 10px; /* Giảm kích thước font */
+        border: none;
+        border-radius: 15px; /* Bo góc mềm mại */
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 2px 2px 5px #e0e0e0, -2px -2px 5px #ffffff;
+        max-width: 100px;
+        max-height:45px;
+    }
+
+    .btn-update {
+        background: linear-gradient(145deg, #e0f7ff, #b3e0ff);
+        color: #007bff;
+    }
+
+        .btn-update:hover {
+            background: linear-gradient(145deg, #c1e7ff, #a2cffe);
+            box-shadow: 3px 3px 7px #a0c4ff, -3px -3px 7px #f0faff;
+        }
+
+    .btn-delete {
+        background: linear-gradient(145deg, #ffc4c4, #ffebeb);
+        color: #dc3545;
+    }
+
+        .btn-delete:hover {
+            background: linear-gradient(145deg, #ffb0b0, #ffdadb);
+            box-shadow: 3px 3px 7px #ffb0b0, -3px -3px 7px #fff2f2;
+        }
+
+    /* No data text */
+    .text-muted {
+        color: #777;
+        font-style: italic;
+        font-size: 15px;
+        padding: 20px;
+    }
+
+    i {
+        margin-right: 5px;
+    }
+</style>

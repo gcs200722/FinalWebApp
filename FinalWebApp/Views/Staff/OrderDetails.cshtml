@@ -1,118 +1,201 @@
 ﻿@using FinalWebApp.Enum
 @model FinalWebApp.Data.Entities.Order
 
-<h2>Order Details
-        @if (Model.OrderStatus == OrderStatusEnum.Pending || Model.OrderStatus == OrderStatusEnum.Confirmed)
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="header">
+            Order Details
+            @if (Model.OrderStatus == OrderStatusEnum.Pending || Model.OrderStatus == OrderStatusEnum.Confirmed)
+            {
+                <form id="orderStatusForm" method="post" asp-action="UpdateOrderStatus" class="status-form">
+                    <input type="hidden" name="orderId" value="@Model.Id" />
+                    <div class="btn-group">
+                        @if (Model.OrderStatus == OrderStatusEnum.Pending)
+                        {
+                            <input type="radio" class="btn-check" name="status" value="Confirmed" id="confirmed-@Model.Id">
+                            <label class="btn btn-outline-primary btn-sm" for="confirmed-@Model.Id">Confirm</label>
+
+                            <input type="radio" class="btn-check" name="status" value="Canceled" id="canceled-@Model.Id">
+                            <label class="btn btn-outline-danger btn-sm" for="canceled-@Model.Id">Cancel</label>
+                        }
+                        else if (Model.OrderStatus == OrderStatusEnum.Confirmed)
+                        {
+                            <input type="radio" class="btn-check" name="status" value="Unpaid" id="unpaid-@Model.Id">
+                            <label class="btn btn-outline-success btn-sm" for="unpaid-@Model.Id">Unpaid</label>
+                        }
+                    </div>
+                </form>
+            }
+            @if (Model.OrderStatus == OrderStatusEnum.Unpaid)
+            {
+                <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a>
+            }
+        </h2>
+
+        <div class="details">
+            <p><strong>Order ID:</strong> @Model.Id</p>
+            <p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><strong>Customer:</strong> @Model.Customer?.Fullname</p>
+            <p><strong>Table:</strong> @Model.Table?.Name</p>
+            <p><strong>Order Status:</strong> @Model.OrderStatus.ToString()</p>
+            <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+        </div>
+
+        <h3>Order Items</h3>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Food Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.Item.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@(item.Quantity * item.Price).ToString("C")</td>
+                            <td>
+                                <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" class="quantity-form">
+                                    <input type="hidden" name="quantity" value="@Math.Max(item.Quantity - 1, 1)" />
+                                    <button type="submit" class="btn btn-danger btn-sm" @(item.Quantity == 1 ? "disabled" : "")>-</button>
+                                </form>
+
+                                <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" class="quantity-form">
+                                    <input type="hidden" name="quantity" value="@item.Quantity + 1" />
+                                    <button type="submit" class="btn btn-success btn-sm">+</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.OrderStatus == OrderStatusEnum.Unpaid)
         {
-        <form id="orderStatusForm" method="post" asp-action="UpdateOrderStatus" class="d-inline">
-            <input type="hidden" name="orderId" value="@Model.Id" />
-            <div class="btn-group" role="group">
-                @if (Model.OrderStatus == OrderStatusEnum.Pending)
-                {
-                    <input type="radio" class="btn-check" name="status" value="Confirmed"
-                           id="confirmed-@Model.Id">
-                    <label class="btn btn-outline-primary btn-sm" for="confirmed-@Model.Id">Confirm</label>
-
-                    <input type="radio" class="btn-check" name="status" value="Canceled"
-                           id="canceled-@Model.Id">
-                    <label class="btn btn-outline-danger btn-sm" for="canceled-@Model.Id">Cancel</label>
-                }
-                else if (Model.OrderStatus == OrderStatusEnum.Confirmed)
-                {
-                    <input type="radio" class="btn-check" name="status" value="Unpaid"
-                           id="unpaid-@Model.Id">
-                    <label class="btn btn-outline-success btn-sm" for="unpaid-@Model.Id">Unpaid</label>
-                }
-            </div>
-        </form>
-
+            <a asp-action="AddItem" asp-route-orderId="@Model.Id" class="btn btn-secondary">Add New</a>
         }
+        <a asp-action="ListOrder" class="btn btn-secondary">Back to Order List</a>
+    </div>
+</body>
 
-    @if (Model.OrderStatus == OrderStatusEnum.Unpaid)
-    {
-        <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f0f4ff, #e4e9f7);
+        margin: 0;
+        padding: 0;
     }
-   </h2>
-<p>
-    <strong>Order ID:</strong> @Model.Id <br />
-    <strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm") <br />
-    <strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm") <br />
-    <strong>Customer:</strong> @Model.Customer?.Fullname <br />
-    <strong>Table:</strong> @Model.Table?.Name <br />
-    <strong>Order Status:</strong> @Model.OrderStatus.ToString() <br />
-    <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C") <br />
-</p>
 
-<h3>Order Items</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Food Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-            <th>Actions</th>  <!-- Thêm cột hành động -->
-        </tr>
-    </thead>
-    <tbody>
+    .container {
+        max-width: 90%;
+        margin: 20px auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: inset 5px 5px 15px #d4d4d4, inset -5px -5px 15px #ffffff;
+    }
 
+    h2, h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        @foreach (var item in Model.OrderItems)
-        {
-            <tr>
-                <td>@item.Item.Name</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@(item.Quantity * item.Price).ToString("C")</td>
+    .details p {
+        font-size: 1rem;
+        margin: 5px 0;
+    }
 
-                <td>
-                    <!-- Nút giảm số lượng -->
-                    <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" style="display:inline;">
-                        <input type="hidden" name="quantity" value="@Math.Max(item.Quantity - 1, 1)" />
-                        <button type="submit" class="btn btn-danger btn-sm" @(item.Quantity == 1 ? "disabled" : "")>-</button>
-                    </form>
+    .table-wrapper {
+        overflow-x: auto;
+        margin-top: 20px;
+    }
 
-                    <!-- Nút tăng số lượng -->
-                    <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" style="display:inline;">
-                        <input type="hidden" name="quantity" value="@item.Quantity + 1" />
-                        <button type="submit" class="btn btn-success btn-sm">+</button>
-                    </form>
-                </td>
-            </tr>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f9f9f9;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    thead {
+        background: #4CAF50;
+        color: #fff;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    tr:nth-child(even) {
+        background: #e0f7e7;
+    }
+
+    tr:hover {
+        background: #d4f4dd;
+        transition: 0.3s;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #4CAF50;
+    }
+
+        .btn-primary:hover {
+            background: #45a049;
         }
-    </tbody>
 
-</table>
-@if (Model.OrderStatus == OrderStatusEnum.Unpaid)
-{
-    <a asp-action="AddItem" asp-route-orderId="@Model.Id" class="btn btn-secondary">Add New</a>
-}
+    .btn-secondary {
+        background: #6c757d;
+    }
 
-<a asp-action="ListOrder" class="btn btn-secondary">Back to Order List</a>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Khi người dùng thay đổi trạng thái
-        $("input[name='status']").on("change", function () {
-            var status = $("input[name='status']:checked").val(); // Lấy giá trị của status được chọn
-            var orderId = $("input[name='orderId']").val(); // Lấy orderId
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
 
-            // Gửi AJAX request để cập nhật trạng thái
-            $.ajax({
-                url: '@Url.Action("UpdateOrderStatus", "Staff")', // Đường dẫn đến action
-                type: "POST",
-                data: {
-                    orderId: orderId,
-                    status: status
-                },
-                success: function (response) {
-                    // Có thể thêm thông báo thành công
-                    alert("Order status updated successfully!");
-                },
-                error: function () {
-                    alert("Có lỗi xảy ra, vui lòng thử lại.");
-                }
-            });
-        });
-    });
-</script>
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .quantity-form {
+        display: inline-block;
+    }
+</style>
+
+</html>

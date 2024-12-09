@@ -113,9 +113,9 @@
                                         </td>
                                         <td>@order.Customer?.Fullname</td>
                                         <td>
-                                                <a asp-action="OrderDetails" asp-route-orderId="@order.Id" class="btn btn-info btn-sm">
-                                                    View Order
-                                                </a>
+                                            <a asp-action="OrderDetails" asp-route-orderId="@order.Id" class="btn btn-info btn-sm">
+                                                View Order
+                                            </a>
                                         </td>
                                     </tr>
                                 }
@@ -129,45 +129,53 @@
 </form>
 
 <style>
+    /* Applying Tin Style */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(145deg, #f0f0f0, #ffffff);
+        color: #333;
+    }
+
+    h2 {
+        font-weight: bold;
+        color: #333;
+    }
+
     /* Container for Filter and Table */
     .filter-table-container {
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #f5f5f5;
+        border-radius: 15px;
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
         padding: 20px;
         width: 90%;
         margin: 0 auto;
         transition: all 0.3s ease;
     }
-    h2{
-        font-weight:bold;
-    }
 
-    /* Filter Container Styling */
     .filter-container {
         background-color: #ffffff;
-        border-radius: 12px;
+        border-radius: 15px;
         padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
     }
 
+    /* Filter options with neumorphism effect */
     .filter-options {
-        background-color: #f7f7f7;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        background-color: #f1f1f1;
+        border-radius: 12px;
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
         padding: 10px;
         margin-bottom: 15px;
         transition: all 0.3s ease;
     }
 
-        /* Hover effect for filter options */
         .filter-options:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.1), inset -6px -6px 12px rgba(255, 255, 255, 0.7);
         }
 
     .form-label {
         font-size: 1rem;
-        color: #2c3e50;
+        color: #333;
         margin-bottom: 10px;
         font-weight: 600;
     }
@@ -176,11 +184,15 @@
         background-color: #f39c12;
         border-color: #f39c12;
         color: white;
+        border-radius: 12px;
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.7);
+        transition: all 0.3s ease;
     }
 
         .btn-gradient-primary:hover {
             background-color: #e67e22;
             border-color: #e67e22;
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2), -4px -4px 12px rgba(255, 255, 255, 0.7);
         }
 
     /* Table Styling */
@@ -201,7 +213,6 @@
         background-color: #f39c12;
         color: white;
         font-weight: bold;
-        
     }
 
     .badge {

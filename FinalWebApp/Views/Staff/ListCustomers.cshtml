@@ -1,9 +1,12 @@
 ﻿@model List<FinalWebApp.Data.Entities.ApplicationUser>
 
 <div class="user-list">
-    <h2>List of Users <a asp-action="Create" asp-controller="UserManager">Create New</a></h2>
+    <h2 class="text-center mb-4">
+        List of Users
+        <a asp-action="Create" asp-controller="UserManager" class="btn btn-create-new">Create New</a>
+    </h2>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>Full Name</th>
@@ -24,10 +27,102 @@
                     <td>@user.DateOfBirth?.ToString("dd/MM/yyyy")</td>
                     <td>@user.NumberPhone</td>
                     <td>
-                        <a href="@Url.Action("Edit", "UserManager", new { id = user.Id })" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="@Url.Action("Edit", "UserManager", new { id = user.Id })" class="btn btn-edit">Edit</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+<style>
+    /* User List Container */
+    .user-list {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        margin: 0 auto;
+        transition: all 0.3s ease;
+    }
+
+        .user-list h2 {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+    /* Create New Button */
+    .btn-create-new {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 25px;
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+        .btn-create-new:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Table Styling */
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .table-bordered {
+        border: none;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #f39c12;
+        color: white;
+        font-weight: bold;
+    }
+
+    .table td {
+        background-color: #ffffff;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #ecf0f1;
+        cursor: pointer;
+    }
+
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    /* Button Styling */
+    .btn-edit {
+        background-color: #3498db;
+        color: white;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 25px;
+        text-decoration: none;
+    }
+
+        .btn-edit:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+</style>

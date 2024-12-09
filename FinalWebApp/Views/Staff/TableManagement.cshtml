@@ -2,68 +2,194 @@
 @using FinalWebApp.ViewModels
 @model IEnumerable<TableViewModel>
 
-<h2>Table Management</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Table Name</th>
-            <th>Capacity</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var table in Model)
-        {
-            <tr>
-                <td>@table.Id</td>
-                <td>@table.Name</td>
-                <td>@table.Capacity</td>
-                <td>
-                    @if (table.Status == FinalWebApp.Enum.StatusTableEnum.Empty)
-                    {
-                        <span class="badge bg-success">Empty</span>
-                    }
-                    else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Booked)
-                    {
-                        <span class="badge bg-warning">Booked</span>
-                    }
-                    else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Active)
-                    {
-                        <span class="badge bg-primary">Active</span>
-                    }
-                </td>
-                <td>
-                <td>
-                        @if (table.Status == FinalWebApp.Enum.StatusTableEnum.Empty)
-                        {
-                        <form method="post" asp-controller="Staff" asp-action="CreateOrderForGuest">
-                            <input type="hidden" name="tableId" value="@table.Id" />
-                            <button type="submit" class="btn btn-primary">Create Guest Order</button>
-                        </form>
-                        }
-                        else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Booked)
-                        {
-                        <form method="post" asp-controller="Staff" asp-action="UpdateTableToActive">
-                            <input type="hidden" name="tableId" value="@table.Id" />
-                            <button type="submit" class="btn btn-warning">Change to Active</button>
-                        </form>
-                        }
-                        else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Active)
-                        {
+<!DOCTYPE html>
+<html lang="vi">
 
-                        <span class="text-muted">Active</span>
-                        }
-                        else
-                        {
-                        <span class="text-muted">No Action</span>
-                        }
-                </td>
-                </td>
-            </tr>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Table Management</h1>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Table Name</th>
+                        <th>Capacity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var table in Model)
+                    {
+                        <tr>
+                            <td>@table.Id</td>
+                            <td>@table.Name</td>
+                            <td>@table.Capacity</td>
+                            <td>
+                                @if (table.Status == FinalWebApp.Enum.StatusTableEnum.Empty)
+                                {
+                                    <span class="badge status-empty">Empty</span>
+                                }
+                                else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Booked)
+                                {
+                                    <span class="badge status-booked">Booked</span>
+                                }
+                                else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Active)
+                                {
+                                    <span class="badge status-active">Active</span>
+                                }
+                            </td>
+                            <td>
+                                @if (table.Status == FinalWebApp.Enum.StatusTableEnum.Empty)
+                                {
+                                    <form method="post" asp-controller="Staff" asp-action="CreateOrderForGuest">
+                                        <input type="hidden" name="tableId" value="@table.Id" />
+                                        <button type="submit" class="btn btn-primary">Create Guest Order</button>
+                                    </form>
+                                }
+                                else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Booked)
+                                {
+                                    <form method="post" asp-controller="Staff" asp-action="UpdateTableToActive">
+                                        <input type="hidden" name="tableId" value="@table.Id" />
+                                        <button type="submit" class="btn btn-warning">Change to Active</button>
+                                    </form>
+                                }
+                                else if (table.Status == FinalWebApp.Enum.StatusTableEnum.Active)
+                                {
+                                    <span class="text-muted">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Action</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f0f4ff, #e4e9f7);
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .container {
+        max-width: 90%;
+        margin: 30px auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: inset 5px 5px 15px #d4d4d4, inset -5px -5px 15px #ffffff;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #4CAF50;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    thead tr {
+        background: #4CAF50;
+        color: #fff;
+        text-align: left;
+    }
+
+    th, td {
+        padding: 15px 20px;
+        font-size: 16px;
+    }
+
+    tr:nth-child(even) {
+        background: #f9f9f9;
+    }
+
+    tr:hover {
+        background: #e0f7e7;
+        transition: all 0.3s ease;
+    }
+
+    .badge {
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .status-empty {
+        background: #4CAF50;
+    }
+
+    .status-booked {
+        background: #FFC107;
+    }
+
+    .status-active {
+        background: #2196F3;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #4CAF50;
+    }
+
+        .btn-primary:hover {
+            background: #45a049;
         }
-    </tbody>
-</table>
 
+    .btn-warning {
+        background: #FFC107;
+    }
 
+        .btn-warning:hover {
+            background: #FFA000;
+        }
+
+    .text-muted {
+        color: #aaa;
+        font-style: italic;
+    }
+</style>
+
+</html>

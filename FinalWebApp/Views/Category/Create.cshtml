@@ -12,7 +12,8 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-6">
+    <!-- Cột cho Create New Category (3/10 trang) -->
+    <div class="col-create">
         <h2>Create New Category</h2>
         <form asp-action="@actionString" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -28,9 +29,126 @@
             </div>
         </form>
     </div>
-    <div class="col-md-6">
+    
+    <!-- Cột cho List Category (7/10 trang) -->
+    <div class="col-list">
         <h2>List Category</h2>
         @await Component.InvokeAsync("CategoryList")
     </div>
 </div>
+
+<!-- Cải tiến giao diện với CSS -->
+<style>
+    /* Tổng quan hàng ngang */
+    .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    /* Cột Create New Category */
+    .col-create {
+        flex: 3;
+        background: linear-gradient(145deg, #f3f4f6, #ffffff);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
+        transition: transform 0.3s ease;
+    }
+
+    .col-create:hover {
+        transform: scale(1.02);
+    }
+
+    /* Cột List Category */
+    .col-list {
+        flex: 7;
+        background: linear-gradient(145deg, #ffffff, #f3f4f6);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
+        transition: transform 0.3s ease;
+    }
+
+    .col-list:hover {
+        transform: scale(1.02);
+    }
+
+    /* Tiêu đề */
+    h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Nhóm form */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        margin-top: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    input[type="text"] {
+        background-color: #f9f9f9;
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #4CAF50;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+    }
+
+    input[type="submit"] {
+        background: linear-gradient(145deg, #4CAF50, #43a047);
+        color: white;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2), -3px -3px 10px rgba(255, 255, 255, 0.7);
+    }
+
+    input[type="submit"]:hover {
+        background: linear-gradient(145deg, #43a047, #4CAF50);
+        box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Văn bản lỗi */
+    .text-danger {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    /* Responsive */
+    media (max-width: 768px) {
+        .row {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .col-create,
+        .col-list {
+            flex: 1 1 100%;
+            margin-bottom: 20px;
+        }
+    }
+</style>
 

@@ -6,18 +6,199 @@
 
 <form asp-action="CreateOrder" method="post">
     <div>
-        <label for="tableId">Select Table:</label>
-        <select name="tableId" id="tableId">
+        <h3> <label for="tableId">Select Table:</label></h3>
+        <!-- Bọc các ô bàn trong một div có khả năng cuộn -->
+        <div id="tableOptionsContainer">
             @foreach (var table in Model)
             {
-                <option value="@table.Id">@table.Name</option>
+                string statusClass = table.Status switch
+                {
+                    StatusTableEnum.Empty => "empty",
+                    StatusTableEnum.Booked => "booked",
+                    StatusTableEnum.Active => "active",
+                    _ => "empty"
+                };
 
+                <div class="table-container">
+                    <div class="table-option @statusClass" data-id="@table.Id">
+                        <!-- Hiển thị Capacity bên trong ô vuông -->
+                        <div class="capacity">@table.Capacity</div>
+                    </div>
+                    <!-- Hiển thị tên bàn bên ngoài ô vuông -->
+                    <div class="table-name">@table.Name</div>
+                </div>
             }
-        </select>
+        </div>
     </div>
-    <div>
+    <div class="dining-time-container">
         <label for="diningTime">Dining Time:</label>
         <input type="datetime-local" id="diningTime" name="diningTime" required />
     </div>
-    <button type="submit">Place Order</button>
+    <button type="submit" class="place-order-btn">Place Order</button>
 </form>
+
+<!-- CSS trực tiếp trong thẻ <style> -->
+
+<style>
+    /* Container chứa các ô bàn và khả năng cuộn */
+    #tableOptionsContainer {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); /* Hiển thị tối đa 5 bàn trong mỗi hàng */
+        grid-gap: 20px;
+        overflow-y: auto; /* Cuộn dọc khi có nhiều hơn 2 hàng */
+        max-height: 350px; /* Chiều cao tối đa cho 2 hàng bàn */
+        padding: 20px;
+        background-color: #f4f4f4; /* Màu nền cho div */
+        border-radius: 15px; /* Bo tròn các góc */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Hiệu ứng shadow */
+        margin-top: 20px;
+        justify-items: center; /* Căn giữa các ô bàn trong Grid */
+        align-items: center; /* Căn giữa theo chiều dọc */
+    }
+
+    h2 {
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+    }
+    h3{
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        padding-top:10px;
+    }
+
+    /* Bao bọc các bàn và tên bàn */
+    .table-container {
+        text-align: center;
+        width: 120px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .table-option {
+        width: 80%;
+        height: 90px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    /* Trạng thái bàn */
+    .empty {
+        background-color: #4CAF50; /* Bàn trống - Xanh lá */
+        color: white;
+    }
+
+    .booked {
+        background-color: #FF9800; /* Bàn đã đặt - Cam */
+        color: white;
+    }
+
+    .active {
+        background-color: #2196F3; /* Bàn đang hoạt động - Xanh dương */
+        color: white;
+    }
+
+    /* Hiển thị Capacity bên trong ô vuông */
+    .capacity {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    /* Hiển thị tên bàn ở vị trí center dưới ô vuông */
+    .table-name {
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 8px;
+        color: #333;
+        text-transform: uppercase;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Hiệu ứng hover */
+    .table-option:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .table-option:active {
+        transform: scale(0.98);
+    }
+
+    /* Phần Dining Time */
+    .dining-time-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        font-size: 18px;
+        font-weight: 500;
+        color: #555;
+    }
+
+        .dining-time-container label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .dining-time-container input[type="datetime-local"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 250px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+            /* Hiệu ứng khi focus vào input */
+            .dining-time-container input[type="datetime-local"]:focus {
+                border-color: #2196F3;
+                box-shadow: 0 0 8px rgba(33, 150, 243, 0.4);
+            }
+
+    /* Nút Place Order nhỏ lại và căn chỉnh hợp lý */
+    .place-order-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        width: 10%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .place-order-btn:hover {
+            background-color: #45a049;
+        }
+
+        .place-order-btn:focus {
+            outline: none;
+        }
+</style>
+
+
+
+

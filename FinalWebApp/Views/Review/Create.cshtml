@@ -6,7 +6,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="SubmitReview" method="post">
+<form asp-action="SubmitReview" method="post" class="review-form">
     <div class="form-group">
         <label for="CustomerName">Full Name:</label>
         <input type="text" class="form-control" id="CustomerName" name="CustomerName" required />
@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <label>Food Quality:</label>
-        <div>
+        <div class="rating-group">
             <label>
                 <input type="radio" name="FoodQualityRating" value="1" required />
                 1 - Poor
@@ -40,7 +40,7 @@
 
     <div class="form-group">
         <label>Service:</label>
-        <div>
+        <div class="rating-group">
             <label>
                 <input type="radio" name="ServiceRating" value="1" required />
                 1 - Poor
@@ -66,7 +66,7 @@
 
     <div class="form-group">
         <label>Ambience:</label>
-        <div>
+        <div class="rating-group">
             <label>
                 <input type="radio" name="AmbienceRating" value="1" required />
                 1 - Poor
@@ -95,5 +95,88 @@
         <textarea id="Comments" name="Comments" class="form-control" rows="4"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit Review</button>
+    <button type="submit" class="btn submit-btn">Submit Review</button>
 </form>
+<style>
+    /* Form container style */
+    .review-form {
+        background-color: #f4f6f9;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 50%;
+        margin: 50px auto;
+        transition: all 0.3s ease;
+    }
+
+        /* Label and input styling */
+        .review-form label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Textarea and input fields */
+    .review-form input[type="text"],
+    .review-form textarea {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 1rem;
+        border: none;
+        width: 100%;
+        box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+        .review-form input[type="text"]:focus,
+        .review-form textarea:focus {
+            outline: none;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Rating group style */
+    .rating-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .rating-group label {
+            font-size: 1rem;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .rating-group input[type="radio"] {
+            margin-right: 10px;
+        }
+
+    /* Submit button style */
+    .submit-btn {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+</style>
