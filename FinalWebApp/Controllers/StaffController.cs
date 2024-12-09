@@ -1,11 +1,13 @@
 ﻿using FinalWebApp.Data;
 using FinalWebApp.Data.Entities;
 using FinalWebApp.Enum;
+using FinalWebApp.Session;
 using FinalWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -14,14 +16,16 @@ namespace FinalWebApp.Controllers
     [Authorize(Roles = "STAFF")]
     public class StaffController : Controller
     {
+        private readonly IHubContext<OrderHub> _orderHubContext;
         private readonly FinalWebDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public StaffController(FinalWebDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public StaffController(FinalWebDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IHubContext<OrderHub> orderHubContext)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+             _orderHubContext = orderHubContext;
         }
 
         // Hiển thị danh sách bàn ăn
@@ -365,18 +369,14 @@ namespace FinalWebApp.Controllers
             var orders = ordersQuery.ToList(); // Thực thi truy vấn
             return View(orders);
         }
-
-
         [HttpPost]
         public async Task<IActionResult> UpdateOrderStatus(Guid orderId, OrderStatusEnum status)
         {
-            // Lấy đơn hàng theo ID
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
             if (order == null)
             {
                 return NotFound();
             }
-
 
             // Cập nhật trạng thái đơn hàng
             order.OrderStatus = status;
@@ -393,11 +393,12 @@ namespace FinalWebApp.Controllers
                     case OrderStatusEnum.Paid:
                         order.Table.Status = StatusTableEnum.Empty;
                         break;
+
                     case OrderStatusEnum.Unpaid:
                         order.Table.Status = StatusTableEnum.Active;
                         break;
+
                     default:
-                        // Các trạng thái khác không thay đổi trạng thái bàn
                         break;
                 }
             }
@@ -405,8 +406,16 @@ namespace FinalWebApp.Controllers
             // Lưu thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
 
+            // Lấy customerId từ đơn hàng
+            var customerId = order.CustomerId; // Giả sử bạn có customerId trong order
+
+            // Gửi thông báo đến nhóm của khách hàng sở hữu đơn hàng
+            await _orderHubContext.Clients.Group($"customer-{customerId}")
+                .SendAsync("SendOrderStatusNotification", orderId.ToString(), status.ToString());
+
             return Json(new { success = true, message = "Order status updated successfully!" });
         }
+
         public IActionResult OrderCompleted(string orderStatus = "paid")
         {
             // Lọc đơn hàng theo trạng thái (mặc định là Paid)

@@ -2,6 +2,7 @@
 using FinalWebApp.Commons;
 using FinalWebApp.Data;
 using FinalWebApp.Data.Entities;
+using FinalWebApp.Session;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddSignalR();
 builder.Services.AddScoped<ReportGenerator>();
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
@@ -50,7 +52,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
-
+app.MapHub<OrderHub>("/orderHub");
 app.UseAuthorization();
 
 app.MapControllerRoute(
