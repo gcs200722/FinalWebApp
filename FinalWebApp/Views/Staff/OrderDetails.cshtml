@@ -1,41 +1,32 @@
 ﻿@using FinalWebApp.Enum
 @model FinalWebApp.Data.Entities.Order
 
-<!DOCTYPE html>
-<html lang="vi">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
-
-<body>
     <div class="container">
         <h2 class="header">
             Order Details
-            @if (Model.OrderStatus == OrderStatusEnum.Pending || Model.OrderStatus == OrderStatusEnum.Confirmed)
-            {
-                <form id="orderStatusForm" method="post" asp-action="UpdateOrderStatus" class="status-form">
-                    <input type="hidden" name="orderId" value="@Model.Id" />
-                    <div class="btn-group">
-                        @if (Model.OrderStatus == OrderStatusEnum.Pending)
-                        {
-                            <input type="radio" class="btn-check" name="status" value="Confirmed" id="confirmed-@Model.Id">
-                            <label class="btn btn-outline-primary btn-sm" for="confirmed-@Model.Id">Confirm</label>
+        @if (Model.OrderStatus == OrderStatusEnum.Pending || Model.OrderStatus == OrderStatusEnum.Confirmed)
+        {
+            <form id="orderStatusForm" method="post" asp-action="UpdateOrderStatus" class="status-form">
+                <input type="hidden" name="orderId" value="@Model.Id" />
+                <div class="btn-group">
+                    @if (Model.OrderStatus == OrderStatusEnum.Pending)
+                    {
+                        <input type="radio" class="btn-check" name="status" value="Confirmed" id="confirmed-@Model.Id" onchange="submitForm(this)">
+                        <label class="btn btn-outline-primary btn-sm" for="confirmed-@Model.Id">Confirm</label>
 
-                            <input type="radio" class="btn-check" name="status" value="Canceled" id="canceled-@Model.Id">
-                            <label class="btn btn-outline-danger btn-sm" for="canceled-@Model.Id">Cancel</label>
-                        }
-                        else if (Model.OrderStatus == OrderStatusEnum.Confirmed)
-                        {
-                            <input type="radio" class="btn-check" name="status" value="Unpaid" id="unpaid-@Model.Id">
-                            <label class="btn btn-outline-success btn-sm" for="unpaid-@Model.Id">Unpaid</label>
-                        }
-                    </div>
-                </form>
-            }
+                        <input type="radio" class="btn-check" name="status" value="Canceled" id="canceled-@Model.Id" onchange="submitForm(this)">
+                        <label class="btn btn-outline-danger btn-sm" for="canceled-@Model.Id">Cancel</label>
+                    }
+                    else if (Model.OrderStatus == OrderStatusEnum.Confirmed)
+                    {
+                        <input type="radio" class="btn-check" name="status" value="Unpaid" id="unpaid-@Model.Id" onchange="submitForm(this)">
+                        <label class="btn btn-outline-success btn-sm" for="unpaid-@Model.Id">Unpaid</label>
+                    }
+                </div>
+            </form>
+        }
+
             @if (Model.OrderStatus == OrderStatusEnum.Unpaid)
             {
                 <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a>
@@ -95,8 +86,16 @@
         }
         <a asp-action="ListOrder" class="btn btn-secondary">Back to Order List</a>
     </div>
-</body>
 
+    <script>
+    function submitForm(inputElement) {
+        const form = inputElement.closest('form');
+        if (form) {
+            form.submit();
+        }
+    }
+
+    </script>
 <style>
     body {
         font-family: 'Poppins', sans-serif;
@@ -198,4 +197,4 @@
     }
 </style>
 
-</html>
+

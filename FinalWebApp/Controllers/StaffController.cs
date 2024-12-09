@@ -424,7 +424,7 @@ namespace FinalWebApp.Controllers
                     .SendAsync("SendOrderStatusNotification", message,order.Id);
             }
 
-            return Json(new { success = true, message = "Order status updated successfully!" });
+            return Redirect("ListOrder");
         }
 
         public IActionResult OrderCompleted(string orderStatus = "paid")
