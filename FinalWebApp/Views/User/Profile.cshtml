@@ -4,45 +4,169 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="profile-container">
+    <h2 class="profile-title">User Profile</h2>
 
-<form asp-action="Profile" method="post" enctype="multipart/form-data">
-    <input hidden asp-for="UserId" />
-    <div class="form-group">
-        <label asp-for="Avatar">Avatar</label>
-        <input asp-for="Avatar" class="form-control" type="file" />
-        <span asp-validation-for="Avatar" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Fullname"></label>
-        <input asp-for="Fullname" class="form-control" />
-        <span asp-validation-for="Fullname" class="text-danger"></span>
-    </div>
+    <form asp-action="Profile" method="post" enctype="multipart/form-data" class="profile-form">
+        <input hidden asp-for="UserId" />
 
-    <div class="form-group">
-        <label asp-for="Gender"></label>
-        <select asp-for="Gender" class="form-control">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
+        <!-- Avatar Upload -->
+        <div class="form-group avatar-group">
+            <label asp-for="Avatar" class="form-label">Avatar</label>
+            <div class="avatar-wrapper">
+                <img src="path_to_current_avatar" alt="Current Avatar" class="avatar-preview" />
+                <input asp-for="Avatar" class="form-input" type="file" />
+            </div>
+            <span asp-validation-for="Avatar" class="error-message"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="DateOfBirth"></label>
-        <input asp-for="DateOfBirth" class="form-control" type="date" />
-        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-    </div>
+        <!-- Full Name -->
+        <div class="form-group">
+            <label asp-for="Fullname" class="form-label">Full Name</label>
+            <input asp-for="Fullname" class="form-input" placeholder="Enter your full name" />
+            <span asp-validation-for="Fullname" class="error-message"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="NumberPhone"></label>
-        <input asp-for="NumberPhone" class="form-control" />
-        <span asp-validation-for="NumberPhone" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Update Profile</button>
+        <!-- Gender -->
+        <div class="form-group">
+            <label asp-for="Gender" class="form-label">Gender</label>
+            <select asp-for="Gender" class="form-input">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <span asp-validation-for="Gender" class="error-message"></span>
+        </div>
 
-    <li class="nav-item">
-        <a class="nav-link" href="/User/ChangePassword">ChangePassword</a>
-    </li>
-</form>
+        <!-- Date of Birth -->
+        <div class="form-group">
+            <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+            <input asp-for="DateOfBirth" class="form-input" type="date" />
+            <span asp-validation-for="DateOfBirth" class="error-message"></span>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group">
+            <label asp-for="NumberPhone" class="form-label">Phone Number</label>
+            <input asp-for="NumberPhone" class="form-input" placeholder="Enter your phone number" />
+            <span asp-validation-for="NumberPhone" class="error-message"></span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-save"></i> Update Profile
+            </button>
+            <a href="/User/ChangePassword" class="btn-link">Change Password</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        background: linear-gradient(145deg, #f0f0f0, #e8e8e8);
+        border-radius: 15px;
+        box-shadow: inset 5px 5px 10px #c8c8c8, inset -5px -5px 10px #ffffff;
+    }
+
+    .profile-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-label {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .form-input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+        .form-input:focus {
+            border-color: #007bff;
+        }
+
+    .avatar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .avatar-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .avatar-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #ddd;
+    }
+
+    .error-message {
+        font-size: 12px;
+        color: #d9534f;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-submit {
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-submit:hover {
+            background: #45a049;
+        }
+
+    .btn-link {
+        font-size: 14px;
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .btn-link:hover {
+            color: #0056b3;
+        }
+</style>
