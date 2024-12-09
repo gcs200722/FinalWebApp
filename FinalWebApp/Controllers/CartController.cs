@@ -6,6 +6,7 @@ using FinalWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -14,11 +15,13 @@ namespace FinalWebApp.Controllers
     [Authorize]
     public class CartController : Controller
     {
+        private readonly IHubContext<OrderHub> _orderHubContext;
         private readonly FinalWebDbContext _context;
 
-        public CartController(FinalWebDbContext context)
+        public CartController(FinalWebDbContext context, IHubContext<OrderHub> orderHubContext)
         {
             _context = context;
+            _orderHubContext = orderHubContext;
         }
         public IActionResult Cart()
         {
@@ -142,101 +145,105 @@ namespace FinalWebApp.Controllers
             });
         }
 
-        [HttpPost]
-        public IActionResult CreateOrder(Guid tableId, DateTime diningTime)
-        {
-            // Lấy giỏ hàng từ session
-            var cartItemIds = HttpContext.Session.Get<List<Guid>>("Cart") ?? new List<Guid>();
-
-            if (!cartItemIds.Any())
+            [HttpPost]
+            public async Task<IActionResult> CreateOrder(Guid tableId, DateTime diningTime)
             {
-                TempData["ErrorMessage"] = "Your cart is empty!";
-                return RedirectToAction("Cart");
-            }
+                // Lấy giỏ hàng từ session
+                var cartItemIds = HttpContext.Session.Get<List<Guid>>("Cart") ?? new List<Guid>();
 
-            // Kiểm tra bàn có sẵn
-            var table = _context.Tables.FirstOrDefault(t => t.Id == tableId && t.Status == Enum.StatusTableEnum.Empty);
-            if (table == null)
-            {
-                TempData["ErrorMessage"] = "The selected table is not available.";
-                return RedirectToAction("SelectTable");
-            }
-
-            // Lấy thông tin sản phẩm từ database
-            var items = _context.Items
-      .Where(i => cartItemIds.Contains(i.Id))
-      .Select(i => new
-      {
-          i.Id,
-          i.Name,
-          i.Price,
-          Quantity = cartItemIds.Count(id => id == i.Id),
-          i.Image,
-          i.CategoryId // Lấy CategoryId
-      })
-      .ToList();
-
-            var totalAmount = items.Sum(item => item.Price * item.Quantity);
-
-            // Kiểm tra xem CategoryId có tồn tại trong bảng Categories không
-            foreach (var item in items)
-            {
-                var categoryExists = _context.Categories.Any(c => c.Id == item.CategoryId);
-                if (!categoryExists)
+                if (!cartItemIds.Any())
                 {
-                    TempData["ErrorMessage"] = $"The category with Id {item.CategoryId} does not exist.";
+                    TempData["ErrorMessage"] = "Your cart is empty!";
+                    return RedirectToAction("Cart");
+                }
+
+                // Kiểm tra bàn có sẵn
+                var table = _context.Tables.FirstOrDefault(t => t.Id == tableId && t.Status == Enum.StatusTableEnum.Empty);
+                if (table == null)
+                {
+                    TempData["ErrorMessage"] = "The selected table is not available.";
+                    return RedirectToAction("SelectTable");
+                }
+
+                // Lấy thông tin sản phẩm từ database
+                var items = _context.Items
+          .Where(i => cartItemIds.Contains(i.Id))
+          .Select(i => new
+          {
+              i.Id,
+              i.Name,
+              i.Price,
+              Quantity = cartItemIds.Count(id => id == i.Id),
+              i.Image,
+              i.CategoryId // Lấy CategoryId
+          })
+          .ToList();
+
+                var totalAmount = items.Sum(item => item.Price * item.Quantity);
+
+                // Kiểm tra xem CategoryId có tồn tại trong bảng Categories không
+                foreach (var item in items)
+                {
+                    var categoryExists = _context.Categories.Any(c => c.Id == item.CategoryId);
+                    if (!categoryExists)
+                    {
+                        TempData["ErrorMessage"] = $"The category with Id {item.CategoryId} does not exist.";
+                        return RedirectToAction("Cart");
+                    }
+                }
+
+                // Tạo đơn hàng
+                var order = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    OrderDate = DateTime.Now,
+                    TotalAmount = totalAmount,
+                    OrderStatus = OrderStatusEnum.Pending,
+                    TableId = tableId,
+                    CustomerId = User.FindFirstValue(ClaimTypes.NameIdentifier), // Lấy đúng CustomerId từ ASP.NET Identity
+                    DiningTime = diningTime, // Lưu thời gian dùng bữa
+                    OrderItems = items.Select(item => new OrderItem
+                    {
+                        Id = Guid.NewGuid(),
+                        ItemId = item.Id,
+                        CategoryId = item.CategoryId, // Gán đúng CategoryId
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        ItemName = item.Name,
+                        ItemImage = item.Image
+                    }).ToList()
+                };
+
+                // Thêm đơn hàng vào database
+                try
+                {
+                    _context.Orders.Add(order);
+                    table.Status = StatusTableEnum.Booked; // Cập nhật trạng thái bàn
+                    _context.SaveChanges();
+                await _orderHubContext.Clients.Group("STAFF")
+           .SendAsync("NotifyStaff", $"New order is waiting for processing. Order ID: {order.Id}", order.Id);
+                // Xóa giỏ hàng sau khi đặt hàng
+                HttpContext.Session.Remove("Cart");
+                    var orderId = order.Id; // ID đơn hàng vừa tạo
+                    var orderStatus = order.OrderStatus.ToString(); // Trạng thái đơn hàng
+
+            
+                return RedirectToAction("OrderDetails", new { orderId });
+
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "An error occurred while placing your order.";
                     return RedirectToAction("Cart");
                 }
             }
 
-            // Tạo đơn hàng
-            var order = new Order
+                public IActionResult SelectTable()
             {
-                Id = Guid.NewGuid(),
-                OrderDate = DateTime.Now,
-                TotalAmount = totalAmount,
-                OrderStatus = OrderStatusEnum.Pending,
-                TableId = tableId,
-                CustomerId = User.FindFirstValue(ClaimTypes.NameIdentifier), // Lấy đúng CustomerId từ ASP.NET Identity
-                DiningTime = diningTime, // Lưu thời gian dùng bữa
-                OrderItems = items.Select(item => new OrderItem
-                {
-                    Id = Guid.NewGuid(),
-                    ItemId = item.Id,
-                    CategoryId = item.CategoryId, // Gán đúng CategoryId
-                    Quantity = item.Quantity,
-                    Price = item.Price,
-                    ItemName = item.Name,
-                    ItemImage = item.Image
-                }).ToList()
-            };
-
-            // Thêm đơn hàng vào database
-            try
-            {
-                _context.Orders.Add(order);
-                table.Status = StatusTableEnum.Booked; // Cập nhật trạng thái bàn
-                _context.SaveChanges();
-
-                // Xóa giỏ hàng sau khi đặt hàng
-                HttpContext.Session.Remove("Cart");
-
-                TempData["SuccessMessage"] = "Your order has been placed successfully!";
-                return RedirectToAction("OrderDetails", new { orderId = order.Id });
+                // Lấy danh sách bàn có sẵn
+                var availableTables = _context.Tables.Where(t => t.Status == Enum.StatusTableEnum.Empty).ToList();
+                return View(availableTables);
             }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "An error occurred while placing your order.";
-                return RedirectToAction("Cart");
-            }
-        }
-
-            public IActionResult SelectTable()
-        {
-            // Lấy danh sách bàn có sẵn
-            var availableTables = _context.Tables.Where(t => t.Status == Enum.StatusTableEnum.Empty).ToList();
-            return View(availableTables);
-        }
         public IActionResult OrderDetails(Guid orderId)
         {
             // Lấy thông tin đơn hàng

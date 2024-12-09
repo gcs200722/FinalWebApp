@@ -16,54 +16,64 @@ namespace FinalWebApp.Session
 
         public override async Task OnConnectedAsync()
         {
-            // Lấy danh sách tất cả người dùng có role "customer"
-            var customers = await _userManager.GetUsersInRoleAsync("customer");
+            var user = Context.User;
 
-            // Lấy customerId từ tất cả người dùng có role "customer"
-            var customerIds = customers.Select(user => user.Id.ToString()).ToList();
-
-            // Thêm khách hàng vào nhóm với tên là "customer-{customerId}"
-            foreach (var customerId in customerIds)
+            if (user != null)
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, $"customer-{customerId}");
-            }
+                // Kiểm tra và thêm nhóm cho CUSTOMER
+                if (user.IsInRole("CUSTOMER"))
+                {
+                    var customerId = Context.UserIdentifier;
+                    if (!string.IsNullOrEmpty(customerId))
+                    {
+                        await Groups.AddToGroupAsync(Context.ConnectionId, $"customer-{customerId}");
+                    }
+                }
 
+                // Kiểm tra và thêm nhóm cho STAFF              
+                if (user.IsInRole("STAFF"))
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, "STAFF");
+                }
+            }
             await base.OnConnectedAsync();
         }
 
+
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var customerId = GetCustomerIdFromContext();
-
-            // Xóa khách hàng khỏi nhóm khi ngắt kết nối
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"customer-{customerId}");
+            var customerId = Context.UserIdentifier;
+            if (!string.IsNullOrEmpty(customerId))
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"customer-{customerId}");
+            }
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "STAFF");
 
             await base.OnDisconnectedAsync(exception);
         }
 
-        private string GetCustomerIdFromContext()
-        {
-            // Lấy customerId từ thông tin người dùng, ví dụ từ token JWT hoặc session
-            return Context.UserIdentifier;  // Giả sử userIdentifier chứa customerId
-        }
+
 
         // Phương thức để gửi thông báo cho khách hàng có ID tương ứng
-        public async Task SendOrderStatusNotification(Guid orderId, OrderStatusEnum status)
+        public async Task SendOrderStatusNotification(Guid customerId, Guid orderId, OrderStatusEnum status)
         {
-            // Lấy danh sách tất cả người dùng có role "customer"
-            var customers = await _userManager.GetUsersInRoleAsync("customer");
-
-            foreach (var customer in customers)
+            string message = status switch
             {
-                // Lấy customerId từ người dùng
-                var customerId = customer.Id.ToString();
-
-                // Tạo thông điệp thông báo
-                string notificationMessage = $"Order ID: {orderId} has been updated to {status}";
-
-                // Gửi thông báo tới nhóm tương ứng với mỗi customerId
-                await Clients.Group($"customer-{customerId}").SendAsync("ReceiveOrderStatusNotification", notificationMessage);
-            }
+                OrderStatusEnum.Confirmed => $"Your order with ID {orderId} has been confirmed.",
+                OrderStatusEnum.Canceled => $"Your order with ID {orderId} has been cancelled.",
+                _ => $"Your order with ID {orderId} is currently in {status} status."
+            };
+            // Gửi thông báo tới nhóm "customer-{customerId}"
+            await Clients.Group($"customer-{customerId}")
+                .SendAsync("SendOrderStatusNotification", message);
         }
+        public async Task NotifyStaff(Guid orderId, OrderStatusEnum status)
+        {
+            // Log để kiểm tra         
+            string message = $"Order ID: {orderId} status updated to {status}";
+            await Clients.Group("STAFF").SendAsync("NotifyStaff", message);
+        }
+
     }
 }
+    

@@ -107,11 +107,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-action="CustomerFeedbackReport" asp-controller="Manager">Manage Feedback</a>
                             </li>
-                        }
-                       
+                        }                      
                         <!-- Additional public or shared links can go here -->
                     </ul>
-
                     <!-- Right-side user-specific items -->
                     <ul class="navbar-nav ms-auto align-items-center">
                         @if (SignInManager.IsSignedIn(User))
@@ -130,13 +128,17 @@
                                     </span>
                                 </a>
                                 <!-- Dropdown hiển thị danh sách thông báo -->
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="max-height: 300px; overflow-y: auto;">
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
                                     <li class="dropdown-item text-center text-muted" id="noNotifications">
                                         No notifications
                                     </li>
-                                    <div id="notificationList"></div>
+                                    <ul id="notificationList" data-id="orderId"></ul>
+                                    <li class="dropdown-item text-center">
+                                        <button class="btn btn-link" id="clearNotifications">Clear All</button>
+                                    </li>
                                 </ul>
                             </li>
+
 
                             <li class="nav-item">
                                 <form method="post" asp-area="" asp-controller="User" asp-action="Logout" class="form-inline">
@@ -181,18 +183,16 @@
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/order.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-
-   
-
-
-
 </body>
 
-</html>
+
 
 <style>
   
+    #notificationList {
+        max-height: 300px;
+        overflow-y: auto;
+    }
 
     /* Header và Footer opacity */
     .bg-gradient-primary {
@@ -254,7 +254,7 @@
 
    
 </style>
-
+</html>
 
 <!-- Thêm link font từ Google Fonts -->
 
