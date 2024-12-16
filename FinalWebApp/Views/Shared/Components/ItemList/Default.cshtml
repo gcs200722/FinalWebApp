@@ -8,7 +8,20 @@
                     <th width="5%">No.</th>
                     <th width="20%">Name of Item</th>
                     <th width="20%">Description</th>
-                    <th width="10%">Category</th>
+                    <th width="10%">
+
+                        Category <form method="get">
+                            <select name="categoryId" onchange="this.form.submit()" class="form-select form-select-sm">
+                                <option value="">-- All Categories --</option>
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <option value="@category.Value" selected="@(category.Value == Context.Request.Query["categoryId"])">
+                                        @category.Text
+                                    </option>
+                                }
+                            </select>
+                        </form>
+                    </th>
                     <th width="10%">Price</th>
                     <th width="20%">Image</th>
                     <th width="15%">Action</th>
@@ -18,14 +31,14 @@
                 @if (Model != null && Model.Any())
                 {
                     var position = 1;
-                    foreach (var item in Model)
+                    foreach (var item in Model.OrderByDescending(i => i.Id))
                     {
                         <tr>
                             <td class="text-center">@position</td>
                             <td>@item.Name</td>
                             <td>@item.Description</td>
                             <td>@item.Category.Name</td>
-                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</td>
                             <td>
                                 <img src="@Url.Content("~/Image/" + item.Image)" alt="@item.Name" width="100" />
                             </td>
@@ -51,6 +64,7 @@
         </table>
     </div>
 </div>
+
 
 <style>
     .scrollable-table {

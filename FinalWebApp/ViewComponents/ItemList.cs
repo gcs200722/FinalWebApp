@@ -11,18 +11,18 @@ namespace FinalWebApp.ViewComponents
         {
             _context = context;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(Guid? categoryId)
         {
-            //var items = await GetItemsAsync();
-            var items = await _context.Items
-                .Include(c => c.Category)
-                .ToListAsync();
+            var itemsQuery = _context.Items.Include(i => i.Category).AsQueryable();
+
+            if (categoryId.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(i => i.CategoryId == categoryId.Value);
+            }
+
+            var items = await itemsQuery.ToListAsync();
             return View(items);
         }
 
-        /*private Task<List<Item>> GetItemsAsync()
-        {
-            return _context.Items.ToListAsync();
-        }*/
     }
 }

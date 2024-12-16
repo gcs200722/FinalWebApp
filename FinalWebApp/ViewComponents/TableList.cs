@@ -20,8 +20,9 @@ namespace FinalWebApp.ViewComponents
 
         private Task<List<Table>> GetItemsAsync()
         {
-            return _context.Tables.ToListAsync();
+            return _context.Tables
+                .OrderByDescending(t => t.Id) // Sorting by newest items first
+                .ToListAsync();
         }
-
     }
 }

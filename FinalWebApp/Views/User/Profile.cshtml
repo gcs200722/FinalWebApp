@@ -8,14 +8,15 @@
     <h2 class="profile-title">User Profile</h2>
 
     <form asp-action="Profile" method="post" enctype="multipart/form-data" class="profile-form">
+        @Html.AntiForgeryToken()
         <input hidden asp-for="UserId" />
 
         <!-- Avatar Upload -->
         <div class="form-group avatar-group">
             <label asp-for="Avatar" class="form-label">Avatar</label>
             <div class="avatar-wrapper">
-                <img src="path_to_current_avatar" alt="Current Avatar" class="avatar-preview" />
-                <input asp-for="Avatar" class="form-input" type="file" />
+                <img src="@Model.AvatarUrl ?? " /https://icon-library.com/images/avatar-icon-png/avatar-icon-png-2.jpg"" alt="Current Avatar" class="avatar-preview" />
+                <input asp-for="Avatar" class="form-input" type="file" id="Avatar" />
             </div>
             <span asp-validation-for="Avatar" class="error-message"></span>
         </div>
@@ -27,6 +28,7 @@
             <span asp-validation-for="Fullname" class="error-message"></span>
         </div>
 
+        <!-- Gender -->
         <!-- Gender -->
         <div class="form-group">
             <label asp-for="Gender" class="form-label">Gender</label>
@@ -170,3 +172,14 @@
             color: #0056b3;
         }
 </style>
+
+<script>
+    // Preview image when user selects a new avatar
+    document.getElementById("Avatar").addEventListener("change", function(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.querySelector(".avatar-preview").src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>

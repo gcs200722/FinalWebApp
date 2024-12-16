@@ -4,6 +4,14 @@
     ViewData["Title"] = isCreate ? "Create Item" : "Edit Item";
     string actionName = isCreate ? "Create" : "Edit";
     string buttonName = actionName;
+    Guid? selectedCategoryId = null;
+    var categoryIdString = Context.Request.Query["categoryId"].ToString();
+
+    if (!string.IsNullOrEmpty(categoryIdString) && Guid.TryParse(categoryIdString, out var parsedCategoryId))
+    {
+        selectedCategoryId = parsedCategoryId;
+    }
+
 }
 
 <h1 class="page-title">@ViewData["Title"]</h1>
@@ -64,7 +72,7 @@
         <!-- Table Section -->
         <div class="col-md-8">
             <div class="table-section">
-                @await Component.InvokeAsync("ItemList")
+                @await Component.InvokeAsync("ItemList", new { categoryId = selectedCategoryId })
             </div>
         </div>
     </div>

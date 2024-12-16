@@ -4,13 +4,11 @@
 
 <div class="tin-section">
     <h3>Order Information</h3>
-    <p><strong>Customer Name:</strong> @Model.CustomerName</p>
     <p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
     <p><strong>Order Time:</strong> @Model.OrderTime.ToString("HH:mm:ss")</p>
     <p><strong>Table Number:</strong> @Model.TableNumber</p>
     <p><strong>Dining Time:</strong> @Model.DiningTime.ToString("dd/MM/yyyy HH:mm")</p>
 </div>
-
 <h3>Order Items</h3>
 @foreach (var item in Model.Items)
 {

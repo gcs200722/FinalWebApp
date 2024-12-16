@@ -2,17 +2,20 @@
 
 <form asp-action="Login" method="post">
     <div class="form-container shadow-lg">
+        <h2 class="page-title">@ViewData["Title"]</h2>
         <div class="header-decor text-center">
             <i class="fas fa-utensils icon-decor"></i>
         </div>
         <h2>Welcome Back!</h2>
         <p class="subheading">Enjoy a luxurious dining experience.</p>
 
+        <div asp-validation-summary="All" class="text-danger"></div>
+
         <div class="form-group">
             <label asp-for="Email" class="control-label">Email</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                <input asp-for="Email" class="form-control input-style" />
+                <input asp-for="Email" class="form-control input-style" placeholder="Enter your email" />
             </div>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
@@ -21,7 +24,7 @@
             <label asp-for="Password" class="control-label">Password</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input asp-for="Password" class="form-control input-style" type="password" />
+                <input asp-for="Password" class="form-control input-style" type="password" placeholder="Enter your password" />
             </div>
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
@@ -36,8 +39,13 @@
         <div class="form-group text-center">
             <button type="submit" class="btn btn-primary">Login</button>
         </div>
+
+        <div class="form-group text-center">
+            <a asp-action="ForgotPassword" class="btn btn-link">Forgot password?</a>
+        </div>
     </div>
 </form>
+
 
 <style>
     body {
