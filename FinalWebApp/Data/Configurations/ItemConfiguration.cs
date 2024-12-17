@@ -13,7 +13,6 @@ namespace FinalWebApp.Data.Configurations
         .IsRequired()
         .HasMaxLength(75);
             builder.Property(c => c.Description)
-       .IsRequired()
        .HasMaxLength(300);
             builder.Property(c => c.Price)
         .IsRequired()

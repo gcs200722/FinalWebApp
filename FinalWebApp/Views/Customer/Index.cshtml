@@ -45,9 +45,6 @@
                             <div class="card custom-card shadow-lg rounded hover-card" style="transition: transform 0.4s ease, box-shadow 0.4s ease;">
                                 <div class="card-img-container">
                                     <img src="~/Image/@item.Image" class="card-img-top" alt="Image of @item.Name">
-                                    <div class="overlay">
-                                        <p class="overlay-text">Click to View</p>
-                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">@item.Name</h5>
@@ -183,32 +180,7 @@
         border-radius: 15px;
     }
 
-    /* Overlay */
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: opacity 0.3s ease;
-        border-radius: 15px;
-    }
 
-    .overlay-text {
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    .card-img-container:hover .overlay {
-        opacity: 1;
-    }
 
     /* Card Body */
     .card-body {
@@ -279,9 +251,7 @@
     }
 
     /* Container Margin */
-    .container-fluid {
-        margin-top: 30px;
-    }
+
 
     .text-center {
         font-family: 'Poppins', sans-serif;

@@ -16,6 +16,5 @@
         public Guid CategoryId { get; set; }
         public virtual Category? Category { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
-
     }
 }

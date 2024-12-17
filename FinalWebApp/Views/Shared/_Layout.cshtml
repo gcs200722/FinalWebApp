@@ -146,7 +146,8 @@
 
                             <li class="nav-item">
                                 <form method="post" asp-area="" asp-controller="User" asp-action="Logout" class="form-inline">
-                                    <button type="submit" class="btn btn-outline-light me-3">Logout</button>
+                                    <button type="submit" class="custom-logout-btn me-3">Logout</button>
+
                                 </form>
                             </li>
                             <li class="nav-item">
@@ -222,18 +223,19 @@
             color: #a8dadc; /* Màu xanh nhạt khi hover */
         }
 
-    /* Button outline-light */
-    .btn-outline-light {
-        border-color: white;
-        color: white;
-        font-family: 'Nunito', sans-serif;
-        transition: background-color 0.3s ease;
+
+
+    .custom-logout-btn {
+        background-color: #f39c12; /* Màu nền khác biệt */
+        color: #fff; /* Màu chữ */
+        border-radius: 10px; /* Bo góc */
+        transition: all 0.3s ease; /* Hiệu ứng chuyển đổi */
     }
 
-        .btn-outline-light:hover {
+        .custom-logout-btn:hover {
             background-color: #e63946; /* Đỏ nhạt khi hover */
-            color: white;
         }
+
 
     /* Avatar rounded-circle */
     .rounded-circle {
@@ -260,7 +262,7 @@
 </style>
 </html>
 
-<!-- Thêm link font từ Google Fonts -->
+
 
 
 

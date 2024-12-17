@@ -24,13 +24,15 @@
                         <label class="btn btn-outline-success btn-sm" for="unpaid-@Model.Id">Unpaid</label>
                     }
                 </div>
+
             </form>
         }
-
+        <div>
             @if (Model.OrderStatus == OrderStatusEnum.Unpaid)
             {
                 <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">Checkout</a>
             }
+            </div>
         </h2>
 
         <div class="details">
@@ -69,10 +71,13 @@
                                     <button type="submit" class="btn btn-danger btn-sm" @(item.Quantity == 1 ? "disabled" : "")>-</button>
                                 </form>
 
-                                <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" class="quantity-form">
-                                    <input type="hidden" name="quantity" value="@item.Quantity + 1" />
-                                    <button type="submit" class="btn btn-success btn-sm">+</button>
-                                </form>
+                            <form asp-action="UpdateQuantity" asp-route-orderId="@Model.Id" asp-route-orderItemId="@item.Id" method="post" class="quantity-form">
+                                <input type="hidden" name="quantity" value="@item.Quantity + 1" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i> 
+                                </button>
+                            </form>
+
                             </td>
                         </tr>
                     }
@@ -132,7 +137,7 @@
     }
 
     .table {
-        width: 100%;
+        width: 100% ;
         border-collapse: collapse;
         margin: 20px 0;
         border-radius: 12px;
@@ -155,17 +160,12 @@
         background: #e0f7e7;
     }
 
-    tr:hover {
-        background: #d4f4dd;
-        transition: 0.3s;
-    }
 
     .btn {
         padding: 10px 20px;
         border-radius: 25px;
         font-size: 14px;
         font-weight: 600;
-        color: #fff;
         border: none;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -175,9 +175,7 @@
         background: #4CAF50;
     }
 
-        .btn-primary:hover {
-            background: #45a049;
-        }
+
 
     .btn-secondary {
         background: #6c757d;
@@ -195,6 +193,48 @@
     .quantity-form {
         display: inline-block;
     }
+    .status-form .btn-outline-primary,
+.status-form .btn-outline-danger,
+.status-form .btn-outline-success {
+    font-size: 16px; /* Tăng kích thước font */
+    padding: 10px 20px; /* Tăng khoảng cách */
+    border-width: 2px; /* Làm đậm viền */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển đổi khi hover */
+}
+
+/* Hiệu ứng hover */
+.status-form .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #0056b3;
+}
+
+.status-form .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+    border-color: #b21f2d;
+}
+
+.status-form .btn-outline-success:hover {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #19692c;
+}
+
+/* Nút Checkout */
+.btn-primary {
+    font-size: 18px; /* Tăng kích thước font */
+    padding: 12px 24px; /* Tăng khoảng cách */
+    background-color: #4caf50; /* Xanh lá */
+    color: #fff;
+    border-radius: 25px; /* Bo tròn */
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #45a049; /* Xanh đậm hơn */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng khi hover */
+}
 </style>
 
 
