@@ -11,13 +11,14 @@ namespace FinalWebApp.Controllers
 {
     public class UserController : Controller
     {
+        private readonly EmailService _emailService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IWebHostEnvironment _environment;
         private readonly FinalWebDbContext _context;
         private readonly ILogger<ItemController> _logger;
-        public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, FinalWebDbContext context, IWebHostEnvironment environment, ILogger<ItemController> logger)
+        public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, FinalWebDbContext context, IWebHostEnvironment environment, ILogger<ItemController> logger, EmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -25,7 +26,7 @@ namespace FinalWebApp.Controllers
             _context = context;
             _environment = environment;
             _logger = logger;
-
+            _emailService = emailService;
         }
         public async Task<string> UploadFile(IFormFile file)
         {
@@ -305,5 +306,95 @@ namespace FinalWebApp.Controllers
             return View(model);
         }
         #endregion
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    // Nếu email không tồn tại
+                    ModelState.AddModelError("", "Email không tồn tại.");
+                    return View();
+                }
+
+                // Tạo token đặt lại mật khẩu
+                var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                // Tạo link đặt lại mật khẩu
+                var resetLink = Url.Action("ResetPassword", "User", new { userId = user.Id, token = resetToken }, protocol: Request.Scheme);
+
+                // Nội dung email
+                var subject = "Reset Your Password";
+                var body = $@"
+                <p>Xin chào {user.Fullname},</p>
+                <p>Để đặt lại mật khẩu của bạn, vui lòng click vào liên kết bên dưới:</p>
+                <p><a href='{resetLink}'>Đặt lại mật khẩu</a></p>
+                <p>Liên kết này sẽ hết hạn sau 24 giờ.</p>";
+
+                // Gửi email
+                await _emailService.SendEmailAsync(user.Email, subject, body);
+
+                ViewBag.Message = "Email đặt lại mật khẩu đã được gửi.";
+                return View("ForgotPasswordConfirmation");
+            }
+
+            return View(model);
+        }
+        [HttpGet]
+        public ActionResult ResetPassword(Guid userId, string token)
+        {
+            if (userId == Guid.Empty || string.IsNullOrEmpty(token))
+            {
+                return BadRequest();  // Equivalent to 400 Bad Request
+            }
+
+            var model = new ResetPasswordViewModel { UserId = userId, Token = token };
+            return View(model);
+        }
+
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+            if (user == null)
+            {
+                return View("ResetPasswordConfirmation");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword); // Pass 'user' object
+            if (result.Succeeded)
+            {
+                return View("ResetPasswordConfirmation");
+            }
+
+            AddErrors(result);
+            return View(model);
+        }
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+        }
     }
+
 }

@@ -15,7 +15,9 @@
         <div class="form-group avatar-group">
             <label asp-for="Avatar" class="form-label">Avatar</label>
             <div class="avatar-wrapper">
-                <img src="@Model.AvatarUrl ?? " /https://icon-library.com/images/avatar-icon-png/avatar-icon-png-2.jpg"" alt="Current Avatar" class="avatar-preview" />
+                <img src="@(string.IsNullOrWhiteSpace(Model.AvatarUrl) ? "https://icon-library.com/images/avatar-icon-png/avatar-icon-png-2.jpg" : Url.Content(Model.AvatarUrl))"
+                     alt="Current Avatar"
+                     class="avatar-preview" />
                 <input asp-for="Avatar" class="form-input" type="file" id="Avatar" />
             </div>
             <span asp-validation-for="Avatar" class="error-message"></span>
@@ -28,7 +30,6 @@
             <span asp-validation-for="Fullname" class="error-message"></span>
         </div>
 
-        <!-- Gender -->
         <!-- Gender -->
         <div class="form-group">
             <label asp-for="Gender" class="form-label">Gender</label>
@@ -64,6 +65,7 @@
     </form>
 </div>
 
+<!-- CSS -->
 <style>
     .profile-container {
         max-width: 600px;
@@ -130,7 +132,12 @@
         border-radius: 50%;
         object-fit: cover;
         border: 1px solid #ddd;
+        transition: transform 0.3s ease;
     }
+
+        .avatar-preview:hover {
+            transform: scale(1.1);
+        }
 
     .error-message {
         font-size: 12px;
@@ -173,13 +180,27 @@
         }
 </style>
 
+<!-- JavaScript -->
 <script>
     // Preview image when user selects a new avatar
     document.getElementById("Avatar").addEventListener("change", function(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.querySelector(".avatar-preview").src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.querySelector(".avatar-preview").src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Khôi phục ảnh gốc nếu không chọn file
+            document.querySelector(".avatar-preview").src = "@(string.IsNullOrWhiteSpace(Model.AvatarUrl) ? "https://icon-library.com/images/avatar-icon-png/avatar-icon-png-2.jpg" : Url.Content(Model.AvatarUrl))";
+        }
+    });
+
+    // Confirm before submitting the form
+    document.querySelector(".profile-form").addEventListener("submit", function(e) {
+        if (!confirm("Are you sure you want to update your profile?")) {
+            e.preventDefault();
+        }
     });
 </script>

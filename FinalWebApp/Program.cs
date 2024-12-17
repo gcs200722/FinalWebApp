@@ -31,6 +31,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<ReportGenerator>();
 builder.Services.AddControllersWithViews();
