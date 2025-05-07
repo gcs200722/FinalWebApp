@@ -35,7 +35,7 @@ namespace FinalWebApp.Controllers
                 // Kiểm tra nếu tên tệp rỗng hoặc null
                 if (string.IsNullOrEmpty(fileName))
                 {
-                    return null; // Trả về null nếu không có tên tệp
+                    return fileName; // Trả về null nếu không có tên tệp
                 }
 
                 // Lấy phần mở rộng của tệp
@@ -44,7 +44,7 @@ namespace FinalWebApp.Controllers
                 // Kiểm tra phần mở rộng hợp lệ
                 if (string.IsNullOrEmpty(fileExtension) || !Constants.Valid_Extensions.Contains(fileExtension))
                 {
-                    return null; // Trả về null nếu phần mở rộng không hợp lệ
+                    return fileName; // Trả về null nếu phần mở rộng không hợp lệ
                 }
 
                 // Tạo tên tệp hoàn chỉnh với GUID và phần mở rộng
@@ -78,11 +78,11 @@ namespace FinalWebApp.Controllers
                 {
                     // Ghi log lỗi nếu có
                     Console.WriteLine($"Error uploading file: {ex.Message}");
-                    return null; // Trả về null nếu có lỗi trong quá trình lưu file
+                    return fileName; // Trả về null nếu có lỗi trong quá trình lưu file
                 }
             }
 
-            return null; // Trả về null nếu không có tệp nào được tải lên
+            return string.Empty; // Trả về null nếu không có tệp nào được tải lên
         }
 
         [HttpGet]

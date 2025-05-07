@@ -3,6 +3,7 @@ using FinalWebApp.Data.Dto;
 using FinalWebApp.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 public class FinalWebDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -32,7 +33,9 @@ public class FinalWebDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(c => c.OrderItems) // Chú ý "OrderItems" thay vì "Items"
             .HasForeignKey(oi => oi.CategoryId)
             .OnDelete(DeleteBehavior.NoAction); // Sử dụng NO ACTION thay vì CASCADE
-
+        builder.Entity<Order>()
+       .Property(o => o.TotalAmount)
+       .HasColumnType("decimal(18,4)");
         // Cấu hình OrderItem - Item
         builder.Entity<OrderItem>()
             .HasOne(oi => oi.Item)

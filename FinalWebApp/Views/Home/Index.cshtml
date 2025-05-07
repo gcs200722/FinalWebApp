@@ -12,12 +12,14 @@
     body {
         margin: 0;
         padding: 0;
-        height: 100%;
+        height: 100vh;
         background-image: url('https://nhahangso.com/wp-content/uploads/2022/08/khong-gian-nha-hang-5-sao-1920x1277.webp');
-        background-size: cover; /* Đảm bảo ảnh nền bao phủ toàn bộ màn hình */
+        background-size: cover; /* Ảnh nền bao phủ toàn bộ màn hình */
         background-position: center; /* Căn giữa hình nền */
         background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+        background-attachment: fixed; /* Giữ nguyên kích thước hình nền khi thu nhỏ browser */
     }
+
 
     .overlay {
         background: rgba(0, 0, 0, 0.5); /* Lớp phủ tối */

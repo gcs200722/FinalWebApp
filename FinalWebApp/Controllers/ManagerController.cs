@@ -241,97 +241,98 @@ namespace FinalWebApp.Controllers
             return View(report);
         }
 
-public IActionResult ExportFeedbackReportToPdf(DateTime? startDate, DateTime? endDate, int? month, int? year)
-    {
-        // Truy xuất dữ liệu từ cơ sở dữ liệu và tạo ViewModel (giống như ví dụ trước)
-        var viewModel = new CustomerFeedbackReportViewModel();
-        var reviewsQuery = _context.CustomerReviews.AsQueryable();
-
-        if (startDate.HasValue)
+        public IActionResult ExportFeedbackReportToPdf(DateTime? startDate, DateTime? endDate, int? month, int? year)
         {
-            reviewsQuery = reviewsQuery.Where(r => r.ReviewDate >= startDate.Value);
-        }
-        if (endDate.HasValue)
-        {
-            reviewsQuery = reviewsQuery.Where(r => r.ReviewDate <= endDate.Value);
-        }
-        if (month.HasValue)
-        {
-            reviewsQuery = reviewsQuery.Where(r => r.ReviewDate.Month == month.Value);
-        }
-        if (year.HasValue)
-        {
-            reviewsQuery = reviewsQuery.Where(r => r.ReviewDate.Year == year.Value);
-        }
+            // Retrieve data from the database and create the ViewModel (similar to the previous example)
+            var viewModel = new CustomerFeedbackReportViewModel();
+            var reviewsQuery = _context.CustomerReviews.AsQueryable();
 
-        var reviews = reviewsQuery.ToList();
-
-        // Tính toán các giá trị tổng quan
-        viewModel.TotalReviews = reviews.Count;
-        viewModel.AverageFoodQualityRating = reviews.Average(r => r.FoodQualityRating);
-        viewModel.AverageServiceRating = reviews.Average(r => r.ServiceRating);
-        viewModel.AverageAmbienceRating = reviews.Average(r => r.AmbienceRating);
-        viewModel.CustomerReviews = reviews;
-
-        // Tạo PDF
-        using (MemoryStream ms = new MemoryStream())
-        {
-            // Tạo đối tượng Document và PdfWriter
-            Document document = new Document(PageSize.A4);
-            PdfWriter writer = PdfWriter.GetInstance(document, ms);
-            document.Open();
-
-            // Thêm tiêu đề báo cáo
-            Font titleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
-            Paragraph title = new Paragraph("Báo Cáo Phản Hồi Của Khách Hàng", titleFont);
-            title.Alignment = Element.ALIGN_CENTER;
-            document.Add(title);
-
-            document.Add(new Phrase("\n"));
-
-            // Thêm thông tin tổng quan
-            Font headerFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
-            document.Add(new Paragraph($"Tổng số đánh giá: {viewModel.TotalReviews}", headerFont));
-            document.Add(new Paragraph($"Đánh giá trung bình chất lượng món ăn: {viewModel.AverageFoodQualityRating:0.0} / 5", headerFont));
-            document.Add(new Paragraph($"Đánh giá trung bình chất lượng dịch vụ: {viewModel.AverageServiceRating:0.0} / 5", headerFont));
-            document.Add(new Paragraph($"Đánh giá trung bình không gian: {viewModel.AverageAmbienceRating:0.0} / 5", headerFont));
-
-            document.Add(new Phrase("\n"));
-
-            // Thêm bảng danh sách phản hồi
-            PdfPTable table = new PdfPTable(6);
-            table.WidthPercentage = 100;
-            table.SetWidths(new float[] { 2, 2, 2, 2, 4, 2 });
-
-            // Header của bảng
-            table.AddCell(new PdfPCell(new Phrase("Tên Khách Hàng", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table.AddCell(new PdfPCell(new Phrase("Chất Lượng Món Ăn", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table.AddCell(new PdfPCell(new Phrase("Chất Lượng Dịch Vụ", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table.AddCell(new PdfPCell(new Phrase("Không Gian", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table.AddCell(new PdfPCell(new Phrase("Ý Kiến Đóng Góp", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table.AddCell(new PdfPCell(new Phrase("Ngày Đánh Giá", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
-
-            // Dữ liệu bảng
-            foreach (var review in viewModel.CustomerReviews)
+            if (startDate.HasValue)
             {
-                table.AddCell(new PdfPCell(new Phrase(review.CustomerName)));
-                table.AddCell(new PdfPCell(new Phrase(review.FoodQualityRating.ToString())));
-                table.AddCell(new PdfPCell(new Phrase(review.ServiceRating.ToString())));
-                table.AddCell(new PdfPCell(new Phrase(review.AmbienceRating.ToString())));
-                table.AddCell(new PdfPCell(new Phrase(review.Comments)));
-                table.AddCell(new PdfPCell(new Phrase(review.ReviewDate.ToString("dd/MM/yyyy"))));
+                reviewsQuery = reviewsQuery.Where(r => r.ReviewDate >= startDate.Value);
+            }
+            if (endDate.HasValue)
+            {
+                reviewsQuery = reviewsQuery.Where(r => r.ReviewDate <= endDate.Value);
+            }
+            if (month.HasValue)
+            {
+                reviewsQuery = reviewsQuery.Where(r => r.ReviewDate.Month == month.Value);
+            }
+            if (year.HasValue)
+            {
+                reviewsQuery = reviewsQuery.Where(r => r.ReviewDate.Year == year.Value);
             }
 
-            // Thêm bảng vào document
-            document.Add(table);
+            var reviews = reviewsQuery.ToList();
 
-            document.Close();
+            // Calculate summary values
+            viewModel.TotalReviews = reviews.Count;
+            viewModel.AverageFoodQualityRating = reviews.Average(r => r.FoodQualityRating);
+            viewModel.AverageServiceRating = reviews.Average(r => r.ServiceRating);
+            viewModel.AverageAmbienceRating = reviews.Average(r => r.AmbienceRating);
+            viewModel.CustomerReviews = reviews;
 
-            // Trả về PDF
-            byte[] byteArray = ms.ToArray();
-            return File(byteArray, "application/pdf", "CustomerFeedbackReport.pdf");
+            // Create PDF
+            using (MemoryStream ms = new MemoryStream())
+            {
+                // Create Document and PdfWriter objects
+                Document document = new Document(PageSize.A4);
+                PdfWriter writer = PdfWriter.GetInstance(document, ms);
+                document.Open();
+
+                // Add report title
+                Font titleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
+                Paragraph title = new Paragraph("Customer Feedback Report", titleFont);
+                title.Alignment = Element.ALIGN_CENTER;
+                document.Add(title);
+
+                document.Add(new Phrase("\n"));
+
+                // Add summary information
+                Font headerFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                document.Add(new Paragraph($"Total Reviews: {viewModel.TotalReviews}", headerFont));
+                document.Add(new Paragraph($"Average Food Quality Rating: {viewModel.AverageFoodQualityRating:0.0} / 5", headerFont));
+                document.Add(new Paragraph($"Average Service Rating: {viewModel.AverageServiceRating:0.0} / 5", headerFont));
+                document.Add(new Paragraph($"Average Ambience Rating: {viewModel.AverageAmbienceRating:0.0} / 5", headerFont));
+
+                document.Add(new Phrase("\n"));
+
+                // Add feedback table
+                PdfPTable table = new PdfPTable(6);
+                table.WidthPercentage = 100;
+                table.SetWidths(new float[] { 2, 2, 2, 2, 4, 2 });
+
+                // Table headers
+                table.AddCell(new PdfPCell(new Phrase("Customer Name", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table.AddCell(new PdfPCell(new Phrase("Food Quality", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table.AddCell(new PdfPCell(new Phrase("Service Quality", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table.AddCell(new PdfPCell(new Phrase("Ambience", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table.AddCell(new PdfPCell(new Phrase("Comments", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+                table.AddCell(new PdfPCell(new Phrase("Review Date", headerFont)) { HorizontalAlignment = Element.ALIGN_CENTER });
+
+                // Table data
+                foreach (var review in viewModel.CustomerReviews)
+                {
+                    table.AddCell(new PdfPCell(new Phrase(review.CustomerName)));
+                    table.AddCell(new PdfPCell(new Phrase(review.FoodQualityRating.ToString())));
+                    table.AddCell(new PdfPCell(new Phrase(review.ServiceRating.ToString())));
+                    table.AddCell(new PdfPCell(new Phrase(review.AmbienceRating.ToString())));
+                    table.AddCell(new PdfPCell(new Phrase(review.Comments)));
+                    table.AddCell(new PdfPCell(new Phrase(review.ReviewDate.ToString("dd/MM/yyyy"))));
+                }
+
+                // Add table to document
+                document.Add(table);
+
+                document.Close();
+
+                // Return PDF
+                byte[] byteArray = ms.ToArray();
+                return File(byteArray, "application/pdf", "CustomerFeedbackReport.pdf");
+            }
         }
-    }
 
-}
+
+    }
 }
