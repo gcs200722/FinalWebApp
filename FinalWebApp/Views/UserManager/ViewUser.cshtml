@@ -1,1 +1,9 @@
-﻿@await Component.InvokeAsync("ListUser")
+﻿@{
+    int page = 1;
+    var pageQuery = Context.Request.Query["page"];
+    if (!string.IsNullOrEmpty(pageQuery) && int.TryParse(pageQuery, out var parsedPage))
+    {
+        page = parsedPage;
+    }
+}
+@await Component.InvokeAsync("ListUser", new { page = page })

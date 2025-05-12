@@ -1,98 +1,98 @@
-﻿@using FinalWebApp.Enum
-@model FinalWebApp.ViewModels.RegisterViewModel
+﻿    @using FinalWebApp.Enum
+    @model FinalWebApp.ViewModels.RegisterViewModel
 
-@{
-    ViewData["Title"] = Model == null || string.IsNullOrEmpty(Model.Id) ? "Register" : "Edit User";
-    var actionString = Model == null || string.IsNullOrEmpty(Model.Id) ? "Create" : "Edit";
-    var buttonString = Model == null || string.IsNullOrEmpty(Model.Id) ? "Create" : "Edit";
-}
-
-<h2>@ViewData["Title"]</h2>
-@TempData["SuccessMessage"]
-
-<form asp-action="@actionString" method="post">
-    <input type="hidden" asp-for="Id" class="form-control" />
-
-    @if (ViewData.ModelState.ErrorCount > 0)
-    {
-        <div class="alert alert-danger">
-            <strong>Error!</strong> There was an error with your submission.
-        </div>
+    @{
+        ViewData["Title"] = Model == null || string.IsNullOrEmpty(Model.Id) ? "Register" : "Edit User";
+        var actionString = Model == null || string.IsNullOrEmpty(Model.Id) ? "Create" : "Edit";
+        var buttonString = Model == null || string.IsNullOrEmpty(Model.Id) ? "Create" : "Edit";
     }
 
-    <div class="form-container">
-        <div class="form-group">
-            <label asp-for="Fullname" class="control-label"></label>
-            <input asp-for="Fullname" class="form-control input-style" value="@Model?.Fullname" />
-            <span asp-validation-for="Fullname" class="text-danger"></span>
-        </div>
+    <h2>@ViewData["Title"]</h2>
+    @TempData["SuccessMessage"]
 
-        <div class="form-group">
-            <label asp-for="Email" class="control-label"></label>
-            <input asp-for="Email" class="form-control input-style" value="@Model?.Email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+    <form asp-action="@actionString" method="post">
+        <input type="hidden" asp-for="Id" class="form-control" />
 
-        @if (@actionString != "Edit")
+        @if (ViewData.ModelState.ErrorCount > 0)
         {
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control input-style" type="password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control input-style" type="password" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            <div class="alert alert-danger">
+                <strong>Error!</strong> There was an error with your submission.
             </div>
         }
 
-        <div class="form-group">
-            <label asp-for="Gender" class="control-label"></label>
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="male" name="Gender" value="1"
-                @(Model?.Gender == GenderEnum.Male ? "checked" : "") />
-                <label class="form-check-label" for="male">
-                    Male
-                </label>
+        <div class="form-container">
+            <div class="form-group">
+                <label asp-for="Fullname" class="control-label"></label>
+                <input asp-for="Fullname" class="form-control input-style" />
+                <span asp-validation-for="Fullname" class="text-danger"></span>
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="female" name="Gender" value="2"
-                @(Model?.Gender == GenderEnum.Female ? "checked" : "") />
-                <label class="form-check-label" for="female">
-                    Female
-                </label>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control input-style" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="other" name="Gender" value="3"
-                @(Model?.Gender == GenderEnum.Other ? "checked" : "") />
-                <label class="form-check-label" for="other">
-                    Other
-                </label>
+            @if (@actionString == "Create")
+            {
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control input-style" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="control-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control input-style" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            }
+
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="male" name="Gender" value="1"
+                    @(Model?.Gender == GenderEnum.Male ? "checked" : "") />
+                    <label class="form-check-label" for="male">
+                        Male
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="female" name="Gender" value="2"
+                    @(Model?.Gender == GenderEnum.Female ? "checked" : "") />
+                    <label class="form-check-label" for="female">
+                        Female
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="other" name="Gender" value="3"
+                    @(Model?.Gender == GenderEnum.Other ? "checked" : "") />
+                    <label class="form-check-label" for="other">
+                        Other
+                    </label>
+                </div>
+
+                <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
 
-            <span asp-validation-for="Gender" class="text-danger"></span>
-        </div>
+            <div class="form-group">
+                <label asp-for="NumberPhone" class="control-label"></label>
+                <input asp-for="NumberPhone" class="form-control input-style" type="tel"  />
+                <span asp-validation-for="NumberPhone" class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="NumberPhone" class="control-label"></label>
-            <input asp-for="NumberPhone" class="form-control input-style" type="tel" value="@Model?.NumberPhone" />
-            <span asp-validation-for="NumberPhone" class="text-danger"></span>
-        </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control input-style" type="date" value="@Model?.DateOfBirth?.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="DateOfBirth" class="control-label"></label>
-            <input asp-for="DateOfBirth" class="form-control input-style" type="date" value="@Model?.DateOfBirth?.ToString("yyyy-MM-dd")" />
-            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            <button type="submit" class="btn btn-primary">@buttonString</button>
         </div>
-
-        <button type="submit" class="btn btn-primary">@buttonString</button>
-    </div>
-</form>
+    </form>
 
 <style>
     body {

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace FinalWebApp.Controllers
 {
     [Authorize(Roles ="ADMIN,MANAGER")]
-    public class ManagerController : Controller
+    public class ManagerController : Controller 
     {
         private readonly ReportGenerator _reportGenerator;
         private readonly FinalWebDbContext _context;

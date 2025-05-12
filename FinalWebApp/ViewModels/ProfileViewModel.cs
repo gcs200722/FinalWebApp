@@ -16,7 +16,7 @@ namespace FinalWebApp.ViewModels
         public GenderEnum Gender { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         [StringLength(15, ErrorMessage = "Phone number must be at most 15 characters.")]
         public string NumberPhone { get; set; }

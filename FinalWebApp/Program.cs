@@ -86,7 +86,10 @@ static async Task SeedRolesAsync(IServiceProvider serviceProvider)
             Email = adminEmail,
             EmailConfirmed = true, // Xác nhận email mặc định
             Fullname = "Administrator",
-            NumberPhone="12345678"
+            NumberPhone="12345678",
+            Avatar = null,
+            DateOfBirth = null,
+            Gender = FinalWebApp.Enum.GenderEnum.Male
         };
 
         var result = await userManager.CreateAsync(adminUser, adminPassword);

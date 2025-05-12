@@ -100,6 +100,7 @@ namespace FinalWebApp.Controllers
                 Gender = user.Gender,
                 NumberPhone = user.NumberPhone,
                 DateOfBirth = user.DateOfBirth
+                
             };
 
             return View("Create",model); // Trả về view với model
@@ -113,6 +114,7 @@ namespace FinalWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var user = await _userManager.FindByIdAsync(model.Id.ToString());
 
                 if (user == null)

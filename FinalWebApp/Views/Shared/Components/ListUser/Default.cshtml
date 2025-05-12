@@ -1,4 +1,7 @@
-﻿@model List<FinalWebApp.Data.Entities.ApplicationUser>
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model IPagedList<FinalWebApp.Data.Entities.ApplicationUser>
 
 <!-- Thêm Font Awesome CDN vào head -->
 <head>
@@ -66,7 +69,20 @@
             }
         </tbody>
     </table>
-
+    <div class="text-center mt-4">
+        @Html.PagedListPager(Model, page => Url.Action("ViewUser", new { page }),
+                 new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            UlElementClasses = new[] { "pagination", "justify-content-center", "custom-pagination" },
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            MaximumPageNumbersToDisplay = 5
+        })
+    </div>
     <!-- Thêm nút Create User dưới bảng -->
     <a asp-action="Create" asp-controller="UserManager" class="btn btn-create">Add New User</a>
 </div>
@@ -256,5 +272,185 @@
         margin: 0 auto;
     }
 
+    /* Pagination Styling */
+    .pagination.custom-pagination {
+        display: flex;
+        justify-content: center;
+        padding: 15px 0;
+        list-style: none;
+        gap: 8px;
+        background-color: transparent;
+    }
+
+    .page-item {
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .page-item:hover {
+            transform: translateY(-2px) scale(1.1);
+        }
+
+    .page-link {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        border: none;
+        border-radius: 50px;
+        padding: 8px 14px;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+        .page-link:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+
+    .page-item.active .page-link {
+        background-color: #e67e22;
+        color: #fff;
+        font-weight: bold;
+        box-shadow: 0 0 0 2px #e67e22 inset;
+    }
+
+    /* Chỉnh sửa giao diện cho các phần khác trong bảng */
+    .user-list {
+        background: #1c1c1c;
+        padding: 40px 30px;
+        border-radius: 10px;
+        max-width: 1300px;
+        margin: 50px auto;
+        font-family: 'Roboto', sans-serif;
+        color: #ecf0f1;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+        .user-list h2 {
+            font-size: 26px;
+            color: #e67e22;
+            font-weight: 500;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        background-color: #2d3436;
+        border-radius: 10px;
+    }
+
+        .table th {
+            background-color: #636e72;
+            color: #fff;
+            padding: 12px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e67e22;
+        }
+
+        .table tbody tr {
+            background-color: #34495e;
+            border-bottom: 1px solid #444;
+        }
+
+        .table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            color: #ecf0f1;
+        }
+
+    .role-badge {
+        background-color: #e67e22;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-right: 8px;
+    }
+
+    .text-muted {
+        color: #bdc3c7;
+    }
+
+    .btn-create {
+        background-color: #e67e22;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin: 20px auto 0;
+        display: block;
+    }
+
+        .btn-create:hover {
+            background-color: #d35400;
+            transform: translateY(-3px) scale(1.05);
+        }
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-evenly;
+        gap: 5px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+
+        .action-buttons .btn {
+            width: 30px;
+            font-size: 12px;
+            padding: 6px;
+            text-align: center;
+        }
+
+            .action-buttons .btn:hover {
+                transform: scale(1.2);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            }
+
+    .btn-edit {
+        background-color: #e67e22;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-delete {
+        background-color: #e74c3c;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-assign-role {
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px) scale(1.05);
+    }
+
+    .btn-edit:hover {
+        background-color: #f1c40f;
+    }
+
+    .btn-delete:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-assign-role:hover {
+        background-color: #2980b9;
+    }
+
+    .btn i {
+        margin-right: 6px;
+    }
 
 </style>                    

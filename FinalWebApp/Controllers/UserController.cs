@@ -199,7 +199,7 @@ namespace FinalWebApp.Controllers
                 UserId = user.Id,
                 Fullname = user.Fullname,
                 Gender = user.Gender,
-                DateOfBirth = (DateTime)user.DateOfBirth,
+                DateOfBirth = user.DateOfBirth,
                 NumberPhone = user.NumberPhone,
                 Avatar = null, // Nếu đã có ảnh đại diện, sẽ lấy từ đây
                  AvatarUrl = user.Avatar

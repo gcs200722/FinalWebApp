@@ -12,16 +12,23 @@
         <input hidden asp-for="UserId" />
 
         <!-- Avatar Upload -->
-        <div class="form-group avatar-group">
-            <label asp-for="Avatar" class="form-label">Avatar</label>
-            <div class="avatar-wrapper">
-                <img src="@(string.IsNullOrWhiteSpace(Model.AvatarUrl) ? "https://icon-library.com/images/avatar-icon-png/avatar-icon-png-2.jpg" : Url.Content(Model.AvatarUrl))"
-                     alt="Current Avatar"
-                     class="avatar-preview" />
-                <input asp-for="Avatar" class="form-input" type="file" id="Avatar" />
+            <div class="form-group avatar-group">
+                <label asp-for="Avatar" class="form-label">Avatar</label>
+                <div class="avatar-wrapper">
+                @{
+                    var avatarPath = string.IsNullOrWhiteSpace(Model.AvatarUrl)
+                    ? "https://icon-library.com/images/avatar-icon-png/avatar-icon-png-2.jpg"
+                    : (Model.AvatarUrl.StartsWith("http") || Model.AvatarUrl.StartsWith("https"))
+                    ? Model.AvatarUrl
+                    : Url.Content("~/Image/" + Model.AvatarUrl); 
+                }
+                <img src="@avatarPath" alt="Avatar" class="avatar-preview" />
+
+
+                    <input asp-for="Avatar" class="form-input" type="file" id="Avatar" />
+                </div>
+                <span asp-validation-for="Avatar" class="error-message"></span>
             </div>
-            <span asp-validation-for="Avatar" class="error-message"></span>
-        </div>
 
         <!-- Full Name -->
         <div class="form-group">
