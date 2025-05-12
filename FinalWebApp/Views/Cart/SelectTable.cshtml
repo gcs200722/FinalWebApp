@@ -1,10 +1,14 @@
-﻿@using FinalWebApp.Data.Entities
+﻿<head>
+    <link rel="stylesheet" href="~/css/customer/SelectTable.css" />
+</head>
+
+@using FinalWebApp.Data.Entities
 @using FinalWebApp.Enum
 @model List<Table>
 <h2>Select a Table</h2>
 <form asp-action="CreateOrder" method="post">
     <div>
-        <h3><label for="tableId">Select Table:</label></h3>
+        <h3><label for="tableId">Select available Table:</label></h3>
         <div id="tableOptionsContainer" style="max-height: 300px; overflow-y: auto;">
             @foreach (var table in Model)
             {
@@ -71,164 +75,3 @@
     }
 </script>
 
-<style>
-    #tableOptionsContainer {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 20px;
-        overflow-y: auto;
-        max-height: 350px;
-        padding: 20px;
-        background-color: #f4f4f4;
-        border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-        justify-items: center;
-        align-items: center;
-    }
-
-    h2 {
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-    }
-
-    h3 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
-        text-align: center;
-        padding-top: 10px;
-    }
-
-    .table-container {
-        text-align: center;
-        width: 120px;
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .table-option {
-        width: 80%;
-        height: 90px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .empty {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .booked {
-        background-color: #FF9800;
-        color: white;
-    }
-
-    .active {
-        background-color: #2196F3;
-        color: white;
-    }
-
-    .capacity {
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .table-name {
-        font-size: 16px;
-        font-weight: 500;
-        margin-top: 8px;
-        color: #333;
-        text-transform: uppercase;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .table-option:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .table-option:active {
-        transform: scale(0.98);
-    }
-
-    .checkmark {
-        font-size: 24px;
-        font-weight: bold;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        color: white;
-        display: none; /* Ẩn dấu tích mặc định */
-    }
-
-    .dining-time-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 30px;
-        margin-bottom: 30px;
-        font-size: 18px;
-        font-weight: 500;
-        color: #555;
-    }
-
-        .dining-time-container label {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .dining-time-container input[type="datetime-local"] {
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            width: 250px;
-            transition: all 0.3s ease;
-            background-color: #fff;
-        }
-
-            .dining-time-container input[type="datetime-local"]:focus {
-                border-color: #2196F3;
-                box-shadow: 0 0 8px rgba(33, 150, 243, 0.4);
-            }
-
-    .place-order-btn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 25px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-top: 20px;
-        width: 10%;
-        margin-left: auto;
-        margin-right: auto;
-        display: block;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-        .place-order-btn:hover {
-            background-color: #45a049;
-        }
-
-        .place-order-btn:focus {
-            outline: none;
-        }
-</style>

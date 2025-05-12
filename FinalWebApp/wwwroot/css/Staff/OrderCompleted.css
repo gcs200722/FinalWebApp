@@ -1,0 +1,191 @@
+﻿
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+h2 {
+    color: #1d3557;
+    font-weight: 500;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #1d3557;
+}
+
+.filter-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #1d3557;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 200px;
+}
+
+    .form-group label {
+        color: #1d3557;
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+    .form-control:focus {
+        border-color: #1d3557;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1);
+    }
+
+/* Button Styles - Đã điều chỉnh nút Filter */
+.btn {
+    padding: 10px 20px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    height: fit-content;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: #1d3557;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background: #3a6a8a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(29, 53, 87, 0.2);
+    }
+
+.btn-info {
+    background-color: #a8dadc;
+    color: #1d3557;
+    font-weight: 500;
+}
+
+    .btn-info:hover {
+        background-color: #457b9d;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .table thead {
+        background-color: #1d3557;
+        color: white;
+    }
+
+    .table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table td {
+        padding: 12px 15px;
+        border-top: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:nth-of-type(odd) {
+        background-color: rgba(241, 250, 238, 0.5);
+    }
+
+    .table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+
+/* Badge Styles - Giữ nguyên */
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-success {
+    background-color: #2a9d8f !important;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #e63946 !important;
+    color: white;
+}
+
+/* Responsive Design - Đã cập nhật phần filter form */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .form-group {
+        min-width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}

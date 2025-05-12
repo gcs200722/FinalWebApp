@@ -1,0 +1,208 @@
+﻿/* ManageFeedback.css - Customer Feedback Report Styles */
+
+/* Base Container */
+.tin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header Section */
+.header-section {
+    margin-bottom: 30px;
+}
+
+.tin-title {
+    color: #1d3557;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Button Styles */
+.tin-button {
+    background-color: #1d3557;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .tin-button:hover {
+        background-color: #3a6a8a;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(29, 53, 87, 0.2);
+    }
+
+/* Filter Section */
+.filter-section {
+    background-color: rgba(241, 250, 238, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #1d3557;
+}
+
+.tin-section-title {
+    color: #1d3557;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.filter-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 15px;
+}
+
+.tin-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #1d3557;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.tin-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+    .tin-input:focus {
+        border-color: #1d3557;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1);
+    }
+
+/* Divider */
+.tin-divider {
+    border: 0;
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 25px 0;
+}
+
+/* Overview Section */
+.tin-overview {
+    background-color: rgba(241, 250, 238, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.overview-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+    .overview-content p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .overview-content strong {
+        color: #1d3557;
+    }
+
+/* Table Styles */
+.tin-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .tin-table thead {
+        background-color: #1d3557;
+        color: white;
+    }
+
+    .tin-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .tin-table td {
+        padding: 12px 15px;
+        border-top: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    .tin-table tbody tr:nth-of-type(odd) {
+        background-color: rgba(241, 250, 238, 0.3);
+    }
+
+    .tin-table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .overview-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .tin-container {
+        padding: 15px;
+    }
+
+    .header-section {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .filter-table {
+        display: block;
+    }
+
+        .filter-table tr {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .filter-table td {
+            padding: 0;
+        }
+
+    .tin-table th,
+    .tin-table td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .overview-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .tin-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .tin-button {
+        width: 100%;
+        justify-content: center;
+    }
+}

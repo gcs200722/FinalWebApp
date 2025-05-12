@@ -3,6 +3,117 @@
 @{
     ViewData["Title"] = "User Profile";
 }
+<head>
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: linear-gradient(145deg, #f0f0f0, #e8e8e8);
+            border-radius: 15px;
+            box-shadow: inset 5px 5px 10px #c8c8c8, inset -5px -5px 10px #ffffff;
+        }
+
+        .profile-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+            .form-input:focus {
+                border-color: #007bff;
+            }
+
+        .avatar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .error-message {
+            font-size: 12px;
+            color: #d9534f;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-submit {
+            background: linear-gradient(145deg, #4caf50, #388e3c);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-submit:hover {
+                background: #45a049;
+            }
+
+        .btn-link {
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+            .btn-link:hover {
+                color: #0056b3;
+            }
+    </style>
+
+</head>
 
 <div class="profile-container">
     <h2 class="profile-title">User Profile</h2>
@@ -64,114 +175,6 @@
     </form>
 </div>
 
-<style>
-    .profile-container {
-        max-width: 600px;
-        margin: 30px auto;
-        padding: 20px;
-        background: linear-gradient(145deg, #f0f0f0, #e8e8e8);
-        border-radius: 15px;
-        box-shadow: inset 5px 5px 10px #c8c8c8, inset -5px -5px 10px #ffffff;
-    }
-
-    .profile-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .profile-form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .form-label {
-        font-size: 14px;
-        color: #555;
-    }
-
-    .form-input {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        outline: none;
-        transition: border-color 0.3s;
-    }
-
-        .form-input:focus {
-            border-color: #007bff;
-        }
-
-    .avatar-group {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .avatar-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .avatar-preview {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 1px solid #ddd;
-    }
-
-    .error-message {
-        font-size: 12px;
-        color: #d9534f;
-    }
-
-    .form-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .btn-submit {
-        background: linear-gradient(145deg, #4caf50, #388e3c);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-        .btn-submit:hover {
-            background: #45a049;
-        }
-
-    .btn-link {
-        font-size: 14px;
-        color: #007bff;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-
-        .btn-link:hover {
-            color: #0056b3;
-        }
-</style>
 
 <script>
     // Preview image when user selects a new avatar

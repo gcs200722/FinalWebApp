@@ -1,5 +1,7 @@
 ﻿@model List<FinalWebApp.Data.Entities.Item>
-
+<head>
+    <link rel="stylesheet" href="~/css/Manager/ManageItem.css" />
+</head>
 <div class="row">
     <div class="scrollable-table">
         <table>
@@ -65,48 +67,3 @@
     </div>
 </div>
 
-
-<style>
-    .scrollable-table {
-        max-height: 800px;
-        overflow-y: auto;
-        display: block;
-    }
-
-        .scrollable-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .scrollable-table th, .scrollable-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .scrollable-table th {
-            background-color: #f2f2f2;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-    .btn {
-        text-decoration: none;
-        color: white;
-        padding: 4px 8px;
-        margin: 2px;
-        border-radius: 4px;
-        font-size: 0.875em;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-    }
-</style>

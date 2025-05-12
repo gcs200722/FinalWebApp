@@ -1,0 +1,146 @@
+﻿/* Details.css - Consistent with your design system */
+
+/* Base Container */
+.order-details-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+/* Title */
+.title {
+    color: #1d3557;
+    font-weight: 500;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #1d3557;
+
+}
+
+/* Order Summary */
+.order-summary {
+    background-color: rgba(241, 250, 238, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+
+}
+
+    .order-summary p {
+        margin: 10px 0;
+        font-size: 1.05rem;
+    }
+
+    .order-summary strong {
+        color: #1d3557;
+        min-width: 120px;
+        display: inline-block;
+    }
+
+.order-id {
+    color: #1d3557;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+/* Order Items */
+
+.order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+
+}
+
+    .order-items-table thead {
+        background-color: #1d3557;
+        color: white;
+    }
+
+    .order-items-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .order-items-table td {
+        padding: 12px 15px;
+        border-top: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    .order-items-table tbody tr:nth-of-type(odd) {
+        background-color: rgba(241, 250, 238, 0.5);
+    }
+
+    .order-items-table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+
+/* Badges - Consistent with your design */
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bg-success {
+    background-color: #2a9d8f !important;
+    color: white;
+}
+
+.bg-danger {
+    background-color: #e63946 !important;
+    color: white;
+}
+
+.bg-warning {
+    background-color: #e9c46a !important;
+    color: #333 !important;
+}
+
+/* Back Button */
+.btn-back {
+    background-color: #1d3557;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+    .btn-back:hover {
+        background-color: #3a6a8a;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(29, 53, 87, 0.2);
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .order-details-container {
+        padding: 20px;
+    }
+
+    .order-summary {
+        padding: 15px;
+    }
+
+        .order-summary p {
+            font-size:

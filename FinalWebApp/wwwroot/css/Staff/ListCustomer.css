@@ -1,0 +1,138 @@
+﻿/* ListCustomer.css - Đồng bộ với hệ thống thiết kế */
+
+    .user-list h2 {
+        color: #1d3557;
+        font-weight: 500;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #1d3557;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+
+.btn {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-create-new {
+    background: #1d3557;
+    color: white;
+    text-decoration: none;
+}
+
+    .btn-create-new:hover {
+        background: #3a6a8a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(29, 53, 87, 0.2);
+    }
+
+.btn-edit {
+    background-color: #a8dadc;
+    color: #1d3557;
+    text-decoration: none;
+}
+
+    .btn-edit:hover {
+        background-color: #457b9d;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+/* Icon Styles */
+.btn-create-new::before {
+    content: "+";
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.btn-edit::before {
+    content: "✏️";
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .table thead {
+        background-color: #1d3557;
+        color: white;
+    }
+
+    .table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table td {
+        padding: 12px 15px;
+        border-top: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:nth-of-type(odd) {
+        background-color: rgba(241, 250, 238, 0.5);
+    }
+
+    .table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+
+/* Gender Badges */
+td:nth-child(3) {
+    text-transform: capitalize;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .user-list {
+        padding: 15px;
+    }
+
+        .user-list h2 {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+    .table th,
+    .table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

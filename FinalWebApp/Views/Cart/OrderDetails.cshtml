@@ -1,4 +1,7 @@
-﻿@model FinalWebApp.ViewModels.OrderViewModel
+﻿<head>
+    <link rel="stylesheet" href="~/css/customer/OrderDetails.css" />
+</head>
+@model FinalWebApp.ViewModels.OrderViewModel
 
 <h2 class="tin-header">Order Details</h2>
 
@@ -25,73 +28,3 @@
 
 <p><strong>Total Amount:</strong> @Model.TotalAmount</p>
 
-<style>
-    /* General styling for the header */
-    .tin-header {
-        color: #333;
-        margin-bottom: 30px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 2rem;
-    }
-
-    /* Section styling */
-    .tin-section {
-        background-color: #ffffff;
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-    }
-
-    /* Item container styling */
-    .tin-item {
-        background-color: #f9f9f9;
-        border-radius: 12px;
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
-    }
-
-    /* Item image styling */
-    .tin-item-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 20px;
-    }
-
-    /* Item info section styling */
-    .tin-item-info {
-        flex-grow: 1;
-    }
-
-        /* Item info text styling */
-        .tin-item-info h4 {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        /* Highlighting price and quantity */
-        .tin-item-info p {
-            font-size: 1rem;
-            color: #555;
-        }
-
-    /* Hover effect for the item container */
-    .tin-item:hover {
-        transform: scale(1.02);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Total amount styling */
-    strong {
-        font-size: 1.2rem;
-        color: #333;
-        font-weight: bold;
-    }
-
-</style>

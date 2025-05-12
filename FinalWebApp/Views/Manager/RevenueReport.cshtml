@@ -4,6 +4,9 @@
     ViewData["Title"] = "Revenue Report";
     var firstReport = Model.FirstOrDefault();
 }
+<head>
+    <link rel="stylesheet" href="~/css/Manager/RevenueReport.css" />
+</head>
 
 <h2 class="page-title"><i class="fas fa-chart-line"></i> @ViewData["Title"]</h2>
 <hr />
@@ -104,86 +107,3 @@
     <i class="fas fa-file-pdf"></i> Export PDF
 </button>
 }
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: #f3f4f6;
-        color: #333;
-    }
-
-    .page-title {
-        text-align: center;
-        font-size: 28px;
-        color: #4b6584;
-    }
-
-    .filter-form {
-        background: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-generate {
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 8px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .btn-generate:hover {
-        background: #0056b3;
-        transform: translateY(-3px);
-    }
-
-    .table {
-        margin-top: 20px;
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .table-header {
-        background-color: #4b6584;
-        color: white;
-    }
-
-    .table tbody tr:hover {
-        background: #f7f9fb;
-        cursor: pointer;
-        transform: scale(1.02);
-        transition: transform 0.2s;
-    }
-
-    .menu-item {
-        background: #eef2f3;
-        padding: 5px;
-        border-radius: 4px;
-        margin-bottom: 3px;
-        display: inline-block;
-        font-size: 14px;
-    }
-
-    .btn-export {
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: bold;
-        display: inline-block;
-        margin-top: 15px;
-    }
-
-    .btn-export:hover {
-        background-color: #c0392b;
-        transform: scale(1.05);
-    }
-
-    .table-responsive {
-        margin-top: 20px;
-    }
-</style>

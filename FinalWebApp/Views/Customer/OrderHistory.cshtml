@@ -1,4 +1,11 @@
-﻿@model List<FinalWebApp.Data.Entities.Order>
+﻿<head>
+    <!-- Thêm liên kết Font Awesome vào head -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/customer/OrderHistory.css" />
+
+</head>
+
+@model List<FinalWebApp.Data.Entities.Order>
 
 @{
     ViewData["Title"] = "Order History";
@@ -12,28 +19,31 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Order Date</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
+    <div class="table-container">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@order.TotalAmount.ToString("C")</td>
-                    <td>@order.OrderStatus</td>
-                    <td>
-                        <!-- Link to order details -->
-                        <a href="@Url.Action("OrderDetails", "Cart", new { orderId = order.Id })">View Details</a>
-                    </td>
+                    <th>Order Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Details</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@order.TotalAmount.ToString("C")</td>
+                        <td>@order.OrderStatus</td>
+                        <td>
+                            <!-- Link to order details -->
+                            <a href="@Url.Action("OrderDetails", "Cart", new { orderId = order.Id })">View Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
 }

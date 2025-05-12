@@ -1,0 +1,329 @@
+﻿/* ManageItem.css - Unified styles for item management */
+
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+}
+
+
+
+
+/* Layout Structure */
+
+.scrollable-table {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0 15px;
+}
+
+.col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 0 15px;
+}
+
+.col-md-8 {
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+    padding: 0 15px;
+}
+
+/* Form Section */
+.form-section {
+    background-color: rgba(241, 250, 238, 0.3);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 4px solid #1d3557;
+    height: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #1d3557;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background-color: #fff;
+}
+
+.form-control:focus {
+    border-color: #1d3557;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1);
+}
+
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Custom Select and File Input */
+.custom-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 1em;
+}
+
+.custom-file {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.custom-file-input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: calc(1.5em + 1.5rem);
+    margin: 0;
+    opacity: 0;
+}
+
+.custom-file-label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: calc(1.5em + 1.5rem);
+    padding: 0.75rem 1.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Image Preview */
+#imagePreview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: none;
+    margin-top: 10px;
+}
+
+/* Table Styles */
+.table-section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    height: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #1d3557;
+    color: white;
+}
+
+th {
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+
+td {
+    padding: 12px 15px;
+    border-top: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+tbody tr:nth-of-type(odd) {
+    background-color: rgba(241, 250, 238, 0.5);
+}
+
+tbody tr:hover {
+    background-color: #e8f4f8;
+}
+
+/* Form Select in Table Header */
+.form-select {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background-color: white;
+    color: #333;
+    width: 100%;
+}
+
+.form-select:focus {
+    border-color: #1d3557;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1);
+}
+
+/* Item Image in Table */
+table img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Text Styles */
+.text-center {
+    text-align: center;
+}
+
+.text-danger {
+    color: #e63946;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Button Styles */
+.btn {
+    padding: 8px 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.btn-primary {
+    background-color: #1d3557;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3a6a8a;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(29, 53, 87, 0.2);
+}
+
+.btn-danger {
+    background-color: #e63946;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #d62c3a;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-create {
+    background: linear-gradient(135deg, #1d3557, #3a6a8a);
+    color: white;
+    padding: 12px 24px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+}
+
+.btn-create:hover {
+    background: linear-gradient(135deg, #3a6a8a, #1d3557);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(29, 53, 87, 0.2);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .col-md-4,
+    .col-md-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .form-section,
+    .table-section {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 15px;
+    }
+    
+    th, td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 6px 12px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    table img {
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-section {
+        padding: 20px;
+    }
+    
+    .form-control {
+        padding: 10px 12px;
+    }
+    
+    .btn-create {
+        max-width: 100%;
+    }
+}

@@ -1,6 +1,10 @@
 ﻿@using FinalWebApp.Data.Entities
 @model FinalWebApp.ViewModels.CustomerFeedbackReportViewModel
 
+<head>
+    <link rel="stylesheet" href="~/css/Manager/ManageFeedback.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
 <div class="tin-container">
     <div class="header-section d-flex justify-content-between align-items-center">
         <h2 class="tin-title">Customer Feedback Report</h2>
@@ -98,103 +102,4 @@
         </tbody>
     </table>
 </div>
-
-<style>
-    .tin-container {
-        background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
-        border-radius: 15px;
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.8);
-        padding: 25px;
-        margin: 20px;
-    }
-
-    .header-section {
-        margin-bottom: 20px;
-    }
-
-    .tin-title {
-        font-size: 26px;
-        font-weight: bold;
-        color: #444;
-    }
-
-    .tin-button {
-        background: linear-gradient(145deg, #ffa726, #fb8c00);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 8px 15px;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .tin-button:hover {
-        background: linear-gradient(145deg, #fb8c00, #ef6c00);
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .filter-section {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
-        padding: 15px;
-    }
-
-    .filter-table {
-        width: 100%;
-        border-spacing: 15px;
-    }
-
-    .tin-label {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 5px;
-        display: block;
-    }
-
-    .tin-input {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 8px 12px;
-        box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.05);
-        transition: all 0.2s ease;
-        width: 100%;
-    }
-
-    .tin-input:focus {
-        outline: none;
-        border-color: #fb8c00;
-        box-shadow: inset 0px 0px 5px rgba(251, 140, 0, 0.3);
-    }
-
-    .overview-content {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-
-    .tin-table {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .tin-table tbody tr:hover {
-        background: #f7f7f7;
-    }
-
-    .tin-divider {
-        border: 1px solid #e0e0e0;
-    }
-
-    .tin-section-title {
-        font-size: 20px;
-        font-weight: bold;
-        color: #444;
-    }
-</style>
 

@@ -1,0 +1,122 @@
+﻿/* OrderDetails.css */
+
+/* Font và màu sắc cơ bản */
+:root {
+    --primary-color: #1d3557;
+    --secondary-color: #2c3e50;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --border-color: #dee2e6;
+}
+
+/* Layout chung */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0 auto;
+
+}
+
+/* Header */
+.tin-header {
+    color: var(--secondary-color);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* Section thông tin đơn hàng */
+.tin-section {
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+    .tin-section h3 {
+        color: var(--primary-color);
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .tin-section p {
+        margin: 8px 0;
+    }
+
+/* Danh sách món ăn */
+.tin-item {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .tin-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+.tin-item-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.tin-item-info {
+    flex: 1;
+}
+
+    .tin-item-info h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: var(--secondary-color);
+    }
+
+    .tin-item-info p {
+        margin: 5px 0;
+    }
+
+/* Tổng tiền */
+p[strong="Total Amount:"] {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: right;
+    padding: 15px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .tin-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tin-item-img {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+    }
+
+    body {
+        padding: 15px;
+    }
+}
+
+/* Hiệu ứng cho các thẻ strong */
+strong {
+    color: var(--dark-gray);
+    font-weight: 600;
+}

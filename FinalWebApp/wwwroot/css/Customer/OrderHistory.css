@@ -1,0 +1,109 @@
+﻿.table-container {
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+table.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 20px;
+    background-color: white;
+    
+}
+
+    table.table thead {
+        background-color: #1d3557 ;
+        color: white;
+    }
+
+
+        table.table thead tr:first-child th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        table.table thead tr:first-child th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+
+    table.table tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    table.table tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 10px;
+    }
+
+
+    table.table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        border: none; /* Xóa border mặc định */
+    }
+
+    table.table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+        table.table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+    table.table td {
+        padding: 15px;
+        vertical-align: middle;
+        border: none; /* Xóa border mặc định */
+        border-bottom: 1px solid #e9ecef; /* Chỉ thêm border bottom */
+    }
+
+/* Responsive - cần điều chỉnh lại */
+@media (max-width: 768px) {
+    .table-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    table.table {
+        border-collapse: collapse;
+    }
+
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    table.table thead {
+        display: none;
+    }
+
+    table.table tbody tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+    }
+
+    table.table td {
+        display: block;
+        text-align: right;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        table.table td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #7f8c8d;
+        }
+
+        table.table td:last-child {
+            border-bottom: 0;
+        }
+}

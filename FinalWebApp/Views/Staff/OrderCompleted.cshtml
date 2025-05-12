@@ -12,11 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/Staff/OrderCompleted.css" />
 </head>
 
 <body>
     <div class="container">
-        <h1 class="header">List of Paid or Canceled Orders</h1>
+        <h2 >List of Paid or Canceled Orders</h2>
 
         <!-- Form lọc theo trạng thái đơn hàng -->
         <form method="get" asp-action="OrderCompleted" class="filter-form">
@@ -74,123 +75,5 @@
     </div>
 </body>
 
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #f0f4ff, #e4e9f7);
-        margin: 0;
-    }
-
-    .container {
-        max-width: 90%;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: inset 5px 5px 15px #d4d4d4, inset -5px -5px 15px #ffffff;
-    }
-
-    .header {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #333;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .filter-form {
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 10px;
-    }
-
-    .form-control {
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        background: #f9f9f9;
-        box-shadow: inset 2px 2px 5px #e0e0e0, inset -2px -2px 5px #ffffff;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background: #4CAF50;
-    }
-
-        .btn-primary:hover {
-            background: #45a049;
-        }
-
-    .btn-info {
-        background: #007bff;
-    }
-
-        .btn-info:hover {
-            background: #0056b3;
-        }
-
-    .table-wrapper {
-        overflow-x: auto;
-        margin-top: 20px;
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        border-radius: 15px;
-        overflow: hidden;
-        background: #f9f9f9;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    thead {
-        background: #4CAF50;
-        color: #fff;
-    }
-
-    th, td {
-        padding: 12px 15px;
-        text-align: left;
-    }
-
-    tr:nth-child(even) {
-        background: #e0f7e7;
-    }
-
-    tr:hover {
-        background: #d4f4dd;
-        transition: 0.3s;
-    }
-
-    .badge {
-        padding: 5px 10px;
-        border-radius: 12px;
-        font-size: 0.9rem;
-        color: #fff;
-    }
-
-    .badge-success {
-        background: #28a745;
-    }
-
-    .badge-danger {
-        background: #dc3545;
-    }
-</style>
 
 </html>

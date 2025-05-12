@@ -1,0 +1,260 @@
+﻿/* ManageTable.css - Unified styles for table management */
+
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+}
+
+h1 {
+    color: #1d3557;
+    font-weight: 500;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1d3557;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #1d3557;
+    font-weight: 500;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 20px 0;
+}
+
+/* Layout Structure */
+.row {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.col-create {
+    flex: 3;
+    min-width: 300px;
+}
+
+.col-list {
+    flex: 7;
+    min-width: 400px;
+}
+
+/* Neumorphism Effect */
+.neumorphism {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 8px 8px 16px #e0e0e0, -8px -8px 16px #ffffff;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #1d3557;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+        background-color: #fff;
+    }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1d3557;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1);
+        }
+
+.text-danger {
+    color: #e63946;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #6c757d;
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #1d3557, #3a6a8a);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    width: 100%;
+}
+
+    .btn-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(29, 53, 87, 0.2);
+        background: linear-gradient(135deg, #3a6a8a, #1d3557);
+    }
+
+.btn-update {
+    background-color: #a8dadc;
+    color: #1d3557;
+    padding: 8px 12px;
+    text-decoration: none;
+
+}
+
+    .btn-update:hover {
+        background-color: #457b9d;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+.btn-delete {
+    background-color: #e63946;
+    color: white;
+    padding: 8px 12px;
+}
+
+    .btn-delete:hover {
+        background-color: #d62c3a;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+    .table thead {
+        background-color: #1d3557;
+        color: white;
+    }
+
+    .table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table td {
+        padding: 12px 15px;
+        border-top: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:nth-of-type(odd) {
+        background-color: rgba(241, 250, 238, 0.5);
+    }
+
+    .table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+
+/* Status Badges */
+.status {
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-create,
+    .col-list {
+        width: 100%;
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .neumorphism {
+        padding: 20px;
+        box-shadow: 5px 5px 10px #e0e0e0, -5px -5px 10px #ffffff;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 6px;
+    }
+}
+
+/* Font Awesome Icons */
+.fa {
+    font-size: 0.9rem;
+}

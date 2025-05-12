@@ -1,4 +1,7 @@
-﻿@model FinalWebApp.ViewModels.ItemViewModel
+﻿<head>
+    <link rel="stylesheet" href="~/css/Manager/ManageItem.css" />
+</head>
+@model FinalWebApp.ViewModels.ItemViewModel
 @{
     bool isCreate = Model == null || Model.Id == Guid.Empty;
     ViewData["Title"] = isCreate ? "Create Item" : "Edit Item";
@@ -13,6 +16,7 @@
     }
 
 }
+
 
 <h1 class="page-title">@ViewData["Title"]</h1>
 <hr />
@@ -101,107 +105,3 @@
         }
     });
 </script>
-<style>
-    /* General Styles */
-    .page-title {
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-    h1{
-        font-weight:bold;
-    }
-
-    /* Form Section Styles */
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .form-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-    .form-group label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .custom-file-label {
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    /* Table Section Styles */
-    .table-section {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .table-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-    .table {
-        margin-top: 10px;
-        border-collapse: collapse;
-        width: 100%;
-    }
-    .table th {
-            background-color: #f39c12;
-    }
-
-        .table th, .table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-
-    /* Button Styles */
-    .btn-create {
-        background: #f39c12;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-        .btn-create:hover {
-            background: #e67e22;
-            transform: scale(1.05);
-        }
-
-    .btn-update {
-        background: #3498db;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        transition: background 0.3s ease;
-    }
-
-        .btn-update:hover {
-            background: #2980b9;
-        }
-
-    .btn-delete {
-        background: #e74c3c;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        transition: background 0.3s ease;
-    }
-
-        .btn-delete:hover {
-            background: #c0392b;
-        }
-</style>
